@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-const promptPlaceVideo = "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/prompt-place.mp4";
+const promptPlaceVideo =
+  "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/prompt-place.mp4";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
@@ -39,6 +40,8 @@ Each scene should have a different background. Use a modern sans-serif font and 
   const [videoError, setVideoError] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [videoS3Key, setVideoS3Key] = useState<string | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number | null>(null);
+  const [videoResolution, setVideoResolution] = useState<string | null>(null);
   const [deleteStatus, setDeleteStatus] = useState<Status>("idle");
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -64,13 +67,15 @@ Each scene should have a different background. Use a modern sans-serif font and 
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const res = await fetch(
-        `${API_BASE_URL}/api/bytez/generate-video`,
+        `${API_BASE_URL}/api/gemini-veo3/generate-video`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
             prompt,
+            quality: selectedQuality,
+            voiceSpeed: selectedVoiceSpeed,
           }),
         }
       );
@@ -79,14 +84,19 @@ Each scene should have a different background. Use a modern sans-serif font and 
         throw new Error(err?.error || "Failed to generate video.");
       }
       const data = await res.json();
-      if (!data?.s3Url) throw new Error("No video URL returned from API.");
+      if (!data?.s3Url) throw new Error("No video URL returned from Gemini VEO 3.");
       setVideoUrl(data.s3Url);
       setVideoS3Key(data.s3Key || null);
+      setVideoDuration(data.duration || null);
+      setVideoResolution(data.resolution || null);
       setVideoStatus("success");
     } catch (err: unknown) {
-      let message = "Unknown error";
+      let message = "An unexpected error occurred while generating the video.";
       if (isErrorWithMessage(err)) {
         message = err.message;
+      } else if (err instanceof Response) {
+        const errorData = await err.json().catch(() => ({}));
+        message = errorData?.error || "Failed to process the request.";
       }
       setVideoError(message);
       setVideoStatus("error");
@@ -410,9 +420,15 @@ Each scene should have a different background. Use a modern sans-serif font and 
                         onDelete={handleDeleteVideo}
                         className="w-full rounded-lg shadow-2xl"
                       />
-                      <div className="flex items-center justify-center gap-2 mt-3 text-green-400 text-sm font-semibold">
+                      <div className="flex flex-col items-center justify-center gap-2 mt-3 text-green-400 text-sm font-semibold">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        Video generated successfully!
+                        <span>Video generated successfully!</span>
+                        {videoDuration && (
+                          <span>Duration: {videoDuration} seconds</span>
+                        )}
+                        {videoResolution && (
+                          <span>Resolution: {videoResolution}</span>
+                        )}
                       </div>
                     </div>
 
