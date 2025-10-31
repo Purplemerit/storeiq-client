@@ -72,14 +72,59 @@ const ImageEditor: React.FC = () => {
 
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      if (maskFile) formData.append("mask", maskFile);
-      formData.append("prompt", prompt);
+      // 1. Get signed upload URL for image
+      const imageUploadRes = await authFetch("/api/s3/generate-upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: imageFile.name,
+          contentType: imageFile.type,
+        }),
+      });
+      if (!imageUploadRes.ok) throw new Error("Failed to get image upload URL");
+      const imageUploadData = await imageUploadRes.json();
+      // 2. Upload image to S3
+      const putImageRes = await fetch(imageUploadData.uploadUrl, {
+        method: "PUT",
+        body: imageFile,
+        headers: { "Content-Type": imageFile.type },
+      });
+      if (!putImageRes.ok) throw new Error("Failed to upload image to S3");
+
+      let maskS3Key = undefined;
+      if (maskFile) {
+        // 3. Get signed upload URL for mask
+        const maskUploadRes = await authFetch("/api/s3/generate-upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: maskFile.name,
+            contentType: maskFile.type,
+          }),
+        });
+        if (!maskUploadRes.ok) throw new Error("Failed to get mask upload URL");
+        const maskUploadData = await maskUploadRes.json();
+        // 4. Upload mask to S3
+        const putMaskRes = await fetch(maskUploadData.uploadUrl, {
+          method: "PUT",
+          body: maskFile,
+          headers: { "Content-Type": maskFile.type },
+        });
+        if (!putMaskRes.ok) throw new Error("Failed to upload mask to S3");
+        maskS3Key = maskUploadData.key;
+      }
+
+      // 5. Call backend with S3 keys
+      const payload: any = {
+        prompt,
+        imageS3Key: imageUploadData.key,
+      };
+      if (maskS3Key) payload.maskS3Key = maskS3Key;
 
       const res = await authFetch("/api/ai/edit-image", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -90,15 +135,15 @@ const ImageEditor: React.FC = () => {
       }
 
       const data = await res.json();
-      // Accept editedImageUrl, imageUrl, or url from backend
+      // Accept editedImageUrl, imageUrl, or url from backend (should be signed URL)
       const url = data?.editedImageUrl || data?.imageUrl || data?.url;
       if (url) {
         setEditedImageUrl(url);
       } else {
         setError("No edited image returned from server.");
       }
-    } catch (err) {
-      setError("Network error. Please try again.");
+    } catch (err: any) {
+      setError(err?.message || "Network error. Please try again.");
     } finally {
       setLoading(false);
     }

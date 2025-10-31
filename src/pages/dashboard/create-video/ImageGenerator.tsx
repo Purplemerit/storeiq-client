@@ -119,6 +119,7 @@ const ImageGenerator: React.FC = () => {
       }
 
       const data = await res.json();
+      // imageUrl is now a signed download URL from backend
       if (data?.imageUrl) {
         setImageUrl(data.imageUrl);
         setGenerationCount((prev) => prev + 1);
