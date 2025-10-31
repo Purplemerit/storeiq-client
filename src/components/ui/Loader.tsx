@@ -195,79 +195,79 @@ const Loader: React.FC<{
     return (
       <div style={overlayStyle}>
         {content}
-        <style jsx>{`
+        <style dangerouslySetInnerHTML={{__html: `
           @keyframes spin-reverse {
             from { transform: rotate(360deg); }
             to { transform: rotate(0deg); }
           }
-          
+
           @keyframes orbit-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
           }
-          
+
           @keyframes orbit-medium {
             from { transform: rotate(120deg); }
             to { transform: rotate(480deg); }
           }
-          
+
           @keyframes orbit-fast {
             from { transform: rotate(240deg); }
             to { transform: rotate(600deg); }
           }
-          
+
           @keyframes wave {
             0%, 60%, 100% { transform: scaleY(0.4); }
             30% { transform: scaleY(1); }
           }
-          
+
           @keyframes ripple-1 {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(2); opacity: 0; }
           }
-          
+
           @keyframes ripple-2 {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(1.67); opacity: 0; }
           }
-          
+
           @keyframes ripple-3 {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(1.33); opacity: 0; }
           }
-          
+
           .animate-spin-reverse {
             animation: spin-reverse 1.5s linear infinite;
           }
-          
+
           .animate-orbit-slow {
             animation: orbit-slow 3s linear infinite;
           }
-          
+
           .animate-orbit-medium {
             animation: orbit-medium 2s linear infinite;
           }
-          
+
           .animate-orbit-fast {
             animation: orbit-fast 1s linear infinite;
           }
-          
+
           .animate-wave {
             animation: wave 1.5s ease-in-out infinite;
           }
-          
+
           .animate-ripple-1 {
             animation: ripple-1 2s ease-out infinite;
           }
-          
+
           .animate-ripple-2 {
             animation: ripple-2 2s ease-out 0.3s infinite;
           }
-          
+
           .animate-ripple-3 {
             animation: ripple-3 2s ease-out 0.6s infinite;
           }
-        `}</style>
+        `}} />
       </div>
     );
   }
