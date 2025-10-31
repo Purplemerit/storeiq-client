@@ -97,8 +97,11 @@ export async function authFetch(input: RequestInfo, init?: RequestInit) {
   }
 
   // Initialize headers with existing ones if present
+  // Don't set Content-Type for FormData - browser will set it automatically with boundary
+  const isFormData = init?.body instanceof FormData;
+
   let headers: HeadersInit = {
-    'Content-Type': 'application/json',
+    ...(!isFormData && { 'Content-Type': 'application/json' }),
     'Accept': 'application/json',
     ...(init?.headers || {})
   };
