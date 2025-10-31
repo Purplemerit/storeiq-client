@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 const promptPlaceVideo =
   "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/prompt-place.mp4";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Form validation error
   const [formError, setFormError] = useState<string | null>(null);
@@ -84,7 +85,8 @@ Each scene should have a different background. Use a modern sans-serif font and 
         throw new Error(err?.error || "Failed to generate video.");
       }
       const data = await res.json();
-      if (!data?.s3Url) throw new Error("No video URL returned from Gemini VEO 3.");
+      if (!data?.s3Url)
+        throw new Error("No video URL returned from Gemini VEO 3.");
       setVideoUrl(data.s3Url);
       setVideoS3Key(data.s3Key || null);
       setVideoDuration(data.duration || null);
@@ -119,7 +121,61 @@ Each scene should have a different background. Use a modern sans-serif font and 
     setUploading(true);
     setUploadStatus("loading");
     try {
-      // ... (existing upload logic remains the same)
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      // 1. Get signed S3 URL from backend (correct endpoint)
+      const getUrlRes = await fetch(`${API_BASE_URL}/api/s3-presigned-url`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          filename: selectedFile.name,
+          contentType: selectedFile.type,
+        }),
+      });
+      if (!getUrlRes.ok) {
+        const err = await getUrlRes.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to get signed upload URL.");
+      }
+
+      const presignedResp = await getUrlRes.json();
+      console.log("Presigned URL response:", presignedResp);
+      const url = presignedResp.url;
+      const fileUrl = presignedResp.fileUrl;
+      // Accept both key and s3Key for compatibility
+      const key = presignedResp.key || presignedResp.s3Key;
+      if (!url || !fileUrl || !key)
+        throw new Error("Invalid signed URL response.");
+
+      // 2. Upload file directly to S3
+      const uploadRes = await fetch(url, {
+        method: "PUT",
+        body: selectedFile,
+        headers: {
+          "Content-Type": selectedFile.type,
+        },
+      });
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload video to S3.");
+      }
+
+      // 3. Register the uploaded video in backend so it appears in /api/videos
+      const registerRes = await fetch(`${API_BASE_URL}/api/register-video`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          s3Key: key,
+          title: selectedFile.name,
+        }),
+      });
+      if (!registerRes.ok) {
+        const err = await registerRes.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to register uploaded video.");
+      }
+      setVideoUrl(fileUrl);
+      setVideoS3Key(key || null);
+      setUploadStatus("success");
+      setSelectedFile(null);
     } catch (err: unknown) {
       let message = "Unknown error";
       if (isErrorWithMessage(err)) {
@@ -321,25 +377,25 @@ Each scene should have a different background. Use a modern sans-serif font and 
                       setUploadError(null);
                     }}
                     className="hidden"
-                    id="video-upload"
-                    disabled={uploading}
+                    ref={fileInputRef}
                   />
-                  <label
-                    htmlFor="video-upload"
-                    className="cursor-pointer w-full"
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-12 w-full border-storiq-border bg-storiq-card-bg hover:bg-storiq-card-bg/80 text-white font-semibold"
+                    disabled={uploading}
+                    onClick={() => {
+                      if (!uploading && fileInputRef.current) {
+                        fileInputRef.current.value = ""; // allow re-selecting same file
+                        fileInputRef.current.click();
+                      }
+                    }}
                   >
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="h-12 w-full border-storiq-border bg-storiq-card-bg hover:bg-storiq-card-bg/80 text-white font-semibold"
-                      disabled={uploading}
-                    >
-                      <span className="flex items-center gap-2">
-                        <Upload className="w-4 h-4" />
-                        Choose File
-                      </span>
-                    </Button>
-                  </label>
+                    <span className="flex items-center gap-2">
+                      <Upload className="w-4 h-4" />
+                      Choose File
+                    </span>
+                  </Button>
                   {selectedFile && (
                     <div className="text-white/60 text-sm">
                       Selected: {selectedFile.name}

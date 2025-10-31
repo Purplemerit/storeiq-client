@@ -81,23 +81,44 @@ const Videos = () => {
 
   // No longer needed: editedVideoUrls state removed
 
-  // Fetch videos only (edited/original split is now backend-driven)
+  // Fetch videos and replace their URLs with signed URLs
   useEffect(() => {
     const fetchVideosAndImages = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch videos
         const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-        const url = `${API_BASE_URL}/api/videos`;
         const fetchOptions: RequestInit = { credentials: "include" };
-        const res = await fetch(url, fetchOptions);
+        // Fetch videos (metadata)
+        const res = await fetch(`${API_BASE_URL}/api/videos`, fetchOptions);
         if (res.status === 401) {
           throw new Error("Unauthorized (401): Please log in.");
         }
         if (!res.ok) throw new Error("Failed to fetch videos");
-        const data = await res.json();
-        setVideos(Array.isArray(data) ? data : []);
+        let data = await res.json();
+        if (!Array.isArray(data)) data = [];
+        // For each video, fetch a signed URL if s3Key exists
+        const videosWithSignedUrls = await Promise.all(
+          data.map(async (video: any) => {
+            if (video.s3Key) {
+              try {
+                const signedUrlRes = await fetch(
+                  `${API_BASE_URL}/api/signed-url?s3Key=${encodeURIComponent(
+                    video.s3Key
+                  )}`,
+                  fetchOptions
+                );
+                if (signedUrlRes.ok) {
+                  const { url: signedUrl } = await signedUrlRes.json();
+                  return { ...video, url: signedUrl };
+                }
+              } catch {}
+            }
+            return video;
+          })
+        );
+        setVideos(videosWithSignedUrls);
+        console.log("[Videos.tsx] videosWithSignedUrls:", videosWithSignedUrls);
         // Fetch images
         const imgRes = await fetch(`${API_BASE_URL}/api/images`, fetchOptions);
         if (imgRes.ok) {
@@ -300,7 +321,9 @@ const Videos = () => {
 
   // Helper: check if file is a video (not image)
   function isVideoFile(url: string) {
-    return /\.(mp4|mov|webm|avi|mkv)$/i.test(url);
+    // Remove query params before checking extension
+    const cleanUrl = url.split("?")[0];
+    return /\.(mp4|mov|webm|avi|mkv)$/i.test(cleanUrl);
   }
   function isImageFile(url: string) {
     return /\.(png|jpg|jpeg|webp)$/i.test(url);
@@ -308,9 +331,12 @@ const Videos = () => {
 
   // Filter out images from videos
   const onlyVideos = videos.filter((video: any) => isVideoFile(video.url));
+  console.log("[Videos.tsx] onlyVideos:", onlyVideos);
   const onlyImages = images;
   const originalVideos = onlyVideos.filter((video: any) => !video.isEdited);
+  console.log("[Videos.tsx] originalVideos:", originalVideos);
   const editedVideos = onlyVideos.filter((video: any) => video.isEdited);
+  console.log("[Videos.tsx] editedVideos:", editedVideos);
 
   // Image modal state
   const [imageModal, setImageModal] = useState<{
