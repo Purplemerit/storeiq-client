@@ -1,16 +1,16 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
+  // Dialog,
+  // DialogContent,
+  // DialogTitle,
   DialogDescription,
-  DialogHeader,
-  DialogFooter,
+  // DialogHeader,
+  // DialogFooter,
 } from "@/components/ui/dialog";
-import AdvancedVideoPlayer from "@/components/AdvancedVideoPlayer";
+const AdvancedVideoPlayer = React.lazy(() => import("@/components/AdvancedVideoPlayer"));
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -34,7 +34,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ConfirmDialog } from "@/components/confirm-dialog";
+const ConfirmDialog = React.lazy(() =>
+  import("@/components/confirm-dialog").then(m => ({ default: m.ConfirmDialog }))
+);
+
+// Dialog UI components
+const Dialog = React.lazy(() =>
+  import("@/components/ui/dialog").then(m => ({ default: m.Dialog }))
+);
+const DialogContent = React.lazy(() =>
+  import("@/components/ui/dialog").then(m => ({ default: m.DialogContent }))
+);
+const DialogHeader = React.lazy(() =>
+  import("@/components/ui/dialog").then(m => ({ default: m.DialogHeader }))
+);
+const DialogTitle = React.lazy(() =>
+  import("@/components/ui/dialog").then(m => ({ default: m.DialogTitle }))
+);
+const DialogFooter = React.lazy(() =>
+  import("@/components/ui/dialog").then(m => ({ default: m.DialogFooter }))
+);
 
 interface Video {
   id?: string;
@@ -443,126 +462,140 @@ const Videos = () => {
         </div>
 
         {/* Preview Modal */}
-        <Dialog
-          open={modal.open}
-          onOpenChange={(open) => {
-            if (!open) closeModal();
-          }}
-        >
-          <DialogContent className="max-w-4xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
-            <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
-              <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
-                <Play className="h-5 w-5 text-blue-400" />
-                {modal.title}
-              </DialogTitle>
-            </DialogHeader>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Dialog
+            open={modal.open}
+            onOpenChange={(open) => {
+              if (!open) closeModal();
+            }}
+          >
+            <Suspense fallback={<div>Loading...</div>}>
+              <DialogContent className="max-w-4xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
+                <Suspense fallback={<div>Loading...</div>}>
+                  <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
+                        <Play className="h-5 w-5 text-blue-400" />
+                        {modal.title}
+                      </DialogTitle>
+                    </Suspense>
+                  </DialogHeader>
+                </Suspense>
 
-            {/* Video Player Container */}
-            <div className="relative px-6 py-4">
-              <AspectRatio
-                ratio={16 / 9}
-                className="bg-black rounded-xl overflow-hidden border border-gray-700"
-              >
-                {/* Overlay: Loading spinner */}
-                {modal.loading && (
-                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/70 transition-opacity animate-fade-in">
-                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <span className="text-white text-lg font-medium">
-                      Loading video...
-                    </span>
-                  </div>
-                )}
+                {/* Video Player Container */}
+                <div className="relative px-6 py-4">
+                  <AspectRatio
+                    ratio={16 / 9}
+                    className="bg-black rounded-xl overflow-hidden border border-gray-700"
+                  >
+                    {/* Overlay: Loading spinner */}
+                    {modal.loading && (
+                      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/70 transition-opacity animate-fade-in">
+                        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                        <span className="text-white text-lg font-medium">
+                          Loading video...
+                        </span>
+                      </div>
+                    )}
 
-                {/* Overlay: Error */}
-                {modal.error && (
-                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/90 transition-opacity animate-fade-in p-6">
-                    <div className="bg-red-500/20 rounded-full p-4 mb-4">
-                      <FileVideo className="h-8 w-8 text-red-400" />
+                    {/* Overlay: Error */}
+                    {modal.error && (
+                      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/90 transition-opacity animate-fade-in p-6">
+                        <div className="bg-red-500/20 rounded-full p-4 mb-4">
+                          <FileVideo className="h-8 w-8 text-red-400" />
+                        </div>
+                        <span className="text-red-400 text-lg font-semibold mb-2">
+                          Failed to load video
+                        </span>
+                        <span className="text-white/70 text-center text-sm mb-6">
+                          {modal.error}
+                        </span>
+                        <Button
+                          variant="outline"
+                          onClick={closeModal}
+                          className="border-gray-600 text-white hover:bg-gray-700"
+                        >
+                          Close Preview
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Video Player */}
+                    {modal.src && (
+                      <Suspense fallback={<Skeleton className="w-full h-full" />}>
+                        <AdvancedVideoPlayer
+                          src={modal.src}
+                          className="w-full h-full"
+                          aria-label="Video preview"
+                          onLoadedData={() => {
+                            setModal((prev) => ({
+                              ...prev,
+                              loading: false,
+                              error: null,
+                            }));
+                          }}
+                          onError={() => {
+                            setModal((prev) => ({
+                              ...prev,
+                              loading: false,
+                              error:
+                                "This video could not be loaded. Please try again later.",
+                            }));
+                          }}
+                        />
+                      </Suspense>
+                    )}
+                  </AspectRatio>
+                </div>
+
+                {/* Action Buttons */}
+                <Suspense fallback={<div>Loading...</div>}>
+                  <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
+                    <div className="text-white/60 text-sm">
+                      Video ID: {modal.videoId || "N/A"}
                     </div>
-                    <span className="text-red-400 text-lg font-semibold mb-2">
-                      Failed to load video
-                    </span>
-                    <span className="text-white/70 text-center text-sm mb-6">
-                      {modal.error}
-                    </span>
-                    <Button
-                      variant="outline"
-                      onClick={closeModal}
-                      className="border-gray-600 text-white hover:bg-gray-700"
-                    >
-                      Close Preview
-                    </Button>
-                  </div>
-                )}
-
-                {/* Video Player */}
-                {modal.src && (
-                  <AdvancedVideoPlayer
-                    src={modal.src}
-                    className="w-full h-full"
-                    aria-label="Video preview"
-                    onLoadedData={() => {
-                      setModal((prev) => ({
-                        ...prev,
-                        loading: false,
-                        error: null,
-                      }));
-                    }}
-                    onError={() => {
-                      setModal((prev) => ({
-                        ...prev,
-                        loading: false,
-                        error:
-                          "This video could not be loaded. Please try again later.",
-                      }));
-                    }}
-                  />
-                )}
-              </AspectRatio>
-            </div>
-
-            {/* Action Buttons */}
-            <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
-              <div className="text-white/60 text-sm">
-                Video ID: {modal.videoId || "N/A"}
-              </div>
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  onClick={closeModal}
-                  className="border-gray-600 text-white hover:bg-gray-700"
-                >
-                  Close
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => handleOpenDeleteDialog(modal.videoId)}
-                  className="gap-2 bg-red-600 hover:bg-red-700"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Delete Video
-                </Button>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+                    <div className="flex gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={closeModal}
+                        className="border-gray-600 text-white hover:bg-gray-700"
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleOpenDeleteDialog(modal.videoId)}
+                        className="gap-2 bg-red-600 hover:bg-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete Video
+                      </Button>
+                    </div>
+                  </DialogFooter>
+                </Suspense>
+              </DialogContent>
+            </Suspense>
+          </Dialog>
+        </Suspense>
 
         {/* Delete Confirmation Dialog */}
         {deleteVideoId && (
-          <ConfirmDialog
-            open={deleteConfirmOpen}
-            title="Delete Video"
-            description="Are you sure you want to delete this video? This action cannot be undone."
-            confirmLabel="Delete"
-            cancelLabel="Cancel"
-            onConfirm={handleDelete}
-            onCancel={() => {
-              setDeleteConfirmOpen(false);
-              setDeleteVideoId(null);
-            }}
-            loading={loading}
-            disableConfirm={loading}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ConfirmDialog
+              open={deleteConfirmOpen}
+              title="Delete Video"
+              description="Are you sure you want to delete this video? This action cannot be undone."
+              confirmLabel="Delete"
+              cancelLabel="Cancel"
+              onConfirm={handleDelete}
+              onCancel={() => {
+                setDeleteConfirmOpen(false);
+                setDeleteVideoId(null);
+              }}
+              loading={loading}
+              disableConfirm={loading}
+            />
+          </Suspense>
         )}
 
         {/* Loading State */}
@@ -828,80 +861,92 @@ const Videos = () => {
         )}
       </div>
       {/* Image Preview Modal */}
-      <Dialog
-        open={imageModal.open}
-        onOpenChange={(open) => {
-          if (!open) closeImageModal();
-        }}
-      >
-        <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
-          <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
-            <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
-              <Eye className="h-5 w-5 text-blue-400" />
-              {imageModal.title}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="relative px-6 py-4 flex items-center justify-center bg-black">
-            {imageModal.src && (
-              <img
-                src={imageModal.src}
-                alt={imageModal.title}
-                className="object-contain max-h-[60vh] w-full"
-                // fallback for modal: if src is not s3Url, try to find the image by id in onlyImages
-                onError={(e) => {
-                  const imgObj = onlyImages.find(
-                    (img) =>
-                      img.id === imageModal.imageId ||
-                      img.s3Key === imageModal.imageId
-                  );
-                  if (imgObj && imgObj.s3Url) {
-                    (e.target as HTMLImageElement).src = imgObj.s3Url;
-                  }
-                }}
-              />
-            )}
-          </div>
-          <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
-            <div className="text-white/60 text-sm">
-              Image ID: {imageModal.imageId || "N/A"}
-            </div>
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={closeImageModal}
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                Close
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => handleOpenDeleteImageDialog(imageModal.imageId)}
-                className="gap-2 bg-red-600 hover:bg-red-700"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete Image
-              </Button>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Dialog
+          open={imageModal.open}
+          onOpenChange={(open) => {
+            if (!open) closeImageModal();
+          }}
+        >
+          <Suspense fallback={<div>Loading...</div>}>
+            <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
+              <Suspense fallback={<div>Loading...</div>}>
+                <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
+                      <Eye className="h-5 w-5 text-blue-400" />
+                      {imageModal.title}
+                    </DialogTitle>
+                  </Suspense>
+                </DialogHeader>
+              </Suspense>
+              <div className="relative px-6 py-4 flex items-center justify-center bg-black">
+                {imageModal.src && (
+                  <img
+                    src={imageModal.src}
+                    alt={imageModal.title}
+                    className="object-contain max-h-[60vh] w-full"
+                    // fallback for modal: if src is not s3Url, try to find the image by id in onlyImages
+                    onError={(e) => {
+                      const imgObj = onlyImages.find(
+                        (img) =>
+                          img.id === imageModal.imageId ||
+                          img.s3Key === imageModal.imageId
+                      );
+                      if (imgObj && imgObj.s3Url) {
+                        (e.target as HTMLImageElement).src = imgObj.s3Url;
+                      }
+                    }}
+                  />
+                )}
+              </div>
+              <Suspense fallback={<div>Loading...</div>}>
+                <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
+                  <div className="text-white/60 text-sm">
+                    Image ID: {imageModal.imageId || "N/A"}
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={closeImageModal}
+                      className="border-gray-600 text-white hover:bg-gray-700"
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleOpenDeleteImageDialog(imageModal.imageId)}
+                      className="gap-2 bg-red-600 hover:bg-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete Image
+                    </Button>
+                  </div>
+                </DialogFooter>
+              </Suspense>
+            </DialogContent>
+          </Suspense>
+        </Dialog>
+      </Suspense>
 
       {/* Delete Confirmation Dialog for Images */}
       {deleteImageId && (
-        <ConfirmDialog
-          open={deleteImageConfirmOpen}
-          title="Delete Image"
-          description="Are you sure you want to delete this image? This action cannot be undone."
-          confirmLabel="Delete"
-          cancelLabel="Cancel"
-          onConfirm={handleDeleteImage}
-          onCancel={() => {
-            setDeleteImageConfirmOpen(false);
-            setDeleteImageId(null);
-          }}
-          loading={loading}
-          disableConfirm={loading}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ConfirmDialog
+            open={deleteImageConfirmOpen}
+            title="Delete Image"
+            description="Are you sure you want to delete this image? This action cannot be undone."
+            confirmLabel="Delete"
+            cancelLabel="Cancel"
+            onConfirm={handleDeleteImage}
+            onCancel={() => {
+              setDeleteImageConfirmOpen(false);
+              setDeleteImageId(null);
+            }}
+            loading={loading}
+            disableConfirm={loading}
+          />
+        </Suspense>
       )}
     </DashboardLayout>
   );

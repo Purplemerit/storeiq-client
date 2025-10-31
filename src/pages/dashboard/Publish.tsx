@@ -11,17 +11,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import useYouTubeConnect from "@/hooks/useYouTubeConnect";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ScheduleDialog } from "@/components/schedule-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Lazy load VideoPublishCard
+const LazyVideoPublishCard = React.lazy(() => import("./VideoPublishCard"));
+
+// Lazy load ScheduleDialog
+const ScheduleDialog = React.lazy(() =>
+  import("@/components/schedule-dialog").then((m) => ({
+    default: m.ScheduleDialog,
+  }))
+);
+
+// Lazy load Dialog components
+const Dialog = React.lazy(() =>
+  import("@/components/ui/dialog").then((m) => ({ default: m.Dialog }))
+);
+const DialogTrigger = React.lazy(() =>
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogTrigger }))
+);
+const DialogContent = React.lazy(() =>
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogContent }))
+);
+const DialogTitle = React.lazy(() =>
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogTitle }))
+);
 
 const IG_OAUTH_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/instagram`;
 
@@ -578,19 +596,25 @@ const Publish = () => {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                         {videoItems.map((video) => (
-                          <VideoPublishCard
-                            key={video.id || video.s3Key}
-                            video={video}
-                            ytConnected={ytConnected}
-                            igConnected={igConnected}
-                            platformSelections={platformSelections}
-                            handlePlatformChange={handlePlatformChange}
-                            handlePost={handlePost}
-                            postingId={postingId}
-                            schedulingLoading={schedulingLoading}
-                            editedTitles={editedTitles}
-                            setEditedTitles={setEditedTitles}
-                          />
+                          <Suspense
+                            fallback={<Skeleton className="h-96 w-full" />}
+                          >
+                            <Suspense fallback={<div>Loading...</div>}>
+                              <LazyVideoPublishCard
+                                key={video.id || video.s3Key}
+                                video={video}
+                                ytConnected={ytConnected}
+                                igConnected={igConnected}
+                                platformSelections={platformSelections}
+                                handlePlatformChange={handlePlatformChange}
+                                handlePost={handlePost}
+                                postingId={postingId}
+                                schedulingLoading={schedulingLoading}
+                                editedTitles={editedTitles}
+                                setEditedTitles={setEditedTitles}
+                              />
+                            </Suspense>
+                          </Suspense>
                         ))}
                       </div>
                     )}
@@ -712,36 +736,48 @@ const Publish = () => {
                             key={image.id || image.s3Key}
                             className="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl overflow-hidden border border-slate-600/50 transition-all duration-300 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1 backdrop-blur-sm"
                           >
-                            <Dialog>
-                              <div className="relative aspect-video bg-slate-900 overflow-hidden">
-                                <img
-                                  src={image.url}
-                                  alt={image.title || "Untitled Image"}
-                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                                <DialogTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100"
-                                  >
-                                    Preview
-                                  </Button>
-                                </DialogTrigger>
-                              </div>
-                              <DialogContent className="max-w-4xl w-full bg-slate-900 border-slate-700">
-                                <DialogTitle className="text-white text-xl font-bold">
-                                  Image Preview
-                                </DialogTitle>
-                                <div className="w-full bg-black rounded-xl overflow-hidden">
+                            <Suspense
+                              fallback={<Skeleton className="h-80 w-full" />}
+                            >
+                              <Dialog>
+                                <div className="relative aspect-video bg-slate-900 overflow-hidden">
                                   <img
                                     src={image.url}
-                                    alt={image.title || "Full size image"}
-                                    className="w-full h-auto"
+                                    alt={image.title || "Untitled Image"}
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                   />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                                  <Suspense fallback={<div>Loading...</div>}>
+                                    <DialogTrigger asChild>
+                                      <Button
+                                        size="sm"
+                                        className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100"
+                                      >
+                                        Preview
+                                      </Button>
+                                    </DialogTrigger>
+                                  </Suspense>
                                 </div>
-                              </DialogContent>
-                            </Dialog>
+                                <Suspense
+                                  fallback={
+                                    <Skeleton className="h-64 w-full" />
+                                  }
+                                >
+                                  <DialogContent className="max-w-4xl w-full bg-slate-900 border-slate-700">
+                                    <DialogTitle className="text-white text-xl font-bold">
+                                      Image Preview
+                                    </DialogTitle>
+                                    <div className="w-full bg-black rounded-xl overflow-hidden">
+                                      <img
+                                        src={image.url}
+                                        alt={image.title || "Full size image"}
+                                        className="w-full h-auto"
+                                      />
+                                    </div>
+                                  </DialogContent>
+                                </Suspense>
+                              </Dialog>
+                            </Suspense>
                             <div className="p-6">
                               <div className="flex items-start justify-between mb-4">
                                 <div className="flex-1 min-w-0">
@@ -752,7 +788,13 @@ const Publish = () => {
                               </div>
                               <Button
                                 className="w-full font-medium bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
-                                onClick={() => handlePost(image)}
+                                onClick={() =>
+                                  handlePost({
+                                    ...image,
+                                    editedTitles,
+                                    setEditedTitles,
+                                  })
+                                }
                               >
                                 <span className="flex items-center justify-center gap-2">
                                   <svg
@@ -868,19 +910,23 @@ const Publish = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                   {videoItems.map((video) => (
-                    <VideoPublishCard
-                      key={video.id || video.s3Key}
-                      video={video}
-                      ytConnected={ytConnected}
-                      igConnected={igConnected}
-                      platformSelections={platformSelections}
-                      handlePlatformChange={handlePlatformChange}
-                      handlePost={handlePost}
-                      postingId={postingId}
-                      schedulingLoading={schedulingLoading}
-                      editedTitles={editedTitles}
-                      setEditedTitles={setEditedTitles}
-                    />
+                    <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <LazyVideoPublishCard
+                          key={video.id || video.s3Key}
+                          video={video}
+                          ytConnected={ytConnected}
+                          igConnected={igConnected}
+                          platformSelections={platformSelections}
+                          handlePlatformChange={handlePlatformChange}
+                          handlePost={handlePost}
+                          postingId={postingId}
+                          schedulingLoading={schedulingLoading}
+                          editedTitles={editedTitles}
+                          setEditedTitles={setEditedTitles}
+                        />
+                      </Suspense>
+                    </Suspense>
                   ))}
                 </div>
               )}
@@ -892,345 +938,7 @@ const Publish = () => {
   );
 };
 
-interface VideoPublishCardProps {
-  video: Video;
-  ytConnected: boolean;
-  igConnected: boolean;
-  platformSelections: { [videoId: string]: { yt: boolean; ig: boolean } };
-  handlePlatformChange: (
-    videoId: string,
-    platform: "youtube" | "instagram"
-  ) => void;
-  handlePost: (video: Video, scheduledTime?: DateTime) => void;
-  postingId: string | null;
-  schedulingLoading: boolean;
-}
-
-interface VideoPublishCardProps {
-  video: Video;
-  ytConnected: boolean;
-  igConnected: boolean;
-  platformSelections: { [videoId: string]: { yt: boolean; ig: boolean } };
-  handlePlatformChange: (
-    videoId: string,
-    platform: "youtube" | "instagram"
-  ) => void;
-  handlePost: (video: Video, scheduledTime?: DateTime) => void;
-  postingId: string | null;
-  schedulingLoading: boolean;
-  editedTitles: { [id: string]: string };
-  setEditedTitles: React.Dispatch<
-    React.SetStateAction<{ [id: string]: string }>
-  >;
-}
-
-const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
-  video,
-  ytConnected,
-  igConnected,
-  platformSelections,
-  handlePlatformChange,
-  handlePost,
-  postingId,
-  schedulingLoading,
-  editedTitles,
-  setEditedTitles,
-}) => {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
-  const videoId = video.id || video.s3Key || "";
-  const selection = platformSelections[videoId] || { yt: false, ig: false };
-
-  return (
-    <div className="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl overflow-hidden border border-slate-600/50 transition-all duration-300 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1 backdrop-blur-sm">
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <div className="relative aspect-video bg-slate-900 overflow-hidden">
-          {video.thumbnail ? (
-            <img
-              src={video.thumbnail}
-              alt={video.title || "Video thumbnail"}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <video
-              src={video.url}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              tabIndex={-1}
-              muted
-              playsInline
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100"
-              onClick={() => setPreviewOpen(true)}
-            >
-              Preview
-            </Button>
-          </DialogTrigger>
-          <ScheduleDialog
-            open={scheduleOpen}
-            onOpenChange={setScheduleOpen}
-            onSchedule={(scheduledTime) => handlePost(video, scheduledTime)}
-          />
-        </div>
-
-        <DialogContent className="max-w-4xl w-full bg-slate-900 border-slate-700">
-          <DialogTitle className="text-white text-xl font-bold">
-            Video Preview
-          </DialogTitle>
-          <div className="aspect-video w-full bg-black rounded-xl overflow-hidden">
-            <video
-              src={video.url}
-              className="w-full h-full"
-              controls
-              autoPlay
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1 min-w-0">
-            <input
-              type="text"
-              className="text-white font-bold text-lg mb-2 truncate group-hover:text-purple-200 transition-colors bg-transparent border-b border-purple-500 focus:outline-none focus:border-pink-500 w-full"
-              value={
-                editedTitles[videoId] !== undefined
-                  ? editedTitles[videoId]
-                  : video.title || ""
-              }
-              placeholder="Enter video title"
-              onChange={(e) =>
-                setEditedTitles((titles) => ({
-                  ...titles,
-                  [videoId]: e.target.value,
-                }))
-              }
-              maxLength={100}
-            />
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-slate-400">
-                Published {video.publishCount ?? 0} time
-                {(video.publishCount ?? 0) === 1 ? "" : "s"}
-              </span>
-              {video.scheduledTime && (
-                <div
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium
-                  ${
-                    video.scheduledStatus === "completed"
-                      ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                      : video.scheduledStatus === "failed"
-                      ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                      : "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                  }`}
-                >
-                  <svg
-                    className={`w-3.5 h-3.5 ${
-                      video.scheduledStatus === "completed"
-                        ? "text-green-400"
-                        : video.scheduledStatus === "failed"
-                        ? "text-red-400"
-                        : "text-purple-400"
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    {video.scheduledStatus === "completed" ? (
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    ) : video.scheduledStatus === "failed" ? (
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    ) : (
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    )}
-                  </svg>
-                  <div>
-                    <span className="font-semibold">
-                      {video.scheduledStatus === "completed"
-                        ? "Published successfully"
-                        : video.scheduledStatus === "failed"
-                        ? "Publishing failed"
-                        : "Scheduled for " +
-                          DateTime.fromISO(video.scheduledTime).toLocaleString(
-                            DateTime.DATETIME_SHORT
-                          )}
-                    </span>
-                    {video.scheduledStatus === "completed" && (
-                      <span className="block text-green-400/60 mt-0.5">
-                        Published to YouTube
-                      </span>
-                    )}
-                    {video.scheduledStatus === "failed" && (
-                      <span className="block text-red-400/60 mt-0.5">
-                        Check connection and try again
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Platform Selection */}
-        <div className="mb-4 flex gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  className={`flex-1 p-2 rounded-lg transition-all ${
-                    selection.yt
-                      ? "bg-purple-500/20 text-purple-400 border-2 border-purple-500"
-                      : "bg-slate-700/50 text-slate-400 border border-slate-600/50"
-                  }`}
-                  onClick={() => handlePlatformChange(videoId, "youtube")}
-                  disabled={!ytConnected}
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <span>YouTube</span>
-                    {ytConnected ? (
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          selection.yt ? "bg-purple-500" : "bg-green-500"
-                        }`}
-                      />
-                    ) : (
-                      <span className="w-2 h-2 rounded-full bg-red-500" />
-                    )}
-                  </div>
-                  {!ytConnected && (
-                    <span className="text-xs block text-red-400">
-                      Not Connected
-                    </span>
-                  )}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  {ytConnected
-                    ? selection.yt
-                      ? "Selected for publishing"
-                      : "Click to select YouTube for publishing"
-                    : "Connect YouTube account to publish"}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-          <Button
-            className={`flex-1 font-medium transition-all duration-300 ${
-              !selection.yt || !ytConnected
-                ? "bg-slate-700/50 hover:bg-slate-600/50 text-slate-400 border border-slate-600/50"
-                : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]"
-            }`}
-            onClick={() => handlePost(video)}
-            disabled={postingId === videoId || !selection.yt || !ytConnected}
-            title={
-              !ytConnected
-                ? "Connect to YouTube to publish videos"
-                : !selection.yt
-                ? "Select a platform to publish"
-                : ""
-            }
-          >
-            {postingId === videoId ? (
-              <span className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Publishing...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
-                {!ytConnected
-                  ? "Connect YouTube"
-                  : !selection.yt
-                  ? "Select Platform"
-                  : "Publish Now"}
-              </span>
-            )}
-          </Button>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className={`bg-slate-700 hover:bg-slate-600 text-white ${
-                    !ytConnected || !selection.yt || schedulingLoading
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  onClick={() => setScheduleOpen(true)}
-                  disabled={
-                    postingId === videoId ||
-                    !selection.yt ||
-                    !ytConnected ||
-                    schedulingLoading
-                  }
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  {!ytConnected
-                    ? "Connect YouTube account to schedule videos"
-                    : !selection.yt
-                    ? "Select YouTube to enable scheduling"
-                    : "Schedule this video for later"}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default Publish;
+/* Removed duplicate VideoPublishCardProps and VideoPublishCard implementation.
+   VideoPublishCard is now imported via React.lazy from './VideoPublishCard'.
+*/
