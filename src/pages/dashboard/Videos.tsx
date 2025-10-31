@@ -118,7 +118,7 @@ const Videos = () => {
           })
         );
         setVideos(videosWithSignedUrls);
-        console.log("[Videos.tsx] videosWithSignedUrls:", videosWithSignedUrls);
+        // removed debug log
         // Fetch images
         const imgRes = await fetch(`${API_BASE_URL}/api/images`, fetchOptions);
         if (imgRes.ok) {
@@ -227,9 +227,9 @@ const Videos = () => {
 
   // Delete handler
   const handleDelete = async () => {
-    console.log("[handleDelete] deleteVideoId:", deleteVideoId);
+    // removed debug log
     if (!deleteVideoId) {
-      console.log("[handleDelete] Early return: deleteVideoId is missing");
+      // removed debug log
       return;
     }
     try {
@@ -238,18 +238,10 @@ const Videos = () => {
       // Find the video object to get the s3Key
       const videoToDelete = videos.find((v) => v.id === deleteVideoId);
       if (!videoToDelete || !videoToDelete.s3Key) {
-        console.log(
-          "[handleDelete] Early return: videoToDelete or s3Key missing",
-          videoToDelete
-        );
+        // removed debug log
         throw new Error("Video s3Key not found");
       }
-      console.log(
-        "[handleDelete] Deleting video object:",
-        videoToDelete,
-        "s3Key:",
-        videoToDelete.s3Key
-      );
+      // removed debug log
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const res = await fetch(`${API_BASE_URL}/api/delete-video`, {
         method: "DELETE",
@@ -312,7 +304,7 @@ const Videos = () => {
 
   // Helper to open delete dialog safely
   function handleOpenDeleteDialog(videoId: string | null) {
-    console.log("[handleOpenDeleteDialog] called with videoId:", videoId);
+    // removed debug log
     if (videoId) {
       setDeleteVideoId(videoId);
       setDeleteConfirmOpen(true);
@@ -331,12 +323,12 @@ const Videos = () => {
 
   // Filter out images from videos
   const onlyVideos = videos.filter((video: any) => isVideoFile(video.url));
-  console.log("[Videos.tsx] onlyVideos:", onlyVideos);
+  // removed debug log
   const onlyImages = images;
   const originalVideos = onlyVideos.filter((video: any) => !video.isEdited);
-  console.log("[Videos.tsx] originalVideos:", originalVideos);
+  // removed debug log
   const editedVideos = onlyVideos.filter((video: any) => video.isEdited);
-  console.log("[Videos.tsx] editedVideos:", editedVideos);
+  // removed debug log
 
   // Image modal state
   const [imageModal, setImageModal] = useState<{
