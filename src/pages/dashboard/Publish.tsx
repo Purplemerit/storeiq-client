@@ -38,6 +38,10 @@ interface Video {
   publishedToYouTube?: boolean;
   scheduledTime?: string;
   scheduledStatus?: "pending" | "completed" | "failed";
+  editedTitles: { [id: string]: string };
+  setEditedTitles: React.Dispatch<
+    React.SetStateAction<{ [id: string]: string }>
+  >;
 }
 
 const Publish = () => {
@@ -53,33 +57,33 @@ const Publish = () => {
 
   const [activeTab, setActiveTab] = useState<"scheduled" | "past">("scheduled");
   const [videos, setVideos] = useState<Video[]>([]);
+  // Track edited titles per video
+  const [editedTitles, setEditedTitles] = useState<{ [id: string]: string }>(
+    {}
+  );
 
-  // Filter videos based on active tab and file type
-  const filteredVideos = React.useMemo(() => {
-    const isVideoFile = (url: string) => /\.(mp4|mov|webm|avi|mkv)$/i.test(url);
-    const videoItems = videos.filter((v) => isVideoFile(v.url));
+  // Helper: check if file is a video (not image)
+  function isVideoFile(url: string) {
+    // Remove query params before checking extension
+    const cleanUrl = url.split("?")[0];
+    return /\.(mp4|mov|webm|avi|mkv)$/i.test(cleanUrl);
+  }
 
-    return videoItems.filter((v) => {
-      if (activeTab === "scheduled") {
-        // Show videos that are:
-        // 1. Not yet published AND
-        // 2. Either unscheduled OR scheduled but not completed
-        return (
-          !v.publishedToYouTube &&
-          (!v.scheduledTime ||
-            (v.scheduledTime && v.scheduledStatus !== "completed"))
-        );
-      } else {
-        // Show videos that are:
-        // 1. Published to YouTube OR
-        // 2. Have completed scheduled publishing
-        return (
-          v.publishedToYouTube ||
-          (v.scheduledTime && v.scheduledStatus === "completed")
-        );
-      }
-    });
-  }, [videos, activeTab]);
+  // Main display: show all video files
+  const videoItems = videos.filter((v) => isVideoFile(v.url));
+
+  // Filtering logic for future use (not applied to main display yet)
+  const scheduledVideos = videoItems.filter(
+    (v) =>
+      !v.publishedToYouTube &&
+      (!v.scheduledTime ||
+        (v.scheduledTime && v.scheduledStatus !== "completed"))
+  );
+  const publishedVideos = videoItems.filter(
+    (v) =>
+      v.publishedToYouTube ||
+      (v.scheduledTime && v.scheduledStatus === "completed")
+  );
   const [images, setImages] = useState<
     { id?: string; url: string; s3Key?: string; title?: string }[]
   >([]);
@@ -231,10 +235,18 @@ const Publish = () => {
         return;
       }
 
+      // Use edited title if available, else fallback to video.title
+      const videoId = video.id || video.s3Key || "";
+      const title =
+        editedTitles[videoId] && editedTitles[videoId].trim()
+          ? editedTitles[videoId].trim()
+          : video.title && video.title.trim()
+          ? video.title.trim()
+          : "Untitled Video";
       const payload = {
         s3Key: video.s3Key,
         metadata: {
-          title: video.title || "Untitled Video",
+          title,
           description: video.description || "",
         },
       };
@@ -485,7 +497,7 @@ const Publish = () => {
                       <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-xl border border-slate-600/50">
                         <span className="text-sm text-slate-400">Total:</span>
                         <span className="text-lg font-bold text-white">
-                          {filteredVideos.length}
+                          {videoItems.length}
                         </span>
                       </div>
                     </div>
@@ -517,7 +529,7 @@ const Publish = () => {
                         </svg>
                         <span>{error}</span>
                       </div>
-                    ) : filteredVideos.length === 0 ? (
+                    ) : videoItems.length === 0 ? (
                       <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
                         <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
                           <svg
@@ -565,7 +577,7 @@ const Publish = () => {
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                        {filteredVideos.map((video) => (
+                        {videoItems.map((video) => (
                           <VideoPublishCard
                             key={video.id || video.s3Key}
                             video={video}
@@ -576,6 +588,8 @@ const Publish = () => {
                             handlePost={handlePost}
                             postingId={postingId}
                             schedulingLoading={schedulingLoading}
+                            editedTitles={editedTitles}
+                            setEditedTitles={setEditedTitles}
                           />
                         ))}
                       </div>
@@ -826,7 +840,7 @@ const Publish = () => {
                   </svg>
                   <span>{error}</span>
                 </div>
-              ) : filteredVideos.length === 0 ? (
+              ) : videoItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
                   <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
                     <svg
@@ -853,7 +867,7 @@ const Publish = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {filteredVideos.map((video) => (
+                  {videoItems.map((video) => (
                     <VideoPublishCard
                       key={video.id || video.s3Key}
                       video={video}
@@ -864,6 +878,8 @@ const Publish = () => {
                       handlePost={handlePost}
                       postingId={postingId}
                       schedulingLoading={schedulingLoading}
+                      editedTitles={editedTitles}
+                      setEditedTitles={setEditedTitles}
                     />
                   ))}
                 </div>
@@ -890,6 +906,24 @@ interface VideoPublishCardProps {
   schedulingLoading: boolean;
 }
 
+interface VideoPublishCardProps {
+  video: Video;
+  ytConnected: boolean;
+  igConnected: boolean;
+  platformSelections: { [videoId: string]: { yt: boolean; ig: boolean } };
+  handlePlatformChange: (
+    videoId: string,
+    platform: "youtube" | "instagram"
+  ) => void;
+  handlePost: (video: Video, scheduledTime?: DateTime) => void;
+  postingId: string | null;
+  schedulingLoading: boolean;
+  editedTitles: { [id: string]: string };
+  setEditedTitles: React.Dispatch<
+    React.SetStateAction<{ [id: string]: string }>
+  >;
+}
+
 const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
   video,
   ytConnected,
@@ -899,6 +933,8 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
   handlePost,
   postingId,
   schedulingLoading,
+  editedTitles,
+  setEditedTitles,
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
@@ -959,9 +995,23 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1 min-w-0">
-            <h3 className="text-white font-bold text-lg mb-2 truncate group-hover:text-purple-200 transition-colors">
-              {video.title || "Untitled Video"}
-            </h3>
+            <input
+              type="text"
+              className="text-white font-bold text-lg mb-2 truncate group-hover:text-purple-200 transition-colors bg-transparent border-b border-purple-500 focus:outline-none focus:border-pink-500 w-full"
+              value={
+                editedTitles[videoId] !== undefined
+                  ? editedTitles[videoId]
+                  : video.title || ""
+              }
+              placeholder="Enter video title"
+              onChange={(e) =>
+                setEditedTitles((titles) => ({
+                  ...titles,
+                  [videoId]: e.target.value,
+                }))
+              }
+              maxLength={100}
+            />
             <div className="flex items-center gap-3 text-sm">
               <span className="text-slate-400">
                 Published {video.publishCount ?? 0} time
