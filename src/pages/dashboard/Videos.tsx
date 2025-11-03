@@ -557,9 +557,6 @@ const Videos = () => {
                 {/* Action Buttons */}
                 <Suspense fallback={<div>Loading...</div>}>
                   <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
-                    <div className="text-white/60 text-sm">
-                      Video ID: {modal.videoId || "N/A"}
-                    </div>
                     <div className="flex gap-3">
                       <Button
                         variant="outline"
