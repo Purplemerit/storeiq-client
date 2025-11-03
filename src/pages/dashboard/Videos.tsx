@@ -10,7 +10,9 @@ import {
   // DialogHeader,
   // DialogFooter,
 } from "@/components/ui/dialog";
-const AdvancedVideoPlayer = React.lazy(() => import("@/components/AdvancedVideoPlayer"));
+const AdvancedVideoPlayer = React.lazy(
+  () => import("@/components/AdvancedVideoPlayer")
+);
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -35,24 +37,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 const ConfirmDialog = React.lazy(() =>
-  import("@/components/confirm-dialog").then(m => ({ default: m.ConfirmDialog }))
+  import("@/components/confirm-dialog").then((m) => ({
+    default: m.ConfirmDialog,
+  }))
 );
 
 // Dialog UI components
 const Dialog = React.lazy(() =>
-  import("@/components/ui/dialog").then(m => ({ default: m.Dialog }))
+  import("@/components/ui/dialog").then((m) => ({ default: m.Dialog }))
 );
 const DialogContent = React.lazy(() =>
-  import("@/components/ui/dialog").then(m => ({ default: m.DialogContent }))
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogContent }))
 );
 const DialogHeader = React.lazy(() =>
-  import("@/components/ui/dialog").then(m => ({ default: m.DialogHeader }))
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogHeader }))
 );
 const DialogTitle = React.lazy(() =>
-  import("@/components/ui/dialog").then(m => ({ default: m.DialogTitle }))
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogTitle }))
 );
 const DialogFooter = React.lazy(() =>
-  import("@/components/ui/dialog").then(m => ({ default: m.DialogFooter }))
+  import("@/components/ui/dialog").then((m) => ({ default: m.DialogFooter }))
 );
 
 interface Video {
@@ -522,7 +526,9 @@ const Videos = () => {
 
                     {/* Video Player */}
                     {modal.src && (
-                      <Suspense fallback={<Skeleton className="w-full h-full" />}>
+                      <Suspense
+                        fallback={<Skeleton className="w-full h-full" />}
+                      >
                         <AdvancedVideoPlayer
                           src={modal.src}
                           className="w-full h-full"
@@ -915,7 +921,9 @@ const Videos = () => {
                     </Button>
                     <Button
                       variant="destructive"
-                      onClick={() => handleOpenDeleteImageDialog(imageModal.imageId)}
+                      onClick={() =>
+                        handleOpenDeleteImageDialog(imageModal.imageId)
+                      }
                       className="gap-2 bg-red-600 hover:bg-red-700"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -973,6 +981,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
   formatDate,
 }) => {
   // Use the same card structure and styling as testfile.tsx
+  // Helper to truncate title
+  const getShortTitle = (title?: string, maxLen = 20) => {
+    if (!title) return "Untitled Video";
+    return title.length > maxLen ? title.slice(0, maxLen) + "..." : title;
+  };
   return (
     <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-colors w-full max-w-xl mx-auto">
       <div className="h-56 relative">
@@ -993,8 +1006,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
       <div className="p-6">
-        <h3 className="text-white text-xl font-bold mb-1">
-          {video.title || "Untitled Video"}
+        <h3
+          className="text-white text-xl font-bold mb-1"
+          title={video.title || "Untitled Video"}
+        >
+          {getShortTitle(video.title)}
         </h3>
         <p className="text-white/60 text-sm mb-4">
           {video.subtitle || video.description || "No description available"}
