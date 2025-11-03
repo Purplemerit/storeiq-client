@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTime } from "luxon";
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+
+// Lazy load ScheduleDialog
+const ScheduleDialog = React.lazy(() =>
+  import("@/components/schedule-dialog").then((m) => ({
+    default: m.ScheduleDialog,
+  }))
+);
 
 export interface Video {
   id?: string;
@@ -16,7 +28,9 @@ export interface Video {
   scheduledTime?: string;
   scheduledStatus?: "pending" | "completed" | "failed";
   editedTitles: { [id: string]: string };
-  setEditedTitles: React.Dispatch<React.SetStateAction<{ [id: string]: string }>>;
+  setEditedTitles: React.Dispatch<
+    React.SetStateAction<{ [id: string]: string }>
+  >;
 }
 
 export interface VideoPublishCardProps {
@@ -32,7 +46,9 @@ export interface VideoPublishCardProps {
   postingId: string | null;
   schedulingLoading: boolean;
   editedTitles: { [id: string]: string };
-  setEditedTitles: React.Dispatch<React.SetStateAction<{ [id: string]: string }>>;
+  setEditedTitles: React.Dispatch<
+    React.SetStateAction<{ [id: string]: string }>
+  >;
 }
 
 const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
@@ -266,8 +282,65 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
               </span>
             )}
           </Button>
-          {/* Schedule button and tooltip will be rendered by parent */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={`px-4 transition-all duration-300 ${
+                    !selection.yt || !ytConnected
+                      ? "border-slate-600/50 text-slate-400 hover:bg-slate-700/50"
+                      : "border-purple-500/50 text-purple-400 hover:bg-purple-500/10 hover:border-purple-400"
+                  }`}
+                  onClick={() => setScheduleOpen(true)}
+                  disabled={schedulingLoading || !selection.yt || !ytConnected}
+                  title={
+                    !ytConnected
+                      ? "Connect to YouTube to schedule videos"
+                      : !selection.yt
+                      ? "Select a platform to schedule"
+                      : "Schedule for later"
+                  }
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {ytConnected
+                    ? selection.yt
+                      ? "Schedule for later"
+                      : "Select a platform to schedule"
+                    : "Connect YouTube to schedule"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
+
+        {/* Schedule Dialog */}
+        <Suspense fallback={null}>
+          <ScheduleDialog
+            open={scheduleOpen}
+            onOpenChange={setScheduleOpen}
+            onSchedule={(scheduledTime) => {
+              handlePost(video, scheduledTime);
+              setScheduleOpen(false);
+            }}
+          />
+        </Suspense>
       </div>
     </div>
   );

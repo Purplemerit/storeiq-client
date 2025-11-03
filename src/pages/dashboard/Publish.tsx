@@ -280,9 +280,13 @@ const Publish = () => {
 
           const requestPayload = scheduledTime
             ? {
-                ...payload,
+                videoS3Key: video.s3Key,
                 scheduledTime: scheduledTime.toISO(),
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                metadata: {
+                  title,
+                  description: video.description || "",
+                },
               }
             : payload;
 

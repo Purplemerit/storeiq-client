@@ -331,13 +331,40 @@ const Settings = () => {
     handleYouTubeOAuth,
     disconnectYouTube,
   } = useYouTubeConnect();
-  // Use IANA timezone, default to user's or system's
-  const [timezone, setTimezone] = useState(
-    user?.timezone || DateTime.local().zoneName
-  );
+
+  // Detect system timezone, with special handling for India
+  const getSystemTimezone = () => {
+    const detected = DateTime.local().zoneName;
+    // If the system detects IST or India timezone, use Asia/Kolkata
+    if (
+      detected === "IST" ||
+      detected.includes("India") ||
+      detected.includes("Calcutta")
+    ) {
+      return "Asia/Kolkata";
+    }
+    return detected;
+  };
+
+  // Use user's saved timezone, or detect system timezone, with cookie fallback
+  const [timezone, setTimezone] = useState(() => {
+    if (user?.timezone) return user.timezone;
+    const savedTimezone = getCookie("selectedTimezone");
+    if (savedTimezone) return savedTimezone;
+    return getSystemTimezone();
+  });
 
   // Track previous ytConnected value for toast notifications
   const prevYtConnected = useRef(ytConnected);
+
+  // Update timezone when user data loads
+  useEffect(() => {
+    if (user?.timezone && user.timezone !== timezone) {
+      setTimezone(user.timezone);
+      setCookie("selectedTimezone", user.timezone);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.timezone]);
 
   useEffect(() => {
     if (prevYtConnected.current !== ytConnected) {
@@ -504,17 +531,20 @@ const Settings = () => {
 
     setPasswordLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/password`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/password`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+          }),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.error || "Failed to update password.");
