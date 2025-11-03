@@ -40,7 +40,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       : "/";
     if (normalizedPath === "") normalizedPath = "/";
 
-    const publicRoutes = ["/", "/login", "/signup", "/about", "/tools"];
+    const publicRoutes = [
+      "/",
+      "/login",
+      "/signup",
+      "/about",
+      "/tools",
+      "/privacy-policy",
+    ];
     const isPublic =
       publicRoutes.includes(normalizedPath) ||
       normalizedPath.startsWith("/login/") ||
@@ -93,13 +100,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         if (storedToken) {
           setToken(storedToken);
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${storedToken}` },
-            credentials: "include",
-          });
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
+            {
+              headers: { Authorization: `Bearer ${storedToken}` },
+              credentials: "include",
+            }
+          );
           await handleAuthMeResponse(res);
         } else {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, { credentials: "include" });
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
+            { credentials: "include" }
+          );
           await handleAuthMeResponse(res);
         }
       } catch {
@@ -112,31 +125,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     fetchUser();
   }, [location.pathname]);
-// Show toast after successful Google login or signup (with ?logged_in=1 or ?signed_up=1)
-useEffect(() => {
-  if (!loading && user) {
-    const params = new URLSearchParams(location.search);
-    let toastShown = false;
-    if (params.get("logged_in") === "1") {
-      toast("Logged in successfully", { icon: "✅" });
-      params.delete("logged_in");
-      toastShown = true;
+  // Show toast after successful Google login or signup (with ?logged_in=1 or ?signed_up=1)
+  useEffect(() => {
+    if (!loading && user) {
+      const params = new URLSearchParams(location.search);
+      let toastShown = false;
+      if (params.get("logged_in") === "1") {
+        toast("Logged in successfully", { icon: "✅" });
+        params.delete("logged_in");
+        toastShown = true;
+      }
+      if (params.get("signed_up") === "1") {
+        toast("Signed up successfully", { icon: "✅" });
+        params.delete("signed_up");
+        toastShown = true;
+      }
+      if (toastShown) {
+        const newSearch = params.toString();
+        const newUrl = location.pathname + (newSearch ? `?${newSearch}` : "");
+        window.history.replaceState({}, "", newUrl);
+      }
     }
-    if (params.get("signed_up") === "1") {
-      toast("Signed up successfully", { icon: "✅" });
-      params.delete("signed_up");
-      toastShown = true;
-    }
-    if (toastShown) {
-      const newSearch = params.toString();
-      const newUrl =
-        location.pathname + (newSearch ? `?${newSearch}` : "");
-      window.history.replaceState({}, "", newUrl);
-    }
-  }
-  // Only run when user or loading changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [user, loading, location.search, location.pathname]);
+    // Only run when user or loading changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading, location.search, location.pathname]);
 
   const login = (_jwt: string, userObj: User) => {
     setToken(_jwt);
@@ -153,23 +165,29 @@ useEffect(() => {
   const updateTimezone = async (timezone: string) => {
     if (!user) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        credentials: "include",
-        body: JSON.stringify({ timezone }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: "include",
+          body: JSON.stringify({ timezone }),
+        }
+      );
       if (!res.ok) throw new Error("Failed to update timezone");
 
-      const userRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        credentials: "include",
-      });
+      const userRes = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/me`,
+        {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: "include",
+        }
+      );
       if (userRes.ok) {
         const data = await userRes.json();
         if (data && data.user) setUser(data.user);

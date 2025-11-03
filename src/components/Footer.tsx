@@ -157,7 +157,7 @@ export const FooterBottom: React.FC = () => {
         </div>
         <div className="self-stretch my-auto">
           <a
-            href="#privacy"
+            href="/privacy-policy"
             className="text-white hover:text-gray-300 transition-colors"
           >
             <div>Privacy Policy</div>
