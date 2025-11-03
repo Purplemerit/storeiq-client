@@ -1,7 +1,10 @@
-import { Button } from "@/components/ui/button";
-const creativeContentVideo = "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/creative-content.mp4";
-const aiGeneratedVideo = "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/ai-generated.mp4";
-const videoContentVideo = "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/video-content.mp4";
+import GetStartedButton from "@/components/ui/get-started-button";
+const creativeContentVideo =
+  "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/creative-content.mp4";
+const aiGeneratedVideo =
+  "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/ai-generated.mp4";
+const videoContentVideo =
+  "https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/video-content.mp4";
 // You can also import the sticker if you prefer that method
 // import girlSticker from "/girl-sticker.png";
 
@@ -37,7 +40,7 @@ const VideoCard = ({ src }) => {
 
 const HeroSection = () => {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center px-8 relative bg-black text-white">
+    <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 relative bg-black text-white">
       {/* Background gradient orbs */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
       <div className="absolute top-0 left-1/2 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -46,31 +49,28 @@ const HeroSection = () => {
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
       {/* Hero Videos Grid */}
-      <div className="grid grid-cols-3 gap-2 mb-12 max-w-4xl w-full">
+      <div
+        className="grid grid-cols-3 mb-12 w-full max-w-[1180px]"
+        style={{ gap: "155px" }}
+      >
         <VideoCard src={creativeContentVideo} />
         <VideoCard src={aiGeneratedVideo} />
         <VideoCard src={videoContentVideo} />
       </div>
 
       {/* Main Heading */}
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white mb-4 max-w-4xl leading-tight">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white mb-4 w-full max-w-[1180px] leading-tight">
         The AI workspace for next-gen creators
       </h1>
 
       {/* Subheading */}
-      <p className="text-base md:text-xl text-white/80 mb-8 max-w-2xl">
+      <p className="text-base md:text-xl text-white/80 mb-8 w-full max-w-[1180px]">
         STORIQ helps modern creators streamline content creation, planning, and
         publishing like never before.
       </p>
 
       {/* CTA Button */}
-      <Button
-        variant="gradient"
-        size="lg"
-        className="text-lg px-12 py-3 rounded-full font-bold"
-      >
-        Explore
-      </Button>
+      <GetStartedButton />
 
       {/* Girl Sticker
       <div className="absolute bottom-0 right-0 w-48 h-48 md:w-56 md:h-56">

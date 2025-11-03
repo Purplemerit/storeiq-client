@@ -32,13 +32,13 @@ const Header = () => {
           </div>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-4">
-          <div className="flex items-center space-x-1">
+        <nav className="hidden md:flex items-center space-x-6">
+          <div className="flex items-center space-x-3">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors duration-300 ${
+                className={`px-5 py-2 rounded-full text-base font-semibold transition-colors duration-300 ${
                   location.pathname === link.path
                     ? "bg-black text-white"
                     : "bg-transparent text-black hover:bg-gray-200"
@@ -52,7 +52,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link
               to="/signup"
-              className="text-black text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-gray-200 transition-colors duration-300"
+              className="text-black text-base font-semibold px-5 py-2 rounded-full hover:bg-gray-200 transition-colors duration-300"
             >
               SIGN UP
             </Link>
