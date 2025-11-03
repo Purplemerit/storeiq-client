@@ -147,31 +147,33 @@ const TestimonialSection: React.FC = () => {
 
   return (
     <section
-      className="relative w-full max-w-[1180px] h-[539px] mx-auto my-0 max-md:h-auto max-md:min-h-[400px] max-md:p-5 max-sm:h-auto max-sm:min-h-[500px] max-sm:p-[15px]"
+      className="relative w-full bg-black py-20 max-md:py-16 max-sm:py-12"
       aria-label="Customer testimonials"
     >
-      {/* Decorative Background Elements */}
-      <DecorativeElements />
+      <div className="relative w-full max-w-[1180px] h-[539px] mx-auto my-0 max-md:h-auto max-md:min-h-[400px] max-md:p-5 max-sm:h-auto max-sm:min-h-[500px] max-sm:p-[15px]">
+        {/* Decorative Background Elements */}
+        <DecorativeElements />
 
-      {/* Section Title */}
-      <h2 className="-rotate-90 text-white text-center text-[35px] font-normal leading-[30px] absolute w-48 h-[30px] left-[85px] top-[240px] max-md:text-[28px] max-md:left-[10px] max-md:top-[200px] max-sm:text-xl max-sm:w-[150px] max-sm:left-[5px] max-sm:top-[150px] z-5">
-        Testimonials
-      </h2>
+        {/* Section Title */}
+        <h2 className="-rotate-90 text-white text-center text-[35px] font-normal leading-[30px] absolute w-48 h-[30px] left-[85px] top-[240px] max-md:text-[28px] max-md:left-[10px] max-md:top-[200px] max-sm:text-xl max-sm:w-[150px] max-sm:left-[5px] max-sm:top-[150px] z-5">
+          Testimonials
+        </h2>
 
-      {/* Current Testimonial */}
-      <TestimonialCard
-        name={currentData.name}
-        quote={currentData.quote}
-        imageUrl={currentData.imageUrl}
-        imageAlt={currentData.imageAlt}
-      />
+        {/* Current Testimonial */}
+        <TestimonialCard
+          name={currentData.name}
+          quote={currentData.quote}
+          imageUrl={currentData.imageUrl}
+          imageAlt={currentData.imageAlt}
+        />
 
-      {/* Navigation Arrows */}
-      <NavigationArrows onPrevious={handlePrevious} onNext={handleNext} />
+        {/* Navigation Arrows */}
+        <NavigationArrows onPrevious={handlePrevious} onNext={handleNext} />
 
-      {/* Screen Reader Navigation Info */}
-      <div className="sr-only" aria-live="polite">
-        Showing testimonial {currentTestimonial + 1} of {testimonials.length}
+        {/* Screen Reader Navigation Info */}
+        <div className="sr-only" aria-live="polite">
+          Showing testimonial {currentTestimonial + 1} of {testimonials.length}
+        </div>
       </div>
     </section>
   );

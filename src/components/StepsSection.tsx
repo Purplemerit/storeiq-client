@@ -64,7 +64,7 @@ const stepsData: Step[] = [
 export const Steps: React.FC = () => {
   return (
     <section
-      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-[#070707] px-[138px] py-[72px] max-md:px-[60px] max-md:py-10 max-sm:px-5 max-sm:py-[30px]"
+      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-black px-[138px] py-[72px] max-md:px-[60px] max-md:py-10 max-sm:px-5 max-sm:py-[30px]"
       aria-labelledby="steps-title"
     >
       <header className="text-center mb-[60px] max-md:mb-10 max-sm:mb-[30px]">

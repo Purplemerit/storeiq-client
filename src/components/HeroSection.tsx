@@ -65,8 +65,8 @@ const HeroSection = () => {
 
       {/* Subheading */}
       <p className="text-base md:text-xl text-white/80 mb-8 w-full max-w-[1180px]">
-        STORIQ helps modern creators streamline content creation, planning, and
-        publishing like never before.
+        <span className="underline">STORIQ</span> helps modern creators
+        streamline content creation, planning, and publishing like never before.
       </p>
 
       {/* CTA Button */}

@@ -134,7 +134,7 @@ export const PricingSection: React.FC = () => {
   };
 
   return (
-    <section className="w-full min-h-[931px] relative flex flex-col items-center box-border bg-[#070707] px-0 py-[72px] max-md:min-h-[auto] max-md:px-5 max-md:py-10 max-sm:px-4 max-sm:py-[30px]">
+    <section className="w-full min-h-[931px] relative flex flex-col items-center box-border bg-black px-0 py-[72px] max-md:min-h-[auto] max-md:px-5 max-md:py-10 max-sm:px-4 max-sm:py-[30px]">
       <header className="text-center mb-20 max-md:mb-[60px] max-sm:mb-10">
         <h1 className="text-white text-5xl font-medium leading-[60px] underline decoration-solid decoration-auto underline-offset-auto text-center mb-0.5 max-md:text-4xl max-md:leading-[44px] max-sm:text-[28px] max-sm:leading-9">
           Pricing
