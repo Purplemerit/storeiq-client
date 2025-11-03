@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       "/about",
       "/tools",
       "/privacy-policy",
+      "/terms-and-conditions",
     ];
     const isPublic =
       publicRoutes.includes(normalizedPath) ||

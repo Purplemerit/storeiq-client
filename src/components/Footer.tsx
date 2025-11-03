@@ -149,7 +149,7 @@ export const FooterBottom: React.FC = () => {
       <div className="flex items-center gap-6 text-white font-bold flex-wrap">
         <div className="self-stretch my-auto">
           <a
-            href="#terms"
+            href="/terms-and-conditions"
             className="text-white hover:text-gray-300 transition-colors"
           >
             <div>Terms & Conditions</div>

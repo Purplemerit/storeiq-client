@@ -13,6 +13,7 @@ import Home from "./components/HeroSection";
 import NotFound from "./pages/NotFound";
 import Footer from "./components/Footer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 // Dashboard pages
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -67,6 +68,10 @@ const App = () => (
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/Home" element={<Home />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route
+                  path="/terms-and-conditions"
+                  element={<TermsAndConditions />}
+                />
 
                 {/* Protected Routes (everything else) */}
                 <Route
