@@ -9,15 +9,15 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/context/AuthContext";
 import Loader from "@/components/ui/Loader";
-import { 
-  Play, 
-  Pause, 
-  Scissors, 
-  Download, 
-  RotateCcw, 
+import {
+  Play,
+  Pause,
+  Scissors,
+  Download,
+  RotateCcw,
   RotateCw,
   Maximize,
-  Settings
+  Settings,
 } from "lucide-react";
 
 interface Video {
@@ -55,9 +55,9 @@ const VideoEditor: React.FC = () => {
   const params = useParams();
   const location = useLocation();
   const { user } = useAuth();
-  console.log('user', user);
+  console.log("user", user);
   const userId = user && user.id ? user.id : null;
-  const wildcard = params['*'];
+  const wildcard = params["*"];
   const [video, setVideo] = useState<Video | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,7 @@ const VideoEditor: React.FC = () => {
     if (location.state && location.state.url) {
       setVideo({
         url: location.state.url,
-        title: decodeURIComponent(wildcard?.split('/').pop() || "Untitled"),
+        title: decodeURIComponent(wildcard?.split("/").pop() || "Untitled"),
         duration: undefined,
       });
       setStart(0);
@@ -104,7 +104,7 @@ const VideoEditor: React.FC = () => {
 
     setLoading(true);
     setError(null);
-    if (wildcard && !wildcard.includes('/')) {
+    if (wildcard && !wildcard.includes("/")) {
       fetchVideoById(wildcard)
         .then((v) => {
           if (v) {
@@ -125,7 +125,7 @@ const VideoEditor: React.FC = () => {
       }
       setVideo({
         url: videoUrl,
-        title: decodeURIComponent(wildcard.split('/').pop() || "Untitled"),
+        title: decodeURIComponent(wildcard.split("/").pop() || "Untitled"),
         duration: undefined,
       });
       setStart(0);
@@ -145,7 +145,9 @@ const VideoEditor: React.FC = () => {
 
     const handleLoadedMetadata = () => {
       setDuration(vid.duration);
-      setEnd((prevEnd) => (prevEnd === 0 || prevEnd > vid.duration ? vid.duration : prevEnd));
+      setEnd((prevEnd) =>
+        prevEnd === 0 || prevEnd > vid.duration ? vid.duration : prevEnd
+      );
     };
 
     const handleTimeUpdate = () => {
@@ -188,7 +190,7 @@ const VideoEditor: React.FC = () => {
   const seekTo = (time: number) => {
     const vid = videoRef.current;
     if (!vid) return;
-    
+
     vid.currentTime = Math.max(0, Math.min(time, duration));
     setCurrentTime(vid.currentTime);
   };
@@ -225,7 +227,9 @@ const VideoEditor: React.FC = () => {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <div className="text-red-500 text-lg font-medium">{error || "Video not found"}</div>
+          <div className="text-red-500 text-lg font-medium">
+            {error || "Video not found"}
+          </div>
           <Button onClick={() => window.history.back()} variant="outline">
             Go Back
           </Button>
@@ -237,22 +241,24 @@ const VideoEditor: React.FC = () => {
   return (
     <DashboardLayout>
       {isExporting && (
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          background: "rgba(0,0,0,0.8)",
-          zIndex: 2000,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.8)",
+            zIndex: 2000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Loader message="Exporting video, please wait..." />
         </div>
       )}
-      
+
       <div className="p-6 md:p-8 max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -294,11 +300,11 @@ const VideoEditor: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem
                         value={value}
-                        id={`aspect-${value.replace(':', '-')}`}
+                        id={`aspect-${value.replace(":", "-")}`}
                         className="w-4 h-4"
                       />
-                      <label 
-                        htmlFor={`aspect-${value.replace(':', '-')}`} 
+                      <label
+                        htmlFor={`aspect-${value.replace(":", "-")}`}
                         className="text-white cursor-pointer text-sm"
                       >
                         {label}
@@ -317,14 +323,15 @@ const VideoEditor: React.FC = () => {
                 className="bg-black rounded-lg overflow-hidden mb-4 relative group"
               >
                 <video
+                  key={aspectRatio} // Force re-render when aspect ratio changes
                   ref={videoRef}
                   src={video.url}
                   controls
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                   preload="metadata"
-                  style={{ 
+                  style={{
                     outline: previewing ? "3px solid #a855f7" : undefined,
-                    outlineOffset: previewing ? "-3px" : undefined
+                    outlineOffset: previewing ? "-3px" : undefined,
                   }}
                 />
                 {/* Custom Play Button Overlay */}
@@ -350,19 +357,11 @@ const VideoEditor: React.FC = () => {
                 >
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                 </Button>
-                
+
                 <div className="flex-1 mx-4">
-                  <div className="text-white text-xs text-center mb-1">
+                  <div className="text-white text-xs text-center">
                     {formatTime(currentTime)} / {formatTime(duration)}
                   </div>
-                  <Slider
-                    min={0}
-                    max={duration}
-                    step={0.1}
-                    value={[currentTime]}
-                    onValueChange={([time]) => seekTo(time)}
-                    className="cursor-pointer"
-                  />
                 </div>
 
                 <Button
@@ -400,8 +399,12 @@ const VideoEditor: React.FC = () => {
                 {/* Timeline Slider */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-white/60 text-sm">
-                    <span className="text-white/60">Start: {formatTime(start)}</span>
-                    <span className="text-white/60">End: {formatTime(end)}</span>
+                    <span className="text-white/60">
+                      Start: {formatTime(start)}
+                    </span>
+                    <span className="text-white/60">
+                      End: {formatTime(end)}
+                    </span>
                   </div>
                   <Slider
                     min={0}
@@ -409,7 +412,10 @@ const VideoEditor: React.FC = () => {
                     step={0.1}
                     value={[start, end]}
                     onValueChange={([newStart, newEnd]) => {
-                      const s = Math.max(0, Math.min(newStart, newEnd, duration));
+                      const s = Math.max(
+                        0,
+                        Math.min(newStart, newEnd, duration)
+                      );
                       const e = Math.max(0, Math.max(newStart, newEnd, 0));
                       setStart(Math.min(s, e));
                       setEnd(Math.max(s, e));
@@ -444,7 +450,9 @@ const VideoEditor: React.FC = () => {
                 {/* Numeric Inputs */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-white/70 text-xs block mb-1">Start Time</label>
+                    <label className="text-white/70 text-xs block mb-1">
+                      Start Time
+                    </label>
                     <input
                       type="number"
                       min={0}
@@ -462,7 +470,9 @@ const VideoEditor: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-white/70 text-xs block mb-1">End Time</label>
+                    <label className="text-white/70 text-xs block mb-1">
+                      End Time
+                    </label>
                     <input
                       type="number"
                       min={start}
@@ -502,7 +512,10 @@ const VideoEditor: React.FC = () => {
             <div className="bg-storiq-card-bg rounded-lg p-4">
               <div className="space-y-4">
                 <div className="text-center">
-                  <Download size={24} className="mx-auto mb-2 text-purple-500" />
+                  <Download
+                    size={24}
+                    className="mx-auto mb-2 text-purple-500"
+                  />
                   <h3 className="text-white font-medium">Export Video</h3>
                   <p className="text-white/60 text-sm">
                     Crop duration: {formatTime(end - start)}
@@ -512,10 +525,7 @@ const VideoEditor: React.FC = () => {
                 <Button
                   className="w-full bg-purple-600 hover:bg-purple-700"
                   disabled={
-                    start >= end ||
-                    !userId ||
-                    isExporting || 
-                    exportDisabled
+                    start >= end || !userId || isExporting || exportDisabled
                   }
                   onClick={async () => {
                     if (isExporting) return;
@@ -530,7 +540,9 @@ const VideoEditor: React.FC = () => {
                         isNaN(start) ||
                         isNaN(end)
                       ) {
-                        alert("Invalid crop parameters. Please check start/end times and video URL.");
+                        alert(
+                          "Invalid crop parameters. Please check start/end times and video URL."
+                        );
                         setIsExporting(false);
                         return;
                       }
@@ -540,21 +552,32 @@ const VideoEditor: React.FC = () => {
                         return;
                       }
                       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-                      const response = await fetch(`${API_BASE_URL}/api/video/crop`, {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          videoUrl: video.url,
-                          start: Number(start),
-                          end: Number(end),
-                          userId: userId,
-                          aspectRatio: aspectRatio,
-                        }),
-                        credentials: "include",
+                      console.log("[VIDEO-EDITOR] Sending crop request:", {
+                        videoUrl: video.url,
+                        start: Number(start),
+                        end: Number(end),
+                        userId: userId,
+                        aspectRatio: aspectRatio,
                       });
-                      if (!response.ok) throw new Error("Failed to export video");
+                      const response = await fetch(
+                        `${API_BASE_URL}/api/video/crop`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            videoUrl: video.url,
+                            start: Number(start),
+                            end: Number(end),
+                            userId: userId,
+                            aspectRatio: aspectRatio,
+                          }),
+                          credentials: "include",
+                        }
+                      );
+                      if (!response.ok)
+                        throw new Error("Failed to export video");
                       const data = await response.json();
                       const jobId = data.job_id || data.jobId;
                       const exportEntry = {
@@ -564,21 +587,25 @@ const VideoEditor: React.FC = () => {
                         url: video.url,
                         job_id: jobId,
                         status: data.status,
-                        export_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                        userId: userId
+                        export_id: `${Date.now()}-${Math.random()
+                          .toString(36)
+                          .substr(2, 9)}`,
+                        userId: userId,
                       };
-                      const existing = JSON.parse(localStorage.getItem("exports") || "[]");
+                      const existing = JSON.parse(
+                        localStorage.getItem("exports") || "[]"
+                      );
                       existing.push(exportEntry);
                       localStorage.setItem("exports", JSON.stringify(existing));
                       toast.success("Video added to export queue!", {
                         duration: 4000,
-                        icon: '✅'
+                        icon: "✅",
                       });
                       setExportDisabled(true);
                     } catch (err) {
                       toast.error("Export failed. Please try again.", {
                         duration: 4000,
-                        icon: '❌'
+                        icon: "❌",
                       });
                     } finally {
                       setIsExporting(false);
