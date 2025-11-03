@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import CustomButton from "@/components/ui/custom-button";
+
+interface FAQItem {
+  id: number;
+  question: string;
+  isOpen: boolean;
+}
 
 // 1. Updated imports to match your new video files
 const editingVideo =
@@ -21,6 +21,56 @@ const growthVideo =
 
 const About = () => {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+  const [faqItems, setFaqItems] = useState<FAQItem[]>([
+    {
+      id: 1,
+      question: "How can Storiq transform my content creation game?",
+      isOpen: false,
+    },
+    {
+      id: 2,
+      question: "Can I cancel my subscription at any time?",
+      isOpen: false,
+    },
+    {
+      id: 3,
+      question: "What kind of content can I create with Storiq?",
+      isOpen: false,
+    },
+    {
+      id: 4,
+      question: "Can I cancel my subscription at any time?",
+      isOpen: false,
+    },
+    {
+      id: 5,
+      question: "How can Storiq transform my content creation game?",
+      isOpen: false,
+    },
+    {
+      id: 6,
+      question: "What kind of content can I create with Storiq?",
+      isOpen: false,
+    },
+    {
+      id: 7,
+      question: "How can Storiq transform my content creation game?",
+      isOpen: false,
+    },
+    {
+      id: 8,
+      question: "Can I cancel my subscription at any time?",
+      isOpen: false,
+    },
+  ]);
+
+  const toggleFAQ = (id: number) => {
+    setFaqItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, isOpen: !item.isOpen } : item
+      )
+    );
+  };
 
   // The 'videoSrc' properties are now correctly linked to your videos
   const whyCreatorsLove = [
@@ -59,17 +109,6 @@ const About = () => {
       description:
         "You retain full ownership of everything you create with us.",
     },
-  ];
-
-  const faqs = [
-    "How can Storiq transform my content creation game?",
-    "Can I cancel my subscription at any time?",
-    "What kind of content can I create with Storiq?",
-    "Can I cancel my subscription at any time?",
-    "How can Storiq transform my content creation game?",
-    "What kind of content can I create with Storiq?",
-    "How can Storiq transform my content creation game?",
-    "Can I cancel my subscription at any time?",
   ];
 
   return (
@@ -236,29 +275,55 @@ const About = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">
-            Frequently Asked Questions
-          </h2>
-          <Accordion type="single" collapsible className="space-y-4">
-            {faqs.map((question, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-6"
+      <section className="py-20 px-8 flex flex-col items-center">
+        <h2 className="text-4xl font-bold text-center mb-16">
+          <span className="underline">Frequently Asked</span> Questions
+        </h2>
+        <div className="w-[1180px] max-w-full text-[28px] text-white font-medium text-center leading-loose">
+          {faqItems.map((item) => (
+            <div
+              key={item.id}
+              className={`bg-[rgba(28,30,33,1)] flex w-full flex-col overflow-hidden items-stretch justify-center p-7 rounded-[20px] max-md:max-w-full max-md:px-5 ${
+                item.id > 1 ? "mt-6" : ""
+              }`}
+            >
+              <button
+                className="flex items-center gap-[40px_100px] justify-between flex-wrap max-md:max-w-full text-left"
+                onClick={() => toggleFAQ(item.id)}
+                aria-expanded={item.isOpen}
+                aria-controls={`faq-content-${item.id}`}
               >
-                <AccordionTrigger className="text-left text-white/80 hover:text-white">
-                  {question}
-                </AccordionTrigger>
-                <AccordionContent className="text-white/60">
-                  This is a placeholder answer for the FAQ question. In a real
-                  implementation, you would provide detailed answers for each
-                  question.
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                <div className="self-stretch my-auto max-md:max-w-full">
+                  {item.question}
+                </div>
+                <img
+                  src="https://api.builder.io/api/v1/image/assets/35de5dc00516421d9aa405b4c562fade/5174b3c6fbffa0666d0dbde2086ba1eedb2c3817?placeholderIfAbsent=true"
+                  className={`aspect-[1] object-contain w-6 self-stretch shrink-0 my-auto transition-transform duration-300 ${
+                    item.isOpen ? "rotate-180" : ""
+                  }`}
+                  alt="Toggle FAQ"
+                />
+              </button>
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${
+                  item.isOpen
+                    ? "grid-rows-[1fr] opacity-100 mt-4"
+                    : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div
+                    id={`faq-content-${item.id}`}
+                    className="text-base text-gray-300 leading-relaxed text-left"
+                  >
+                    This is the answer content for "{item.question}". Here you
+                    would typically include detailed information about the
+                    question.
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>
