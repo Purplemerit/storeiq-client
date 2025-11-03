@@ -1,10 +1,12 @@
 import React from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import DarkVeil from "@/components/DarkVeil";
 
 const Hero: React.FC = () => {
   return (
     <section className="flex w-full max-w-[1264px] flex-col items-start relative box-border m-0 p-0 mx-auto max-md:max-w-full max-md:px-6 max-md:py-0 max-sm:px-4 max-sm:py-0">
-      <div className="flex w-full flex-col items-start relative box-border mb-[120px] m-0 p-0 max-md:mb-16">
+      <div className="flex w-full flex-col items-start relative box-border mb-16 m-0 p-0 max-md:mb-12">
         <div className="flex flex-col items-center w-full relative box-border m-0 p-0 mt-20 max-md:mt-10">
           <div className="flex flex-col justify-center items-center gap-6 relative box-border m-0 p-0 max-md:gap-4">
             <div className="flex flex-col items-start relative box-border m-0 p-0">
@@ -196,7 +198,7 @@ const PolicyContent: React.FC = () => {
       </PolicySection>
 
       <PolicySection title="Reach Out" className="pt-[38px] max-md:pt-8">
-        <div className="flex w-full flex-col items-start relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
+        <div className="flex w-full flex-col items-start relative box-border mb-0 m-0 p-0">
           <p className="text-[#CACFD8] text-base font-normal leading-[25.6px] relative box-border m-0 p-0">
             If you have any questions, please contact us at{" "}
             <a
@@ -215,12 +217,20 @@ const PolicyContent: React.FC = () => {
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <div className="w-full bg-black min-h-screen">
-      <Header />
-      <div className="py-20 px-4">
-        <div className="max-w-[1264px] mx-auto">
-          <Hero />
-          <PolicyContent />
+    <div className="w-full bg-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
+        <DarkVeil />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        <Header />
+        <div className="py-20 px-4">
+          <div className="max-w-[1264px] mx-auto">
+            <Hero />
+            <PolicyContent />
+          </div>
         </div>
       </div>
     </div>

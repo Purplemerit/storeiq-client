@@ -1,10 +1,12 @@
 import * as React from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import DarkVeil from "@/components/DarkVeil";
 
 const Hero: React.FC = () => {
   return (
     <section className="flex w-full max-w-[1264px] flex-col items-start relative mx-auto max-md:max-w-full max-md:px-6 max-md:py-0 max-sm:px-4 max-sm:py-0">
-      <div className="flex w-full flex-col items-start relative mb-[120px] m-0 p-0 max-md:mb-16">
+      <div className="flex w-full flex-col items-start relative mb-16 m-0 p-0 max-md:mb-12">
         <div className="flex flex-col items-center w-full relative box-border m-0 p-0 mt-20 max-md:mt-10">
           <div className="flex flex-col justify-center items-center gap-6 relative box-border m-0 p-0 max-md:gap-4">
             <div className="flex flex-col items-start relative box-border m-0 p-0">
@@ -42,7 +44,7 @@ interface TermsSectionProps {
 }
 
 const TermsSection: React.FC<TermsSectionProps> = ({ title, children }) => (
-  <div className="flex w-full flex-col gap-5 mb-10">
+  <div className="flex w-full flex-col gap-5 mb-10 last:mb-0">
     <div className="flex w-full flex-col items-start relative">
       <h2 className="text-white text-2xl font-semibold leading-[33.6px] tracking-[-0.36px] relative max-md:text-xl max-md:leading-7 max-sm:text-lg max-sm:leading-[25px]">
         {title}
@@ -215,12 +217,20 @@ const TermsContent: React.FC = () => {
 
 const TermsAndConditions: React.FC = () => {
   return (
-    <div className="w-full bg-black min-h-screen">
-      <Header />
-      <div className="py-20 px-4">
-        <div className="max-w-[1264px] mx-auto">
-          <Hero />
-          <TermsContent />
+    <div className="w-full bg-black relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
+        <DarkVeil />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        <Header />
+        <div className="py-20 px-4">
+          <div className="max-w-[1264px] mx-auto">
+            <Hero />
+            <TermsContent />
+          </div>
         </div>
       </div>
     </div>
