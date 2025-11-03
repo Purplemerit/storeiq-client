@@ -53,7 +53,7 @@ const HeroSection = () => {
       </div>
 
       {/* Main Heading */}
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 max-w-4xl leading-tight">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white mb-4 max-w-4xl leading-tight">
         The AI workspace for next-gen creators
       </h1>
 
