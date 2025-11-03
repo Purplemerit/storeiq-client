@@ -34,7 +34,7 @@ Feature a young female character.
 Each scene should have a different background. Use a modern sans-serif font and vibrant nature visuals.`
   );
   const [selectedQuality, setSelectedQuality] = useState("720P");
-  const [selectedVoiceSpeed, setSelectedVoiceSpeed] = useState("5x");
+  const [selectedVoiceSpeed, setSelectedVoiceSpeed] = useState("1x");
   // Status for video generation
   const [videoStatus, setVideoStatus] = useState<Status>("idle");
   const [videoError, setVideoError] = useState<string | null>(null);
@@ -107,7 +107,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
 
   // --- DATA ---
   const qualityOptions = ["480P", "720P", "1080P"];
-  const voiceSpeedOptions = ["5x", "10x"];
+  const voiceSpeedOptions = ["1x", "2x"];
 
   // --- UPLOAD VIDEO HANDLER ---
   const handleUploadVideo = async (e: React.FormEvent) => {
@@ -321,25 +321,6 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     </span>
                   </Button>
                 ))}
-              </div>
-            </Card>
-
-            {/* Aspect Ratio Selection */}
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-white text-lg font-semibold">
-                  Aspect Ratio
-                </h3>
-                <div className="flex items-center gap-2 text-green-400 text-sm font-semibold">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  Create +10
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-white/60 text-sm">Swipe to explore</span>
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
               </div>
             </Card>
 
