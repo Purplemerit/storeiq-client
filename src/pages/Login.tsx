@@ -55,15 +55,18 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         // Check for invalid credentials
@@ -121,7 +124,7 @@ const Login = () => {
         {/* White Pill Container */}
         <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
           {/* Logo - UPDATED CLASSES HERE */}
-          <h1 className="font-orbitron font-semibold text-2xl text-black pl-6">
+          <h1 className="font-semibold text-2xl text-black pl-6">
             <Link to="/">STORIQ</Link>
           </h1>
           {/* Sign Up Button */}
@@ -165,7 +168,9 @@ const Login = () => {
                 <Input
                   type="text"
                   placeholder="Email Address"
-                  className={`w-full ${email && !isEmail(email) ? "border-2 border-red-500" : ""}`}
+                  className={`w-full ${
+                    email && !isEmail(email) ? "border-2 border-red-500" : ""
+                  }`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onBlur={(e) => {

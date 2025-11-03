@@ -67,15 +67,18 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username,
-          email: emailOrPhone,
-          password,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username,
+            email: emailOrPhone,
+            password,
+          }),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.message || "Registration failed.");
@@ -124,7 +127,7 @@ const Signup = () => {
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-10">
         <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
-          <h1 className="font-orbitron font-semibold text-2xl text-black pl-6">
+          <h1 className="font-semibold text-2xl text-black pl-6">
             <Link to="/">STORIQ</Link>
           </h1>
           <Button

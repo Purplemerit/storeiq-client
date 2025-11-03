@@ -19,7 +19,7 @@ export default {
         },
         extend: {
             fontFamily: {
-                orbitron: ['Orbitron', 'sans-serif'], // Added this line
+                sans: ['Clash Display', 'sans-serif'],
             },
             colors: {
                 border: 'hsl(var(--border))',

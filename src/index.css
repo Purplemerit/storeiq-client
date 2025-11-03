@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -88,12 +88,18 @@ All colors MUST be HSL.
 }
 
 @layer base {
+
+  html {
+    font-family: 'Clash Display', sans-serif;
+  }
   * {
+    font-family: inherit;
     @apply border-border;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Clash Display', sans-serif;
   }
 }
 /* Hide scrollbar utility */
