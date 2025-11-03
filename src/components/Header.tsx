@@ -15,8 +15,16 @@ const Header = () => {
       <header className="w-full max-w-5xl mx-auto bg-white rounded-full py-3 px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex items-center">
-            {/* This class will now work correctly */}
-            <div className="text-black font-semibold text-2xl tracking-normal leading-6">
+            <div
+              style={{
+                color: "#000",
+                fontFamily: "Orbitron",
+                fontSize: "24px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "24px",
+              }}
+            >
               STORIQ
             </div>
           </div>
