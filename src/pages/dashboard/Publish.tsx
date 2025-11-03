@@ -170,6 +170,8 @@ const Publish = () => {
       if (!res.ok) throw new Error("Failed to fetch videos");
       const data = await res.json();
       setVideos(Array.isArray(data) ? data : []);
+      // Debug: log what we get from backend
+      console.log("Fetched videos:", data);
       return {};
     } catch (err) {
       const error = (err as Error)?.message || "Unknown error";
@@ -451,33 +453,23 @@ const Publish = () => {
             {/* Split videos and images by file extension */}
             {(() => {
               function isVideoFile(url: string) {
-                return /\.(mp4|mov|webm|avi|mkv)$/i.test(url);
+                const cleanUrl = url.split("?")[0];
+                return /\.(mp4|mov|webm|avi|mkv)$/i.test(cleanUrl);
               }
               function isImageFile(url: string) {
-                return /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
+                const cleanUrl = url.split("?")[0];
+                return /\.(jpg|jpeg|png|gif|webp)$/i.test(cleanUrl);
               }
 
               // Filter videos for current view
               const allVideoItems = videos.filter((v) => isVideoFile(v.url));
+              // Only show scheduled (not published) videos in this tab
               const currentVideoItems = allVideoItems.filter((v) => {
-                if (activeTab === "scheduled") {
-                  // Show videos that are:
-                  // 1. Not yet published AND
-                  // 2. Either unscheduled OR scheduled but not completed
-                  return (
-                    !v.publishedToYouTube &&
-                    (!v.scheduledTime ||
-                      (v.scheduledTime && v.scheduledStatus !== "completed"))
-                  );
-                } else {
-                  // Show videos that are:
-                  // 1. Published to YouTube OR
-                  // 2. Have completed scheduled publishing
-                  return (
-                    v.publishedToYouTube ||
-                    (v.scheduledTime && v.scheduledStatus === "completed")
-                  );
-                }
+                const published = !!v.publishedToYouTube;
+                const scheduledCompleted =
+                  !!v.scheduledTime && v.scheduledStatus === "completed";
+                // Show if NOT published and NOT completed
+                return !published && !scheduledCompleted;
               });
 
               const imageItems = images;
@@ -547,7 +539,7 @@ const Publish = () => {
                         </svg>
                         <span>{error}</span>
                       </div>
-                    ) : videoItems.length === 0 ? (
+                    ) : currentVideoItems.length === 0 ? (
                       <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
                         <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
                           <svg
@@ -595,7 +587,7 @@ const Publish = () => {
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                        {videoItems.map((video) => (
+                        {currentVideoItems.map((video) => (
                           <Suspense
                             fallback={<Skeleton className="h-96 w-full" />}
                           >
@@ -882,53 +874,78 @@ const Publish = () => {
                   </svg>
                   <span>{error}</span>
                 </div>
-              ) : videoItems.length === 0 ? (
-                <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
-                  <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
-                    <svg
-                      className="w-10 h-10 text-slate-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    No Published Content
-                  </h3>
-                  <p className="text-slate-400 mb-6 max-w-md mx-auto">
-                    Your published content will appear here after successful
-                    publication.
-                  </p>
-                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {videoItems.map((video) => (
-                    <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-                      <Suspense fallback={<div>Loading...</div>}>
-                        <LazyVideoPublishCard
-                          key={video.id || video.s3Key}
-                          video={video}
-                          ytConnected={ytConnected}
-                          igConnected={igConnected}
-                          platformSelections={platformSelections}
-                          handlePlatformChange={handlePlatformChange}
-                          handlePost={handlePost}
-                          postingId={postingId}
-                          schedulingLoading={schedulingLoading}
-                          editedTitles={editedTitles}
-                          setEditedTitles={setEditedTitles}
-                        />
-                      </Suspense>
-                    </Suspense>
-                  ))}
-                </div>
+                (() => {
+                  function isVideoFile(url: string) {
+                    const cleanUrl = url.split("?")[0];
+                    return /\.(mp4|mov|webm|avi|mkv)$/i.test(cleanUrl);
+                  }
+                  const allVideoItems = videos.filter((v) =>
+                    isVideoFile(v.url)
+                  );
+                  // Only show published/completed videos in this tab
+                  // Defensive: treat missing fields as false
+                  const publishedVideoItems = allVideoItems.filter(
+                    (v) =>
+                      !!v.publishedToYouTube ||
+                      (!!v.scheduledTime && v.scheduledStatus === "completed")
+                  );
+                  // Debug: fallback to show all if empty (for troubleshooting)
+                  const debugPublishedItems =
+                    publishedVideoItems.length === 0
+                      ? allVideoItems
+                      : publishedVideoItems;
+                  return debugPublishedItems.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
+                      <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
+                        <svg
+                          className="w-10 h-10 text-slate-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        No Published Content
+                      </h3>
+                      <p className="text-slate-400 mb-6 max-w-md mx-auto">
+                        Your published content will appear here after successful
+                        publication.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                      {debugPublishedItems.map((video) => (
+                        <Suspense
+                          fallback={<Skeleton className="h-96 w-full" />}
+                        >
+                          <Suspense fallback={<div>Loading...</div>}>
+                            <LazyVideoPublishCard
+                              key={video.id || video.s3Key}
+                              video={video}
+                              ytConnected={ytConnected}
+                              igConnected={igConnected}
+                              platformSelections={platformSelections}
+                              handlePlatformChange={handlePlatformChange}
+                              handlePost={handlePost}
+                              postingId={postingId}
+                              schedulingLoading={schedulingLoading}
+                              editedTitles={editedTitles}
+                              setEditedTitles={setEditedTitles}
+                            />
+                          </Suspense>
+                        </Suspense>
+                      ))}
+                    </div>
+                  );
+                })()
               )}
             </div>
           </TabsContent>
