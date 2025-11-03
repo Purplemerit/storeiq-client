@@ -890,12 +890,7 @@ const Publish = () => {
                       !!v.publishedToYouTube ||
                       (!!v.scheduledTime && v.scheduledStatus === "completed")
                   );
-                  // Debug: fallback to show all if empty (for troubleshooting)
-                  const debugPublishedItems =
-                    publishedVideoItems.length === 0
-                      ? allVideoItems
-                      : publishedVideoItems;
-                  return debugPublishedItems.length === 0 ? (
+                  return publishedVideoItems.length === 0 ? (
                     <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed border-slate-600/50 rounded-2xl bg-slate-800/20">
                       <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mx-auto">
                         <svg
@@ -922,7 +917,7 @@ const Publish = () => {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                      {debugPublishedItems.map((video) => (
+                      {publishedVideoItems.map((video) => (
                         <Suspense
                           fallback={<Skeleton className="h-96 w-full" />}
                         >
