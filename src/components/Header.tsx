@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <div className="bg-[#100f1f] p-4 font-sans">
-      <header className="w-full max-w-5xl mx-auto bg-white rounded-full py-3 px-6 flex items-center justify-between">
+      <header className="w-full max-w-7xl mx-auto bg-white rounded-full py-3 px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex items-center">
             <Link to="/">
