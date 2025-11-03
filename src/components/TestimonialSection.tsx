@@ -115,7 +115,7 @@ const testimonials: Testimonial[] = [
     name: "Alex Johnson",
     quote:
       '"This platform has revolutionized my workflow. The intuitive interface and powerful features make content creation a breeze."',
-    imageUrl: "/girl-stickerr.png",
+    imageUrl: "/alex_johnson.jpg",
     imageAlt: "Alex Johnson profile image",
   },
   {
@@ -123,7 +123,7 @@ const testimonials: Testimonial[] = [
     name: "Sarah Chen",
     quote:
       "\"I've tried many tools, but nothing comes close to this level of automation and quality. It's a game-changer for creators.\"",
-    imageUrl: "/girl-stickerr.png",
+    imageUrl: "/sarah_chen.jpg",
     imageAlt: "Sarah Chen profile image",
   },
 ];
