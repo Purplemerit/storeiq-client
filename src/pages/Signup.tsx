@@ -127,9 +127,21 @@ const Signup = () => {
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-10">
         <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
-          <h1 className="font-semibold text-2xl text-black pl-6">
-            <Link to="/">STORIQ</Link>
-          </h1>
+          <Link to="/">
+            <div
+              style={{
+                color: "#000",
+                fontFamily: "Orbitron",
+                fontSize: "24px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "24px",
+                paddingLeft: "1.5rem",
+              }}
+            >
+              STORIQ
+            </div>
+          </Link>
           <Button
             variant="default"
             className="bg-black text-white hover:bg-gray-800 rounded-full px-5 py-2 text-sm font-semibold"

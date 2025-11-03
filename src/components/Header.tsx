@@ -15,18 +15,20 @@ const Header = () => {
       <header className="w-full max-w-5xl mx-auto bg-white rounded-full py-3 px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex items-center">
-            <div
-              style={{
-                color: "#000",
-                fontFamily: "Orbitron",
-                fontSize: "24px",
-                fontStyle: "normal",
-                fontWeight: 600,
-                lineHeight: "24px",
-              }}
-            >
-              STORIQ
-            </div>
+            <Link to="/">
+              <div
+                style={{
+                  color: "#000",
+                  fontFamily: "Orbitron",
+                  fontSize: "24px",
+                  fontStyle: "normal",
+                  fontWeight: 600,
+                  lineHeight: "24px",
+                }}
+              >
+                STORIQ
+              </div>
+            </Link>
           </div>
         </div>
 
