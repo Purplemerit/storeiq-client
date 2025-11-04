@@ -223,43 +223,56 @@ const Stats = () => {
   ].filter((item) => item.value > 0);
 
   const renderChart = () => {
+    const isMobile = window.innerWidth < 768;
+    const chartMargin = isMobile
+      ? { top: 10, right: 10, left: 0, bottom: 5 }
+      : { top: 20, right: 30, left: 20, bottom: 5 };
+
     if (chartType === "line") {
       return (
-        <LineChart
-          data={timeseries}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
+        <LineChart data={timeseries} margin={chartMargin}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-          <XAxis dataKey="label" tick={{ fill: "#9CA3AF" }} axisLine={false} />
-          <YAxis tick={{ fill: "#9CA3AF" }} axisLine={false} />
+          <XAxis
+            dataKey="label"
+            tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+            axisLine={false}
+            angle={isMobile ? -45 : 0}
+            textAnchor={isMobile ? "end" : "middle"}
+            height={isMobile ? 60 : 30}
+          />
+          <YAxis
+            tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+            axisLine={false}
+            width={isMobile ? 30 : 60}
+          />
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
+          {!isMobile && <Legend />}
           <Line
             type="monotone"
             dataKey="aiVideosGeneratedCount"
             name="Videos Generated"
             stroke={COLORS.videoGenerated}
-            strokeWidth={3}
-            dot={{ fill: COLORS.videoGenerated, r: 4 }}
-            activeDot={{ r: 6 }}
+            strokeWidth={isMobile ? 2 : 3}
+            dot={{ fill: COLORS.videoGenerated, r: isMobile ? 3 : 4 }}
+            activeDot={{ r: isMobile ? 5 : 6 }}
           />
           <Line
             type="monotone"
             dataKey="aiImagesGeneratedCount"
             name="Images Generated"
             stroke={COLORS.imageGenerated}
-            strokeWidth={3}
-            dot={{ fill: COLORS.imageGenerated, r: 4 }}
-            activeDot={{ r: 6 }}
+            strokeWidth={isMobile ? 2 : 3}
+            dot={{ fill: COLORS.imageGenerated, r: isMobile ? 3 : 4 }}
+            activeDot={{ r: isMobile ? 5 : 6 }}
           />
           <Line
             type="monotone"
             dataKey="publishedCount"
             name="Published"
             stroke={COLORS.published}
-            strokeWidth={3}
-            dot={{ fill: COLORS.published, r: 4 }}
-            activeDot={{ r: 6 }}
+            strokeWidth={isMobile ? 2 : 3}
+            dot={{ fill: COLORS.published, r: isMobile ? 3 : 4 }}
+            activeDot={{ r: isMobile ? 5 : 6 }}
           />
         </LineChart>
       );
@@ -267,15 +280,23 @@ const Stats = () => {
 
     if (chartType === "bar") {
       return (
-        <BarChart
-          data={timeseries}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
+        <BarChart data={timeseries} margin={chartMargin}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-          <XAxis dataKey="label" tick={{ fill: "#9CA3AF" }} axisLine={false} />
-          <YAxis tick={{ fill: "#9CA3AF" }} axisLine={false} />
+          <XAxis
+            dataKey="label"
+            tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+            axisLine={false}
+            angle={isMobile ? -45 : 0}
+            textAnchor={isMobile ? "end" : "middle"}
+            height={isMobile ? 60 : 30}
+          />
+          <YAxis
+            tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+            axisLine={false}
+            width={isMobile ? 30 : 60}
+          />
           <Tooltip content={<CustomTooltip />} />
-          <Legend />
+          {!isMobile && <Legend />}
           <Bar
             dataKey="aiVideosGeneratedCount"
             name="Videos Generated"
@@ -300,10 +321,7 @@ const Stats = () => {
 
     // Default area chart
     return (
-      <AreaChart
-        data={timeseries}
-        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-      >
+      <AreaChart data={timeseries} margin={chartMargin}>
         <defs>
           <linearGradient id="colorVideoGenerated" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -335,17 +353,28 @@ const Stats = () => {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-        <XAxis dataKey="label" tick={{ fill: "#9CA3AF" }} axisLine={false} />
-        <YAxis tick={{ fill: "#9CA3AF" }} axisLine={false} />
+        <XAxis
+          dataKey="label"
+          tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+          axisLine={false}
+          angle={isMobile ? -45 : 0}
+          textAnchor={isMobile ? "end" : "middle"}
+          height={isMobile ? 60 : 30}
+        />
+        <YAxis
+          tick={{ fill: "#9CA3AF", fontSize: isMobile ? 10 : 12 }}
+          axisLine={false}
+          width={isMobile ? 30 : 60}
+        />
         <Tooltip content={<CustomTooltip />} />
-        <Legend />
+        {!isMobile && <Legend />}
         <Area
           type="monotone"
           dataKey="aiVideosGeneratedCount"
           name="Videos Generated"
           stroke={COLORS.videoGenerated}
           fill="url(#colorVideoGenerated)"
-          strokeWidth={2}
+          strokeWidth={isMobile ? 1.5 : 2}
         />
         <Area
           type="monotone"
@@ -353,7 +382,7 @@ const Stats = () => {
           name="Images Generated"
           stroke={COLORS.imageGenerated}
           fill="url(#colorImageGenerated)"
-          strokeWidth={2}
+          strokeWidth={isMobile ? 1.5 : 2}
         />
         <Area
           type="monotone"
@@ -361,7 +390,7 @@ const Stats = () => {
           name="Published"
           stroke={COLORS.published}
           fill="url(#colorPublished)"
-          strokeWidth={2}
+          strokeWidth={isMobile ? 1.5 : 2}
         />
       </AreaChart>
     );
@@ -369,27 +398,46 @@ const Stats = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Performance Stats</h1>
-          <p className="text-white/60">Your posts activity from the last 30 days.</p>
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
+            Performance Stats
+          </h1>
+          <p className="text-white/60 text-sm md:text-base">
+            Your posts activity from the last 30 days.
+          </p>
         </div>
 
         {/* Filters */}
-        <div className="flex space-x-4 mb-8">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-6 md:mb-8">
           <Select defaultValue="all-videos">
-            <SelectTrigger className="w-48 bg-storiq-card-bg border-storiq-border text-white">
+            <SelectTrigger className="w-full sm:w-48 bg-storiq-card-bg border-storiq-border text-white">
               <SelectValue placeholder="All videos" />
             </SelectTrigger>
             <SelectContent className="bg-storiq-card-bg border-storiq-border">
-              <SelectItem value="all-videos" className="text-white hover:bg-storiq-purple/20">All videos</SelectItem>
-              <SelectItem value="published" className="text-white hover:bg-storiq-purple/20">Published</SelectItem>
-              <SelectItem value="drafts" className="text-white hover:bg-storiq-purple/20">Drafts</SelectItem>
+              <SelectItem
+                value="all-videos"
+                className="text-white hover:bg-storiq-purple/20"
+              >
+                All videos
+              </SelectItem>
+              <SelectItem
+                value="published"
+                className="text-white hover:bg-storiq-purple/20"
+              >
+                Published
+              </SelectItem>
+              <SelectItem
+                value="drafts"
+                className="text-white hover:bg-storiq-purple/20"
+              >
+                Drafts
+              </SelectItem>
             </SelectContent>
           </Select>
 
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-48 bg-storiq-card-bg border-storiq-border text-white">
+            <SelectTrigger className="w-full sm:w-48 bg-storiq-card-bg border-storiq-border text-white">
               <SelectValue placeholder="Select days" />
             </SelectTrigger>
             <SelectContent className="bg-storiq-card-bg border-storiq-border">
@@ -407,25 +455,30 @@ const Stats = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           {loading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6">
-  <Skeleton className="h-4 w-1/3 bg-white/10 mb-2" />
-  <Skeleton className="h-8 w-2/3 bg-white/20 mb-2" />
-  <Skeleton className="h-6 w-16 bg-white/10" />
-</div>
+              <div
+                key={i}
+                className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6"
+              >
+                <Skeleton className="h-3 md:h-4 w-1/3 bg-white/10 mb-2" />
+                <Skeleton className="h-6 md:h-8 w-2/3 bg-white/20 mb-2" />
+                <Skeleton className="h-4 md:h-6 w-16 bg-white/10" />
+              </div>
             ))
           ) : error ? (
-            <div className="col-span-4 bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 text-center">
-  <span className="text-red-400">Error: {error}</span>
-</div>
+            <div className="col-span-2 lg:col-span-4 bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6 text-center">
+              <span className="text-red-400 text-sm md:text-base">
+                Error: {error}
+              </span>
+            </div>
           ) : stats.length === 0 ? (
-            <div className="col-span-4 bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 text-center">
-  <span className="text-white/60">
-    No statistics available for the selected filters.
-  </span>
-</div>
+            <div className="col-span-2 lg:col-span-4 bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6 text-center">
+              <span className="text-white/60 text-sm md:text-base">
+                No statistics available for the selected filters.
+              </span>
+            </div>
           ) : (
             <>
               {(() => {
@@ -443,18 +496,29 @@ const Stats = () => {
                   })
                   .slice(0, 4)
                   .map((stat, index) => (
-                    <div key={index} className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6">
-                      <h3 className="text-white/60 text-sm mb-2">{stat.title}</h3>
-                      <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
+                    <div
+                      key={index}
+                      className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6"
+                    >
+                      <h3 className="text-white/60 text-xs md:text-sm mb-1 md:mb-2">
+                        {stat.title}
+                      </h3>
+                      <div className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">
+                        {stat.value}
+                      </div>
                       <div className="flex items-center space-x-2">
-                        <span className={`text-sm font-semibold px-2 py-1 rounded ${
-                          stat.changeType === 'positive'
-                            ? 'bg-green-500/20 text-green-400'
-                            : 'bg-red-500/20 text-red-400'
-                        }`}>
+                        <span
+                          className={`text-xs md:text-sm font-semibold px-1.5 md:px-2 py-0.5 md:py-1 rounded ${
+                            stat.changeType === "positive"
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-red-500/20 text-red-400"
+                          }`}
+                        >
                           {stat.change}
                         </span>
-                        <span className="text-white/50 text-sm">{stat.comparison}</span>
+                        <span className="text-white/50 text-xs md:text-sm truncate">
+                          {stat.comparison}
+                        </span>
                       </div>
                     </div>
                   ));
@@ -464,18 +528,26 @@ const Stats = () => {
               {stats.length > 4 &&
                 stats[4].title !== "Scripts Generated" &&
                 stats[4].title !== "Videos Published to Instagram" && (
-                  <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6">
-                    <h3 className="text-white/60 text-sm mb-2">{stats[4].title}</h3>
-                    <div className="text-3xl font-bold text-white mb-2">{stats[4].value}</div>
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6">
+                    <h3 className="text-white/60 text-xs md:text-sm mb-1 md:mb-2">
+                      {stats[4].title}
+                    </h3>
+                    <div className="text-xl md:text-3xl font-bold text-white mb-1 md:mb-2">
+                      {stats[4].value}
+                    </div>
                     <div className="flex items-center space-x-2">
-                      <span className={`text-sm font-semibold px-2 py-1 rounded ${
-                        stats[4].changeType === 'positive'
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-red-500/20 text-red-400'
-                      }`}>
+                      <span
+                        className={`text-xs md:text-sm font-semibold px-1.5 md:px-2 py-0.5 md:py-1 rounded ${
+                          stats[4].changeType === "positive"
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
                         {stats[4].change}
                       </span>
-                      <span className="text-white/50 text-sm">{stats[4].comparison}</span>
+                      <span className="text-white/50 text-xs md:text-sm truncate">
+                        {stats[4].comparison}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -484,21 +556,27 @@ const Stats = () => {
         </div>
 
         {/* Chart */}
-        <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6">
-          <h3 className="text-white text-xl font-bold mb-6">Overall Statistics</h3>
-          <div className="h-80 relative pr-4 pb-8">
+        <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6">
+          <h3 className="text-white text-lg md:text-xl font-bold mb-4 md:mb-6">
+            Overall Statistics
+          </h3>
+          <div className="h-64 md:h-80 relative pr-2 md:pr-4 pb-4 md:pb-8 overflow-x-auto">
             <ResponsiveContainer width="100%" height="100%">
               {renderChart()}
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-center space-x-6 mt-4">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-4">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span className="text-white/60 text-sm">Video Generated</span>
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
+              <span className="text-white/60 text-xs md:text-sm">
+                Video Generated
+              </span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-white/60 text-sm">Video Download</span>
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full"></div>
+              <span className="text-white/60 text-xs md:text-sm">
+                Video Download
+              </span>
             </div>
           </div>
         </div>
