@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -44,6 +45,17 @@ import ProtectedRoute from "./context/Protected";
 
 const queryClient = new QueryClient();
 
+// ScrollToTop component to handle scroll on route change
+const ScrollToTop = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return null;
+};
+
 // Layout component that includes Header and Footer
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -59,7 +71,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
       )}
       <div
-        className="flex-grow"
+        className={`flex-grow ${showHeaderFooter ? "pt-20" : ""}`}
         style={{ position: "relative", overflow: "hidden" }}
       >
         {children}
@@ -239,6 +251,7 @@ const App = () => (
       <Sonner />
       <LoaderProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <AuthProvider>
             <Layout>
               <AnimatedRoutes />

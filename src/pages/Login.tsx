@@ -101,7 +101,7 @@ const Login = () => {
   };
 
   const handleForgotPassword = () => {
-    toast.info("Forgot password functionality coming soon!");
+    toast("Forgot password functionality coming soon!");
   };
 
   const handleSignup = () => {
@@ -116,9 +116,12 @@ const Login = () => {
       <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-50"></div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-10">
+      <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-50">
         <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
-          <Link to="/">
+          <Link
+            to="/"
+            className="cursor-pointer hover:opacity-80 transition-opacity"
+          >
             <div
               style={{
                 color: "#000",
@@ -162,25 +165,25 @@ const Login = () => {
         </div>
         {/* Right Side - Login Form */}
         <div className="flex-1 flex items-center justify-center px-8 z-10">
-          <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[480px] h-[796px] pt-[97px] pb-[47px] px-10 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[400px] max-md:h-[700px] max-md:pt-[60px] max-md:pb-[30px] max-md:px-[30px] max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[600px] max-sm:pt-10 max-sm:pb-5 max-sm:px-5">
-            <div className="flex flex-col items-center gap-[101px] w-[400px] h-[652px] max-md:w-[340px] max-md:gap-20 max-sm:w-full max-sm:gap-[60px]">
-              <div className="flex flex-col items-start gap-[47px] w-full">
-                <section className="flex flex-col items-start gap-3.5 w-full">
+          <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[420px] h-[700px] pt-[60px] pb-[40px] px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[380px] max-md:h-[650px] max-md:pt-[50px] max-md:pb-[30px] max-md:px-7 max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[550px] max-sm:pt-8 max-sm:pb-5 max-sm:px-5">
+            <div className="flex flex-col items-center gap-[80px] w-full max-md:gap-16 max-sm:gap-[50px]">
+              <div className="flex flex-col items-start gap-[35px] w-full">
+                <section className="flex flex-col items-start gap-3 w-full">
                   <header className="flex flex-col items-start">
-                    <h1 className="text-white text-4xl font-semibold">Login</h1>
-                    <p className="text-white text-base font-medium">
+                    <h1 className="text-white text-3xl font-semibold">Login</h1>
+                    <p className="text-white text-sm font-medium">
                       Glad you're back.!
                     </p>
                   </header>
 
                   <form
                     onSubmit={handleLogin}
-                    className="flex flex-col items-start gap-[25px] max-md:gap-5 max-sm:gap-[15px] w-full"
+                    className="flex flex-col items-start gap-[18px] max-md:gap-4 max-sm:gap-[12px] w-full"
                     noValidate
                   >
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-col gap-1 w-full">
                       <div
-                        className={`flex w-full items-center gap-2.5 border px-4 py-3.5 rounded-xl border-solid ${
+                        className={`flex w-full items-center gap-2.5 border px-3 py-2.5 rounded-lg border-solid ${
                           email && !isEmail(email)
                             ? "border-red-500 border-2"
                             : "border-white"
@@ -196,36 +199,36 @@ const Login = () => {
                               toast.error("Invalid email format");
                             }
                           }}
-                          className="text-white text-xl font-normal bg-transparent border-none outline-none w-full placeholder:text-white"
+                          className="text-white text-base font-normal bg-transparent border-none outline-none w-full placeholder:text-white"
                           aria-label="Username"
                           required
                         />
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-start gap-3 w-full">
-                      <div className="flex flex-col gap-2 w-full">
-                        <div className="flex w-full justify-between items-center border px-4 py-3.5 rounded-xl border-solid border-white">
+                    <div className="flex flex-col items-start gap-2.5 w-full">
+                      <div className="flex flex-col gap-1 w-full">
+                        <div className="flex w-full justify-between items-center border px-3 py-2.5 rounded-lg border-solid border-white">
                           <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="text-white text-xl font-normal bg-transparent border-none outline-none w-full placeholder:text-white"
+                            className="text-white text-base font-normal bg-transparent border-none outline-none w-full placeholder:text-white"
                             aria-label="Password"
                             required
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="w-[18px] h-[18px] flex-shrink-0 hover:opacity-80 transition-opacity"
+                            className="w-[16px] h-[16px] flex-shrink-0 hover:opacity-80 transition-opacity"
                             aria-label={
                               showPassword ? "Hide password" : "Show password"
                             }
                           >
                             <svg
-                              width="18"
-                              height="18"
+                              width="16"
+                              height="16"
                               viewBox="0 0 18 18"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -248,10 +251,10 @@ const Login = () => {
                           className="sr-only"
                           aria-describedby="remember-me-label"
                         />
-                        <div className="w-[18px] h-[18px]">
+                        <div className="w-[16px] h-[16px]">
                           <svg
-                            width="18"
-                            height="18"
+                            width="16"
+                            height="16"
                             viewBox="0 0 18 18"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +281,7 @@ const Login = () => {
                         </div>
                         <span
                           id="remember-me-label"
-                          className="text-white text-base font-medium"
+                          className="text-white text-sm font-medium"
                         >
                           Remember me
                         </span>
@@ -295,9 +298,9 @@ const Login = () => {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="flex w-full justify-center items-center gap-2.5 cursor-pointer px-2.5 py-3.5 rounded-xl bg-gradient-to-r from-[#7CC1F3] to-[#D27EEF] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex w-full justify-center items-center gap-2.5 cursor-pointer px-2.5 py-2.5 rounded-lg bg-gradient-to-r from-[#7CC1F3] to-[#D27EEF] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="text-white text-xl font-semibold">
+                        <span className="text-white text-base font-semibold">
                           {loading ? "Logging in..." : "Login"}
                         </span>
                       </button>
@@ -305,7 +308,7 @@ const Login = () => {
                       <button
                         type="button"
                         onClick={handleForgotPassword}
-                        className="text-white text-base font-medium cursor-pointer hover:underline"
+                        className="text-white text-sm font-medium cursor-pointer hover:underline"
                       >
                         Forgot password ?
                       </button>
@@ -324,23 +327,21 @@ const Login = () => {
                   role="separator"
                   aria-label="Alternative login methods"
                 >
-                  <div className="w-[170px] h-0.5 bg-[#4D4D4D]" />
-                  <span className="text-[#4D4D4D] text-base font-medium">
-                    Or
-                  </span>
-                  <div className="w-[170px] h-0.5 bg-[#4D4D4D]" />
+                  <div className="w-[130px] h-0.5 bg-[#4D4D4D]" />
+                  <span className="text-[#4D4D4D] text-sm font-medium">Or</span>
+                  <div className="w-[130px] h-0.5 bg-[#4D4D4D]" />
                 </div>
 
                 <div className="flex justify-center items-center gap-[18px]">
                   <button
                     onClick={handleGoogleAuth}
-                    className="w-[42px] h-[42px] cursor-pointer hover:opacity-80 transition-opacity"
+                    className="w-[36px] h-[36px] cursor-pointer hover:opacity-80 transition-opacity"
                     aria-label="Login with Google"
                     type="button"
                   >
                     <svg
-                      width="42"
-                      height="42"
+                      width="36"
+                      height="36"
                       viewBox="0 0 42 42"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -378,13 +379,13 @@ const Login = () => {
 
                   <button
                     onClick={handleFacebookAuth}
-                    className="w-[42px] h-[42px] cursor-pointer hover:opacity-80 transition-opacity"
+                    className="w-[36px] h-[36px] cursor-pointer hover:opacity-80 transition-opacity"
                     aria-label="Login with Facebook"
                     type="button"
                   >
                     <svg
-                      width="42"
-                      height="42"
+                      width="36"
+                      height="36"
                       viewBox="0 0 42 42"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -410,13 +411,13 @@ const Login = () => {
 
                   <button
                     onClick={handleGithubAuth}
-                    className="w-[42px] h-[42px] cursor-pointer hover:opacity-80 transition-opacity"
+                    className="w-[36px] h-[36px] cursor-pointer hover:opacity-80 transition-opacity"
                     aria-label="Login with GitHub"
                     type="button"
                   >
                     <svg
-                      width="42"
-                      height="42"
+                      width="36"
+                      height="36"
                       viewBox="0 0 42 42"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -435,30 +436,36 @@ const Login = () => {
             <footer className="flex flex-col items-center gap-2 mt-auto">
               <button
                 onClick={handleSignup}
-                className="text-white text-base font-medium hover:underline cursor-pointer"
+                className="text-white text-sm font-medium hover:underline cursor-pointer"
               >
                 Don't have an account ? Signup
               </button>
 
-              <nav className="flex w-full justify-between items-center px-1.5 py-1 rounded-md max-sm:flex-col max-sm:gap-2.5 max-sm:text-center">
+              <nav className="flex w-full justify-between items-center px-1.5 py-1 rounded-md gap-4 max-sm:flex-col max-sm:gap-2.5 max-sm:text-center">
                 <Link
                   to="/terms-and-conditions"
                   className="flex items-start gap-2.5 max-sm:justify-center"
                 >
-                  <span className="text-white text-base font-normal cursor-pointer hover:underline">
+                  <span className="text-white text-sm font-normal cursor-pointer hover:underline">
                     Terms & Conditions
                   </span>
                 </Link>
-                <button className="flex items-start gap-2.5 max-sm:justify-center">
-                  <span className="text-white text-base font-normal cursor-pointer hover:underline">
+                <Link
+                  to="/about"
+                  className="flex items-start gap-2.5 max-sm:justify-center"
+                >
+                  <span className="text-white text-sm font-normal cursor-pointer hover:underline">
                     Support
                   </span>
-                </button>
-                <button className="flex items-start gap-2.5 max-sm:justify-center">
-                  <span className="text-white text-base font-normal cursor-pointer hover:underline">
+                </Link>
+                <Link
+                  to="/about"
+                  className="flex items-start gap-2.5 max-sm:justify-center"
+                >
+                  <span className="text-white text-sm font-normal cursor-pointer hover:underline">
                     Customer Care
                   </span>
-                </button>
+                </Link>
               </nav>
             </footer>
           </div>
