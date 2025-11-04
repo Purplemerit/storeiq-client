@@ -49,10 +49,10 @@ All colors MUST be HSL.
     /* STORIQ Dark Theme Variables */
     --storiq-dark: 240 10% 3.9%;
     --storiq-dark-lighter: 240 8% 12%;
-    --storiq-purple: 271 100% 50%;
-    --storiq-purple-light: 271 100% 65%;
+    --storiq-purple: 271 100% 60%;
+    --storiq-purple-light: 271 100% 70%;
     --storiq-blue: 221 83% 53%;
-    --storiq-gradient: linear-gradient(135deg, hsl(271 100% 50%), hsl(221 83% 53%));
+    --storiq-gradient: linear-gradient(135deg, hsl(271 100% 60%), hsl(221 83% 53%));
     --storiq-card-bg: 240 8% 8%;
     --storiq-border: 240 8% 20%;
   }

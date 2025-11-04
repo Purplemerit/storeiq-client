@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import DashboardLayout from "@/components/DashboardLayout"
-import { Button } from "@/components/ui/button"
-import { Play, Sparkles, Zap } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DashboardLayout from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Play, Sparkles, Zap } from "lucide-react";
 
 // Import images from assets
 import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
@@ -14,15 +14,15 @@ import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState<unknown[] | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState(0)
+  const [data, setData] = useState<unknown[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
-    setData([])
-    setLoading(false)
-  }, [])
+    setData([]);
+    setLoading(false);
+  }, []);
 
   const quickOptions = [
     {
@@ -62,9 +62,9 @@ const Dashboard = () => {
       image:
         "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3",
     },
-  ]
+  ];
 
-const tools = [
+  const tools = [
     {
       title: "Video Generator",
       subtitle: "Turn text into videos with AI",
@@ -103,33 +103,34 @@ const tools = [
     {
       title: "Image mobing tool",
       subtitle: "Add object to other background scene",
-      image: "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/WhatsApp+Image+2025-09-24+at+15.54.32.jpeg",
+      image:
+        "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/WhatsApp+Image+2025-09-24+at+15.54.32.jpeg",
       buttonText: "Try Now",
       link: "/dashboard/aitools/Mobimage",
-      
     },
-   {
+    {
       title: "Script to Live Analyzer",
       subtitle: "Generate audio automatically",
-      image: "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/Screenshot+2025-09-26+110713.png",
+      image:
+        "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/Screenshot+2025-09-26+110713.png",
       buttonText: "Try Now",
       link: "/dashboard/aitools/tts",
-     
     },
-    
   ];
 
   return (
     <DashboardLayout>
       <div className="p-8 bg-[#121212] min-h-screen">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Start Creating!</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            Start Creating!
+          </h1>
           <p className="text-gray-400">Choose how you want to get started</p>
         </div>
 
         {/* Quick Options */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {quickOptions.map((option, index) => (
+          {quickOptions.map((option, index) =>
             option.href ? (
               <div
                 key={index}
@@ -141,15 +142,19 @@ const tools = [
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-300"
-                  style={{backgroundImage: `url(${option.image})`}}
+                  style={{ backgroundImage: `url(${option.image})` }}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 {option.icon}
                 <div className="relative z-10">
                   {option.superTitle && (
-                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">{option.superTitle}</p>
+                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">
+                      {option.superTitle}
+                    </p>
                   )}
-                  <h3 className="text-white text-xl font-bold">{option.title}</h3>
+                  <h3 className="text-white text-xl font-bold">
+                    {option.title}
+                  </h3>
                 </div>
               </div>
             ) : (
@@ -159,23 +164,36 @@ const tools = [
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-300"
-                  style={{backgroundImage: `url(${option.image})`}}
+                  style={{ backgroundImage: `url(${option.image})` }}
                 ></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                 {option.icon}
                 <div className="relative z-10">
                   {option.superTitle && (
-                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">{option.superTitle}</p>
+                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">
+                      {option.superTitle}
+                    </p>
                   )}
-                  <h3 className="text-white text-xl font-bold">{option.title}</h3>
+                  <h3 className="text-white text-xl font-bold">
+                    {option.title}
+                  </h3>
                 </div>
               </div>
             )
-          ))}
+          )}
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-2 mb-8">
+        <div className="relative inline-flex bg-[#1C1C1C] border border-gray-800/80 rounded-xl p-1 mb-8">
+          {/* Animated slider background */}
+          <div
+            className="absolute top-1 bottom-1 bg-storiq-purple rounded-lg transition-all duration-300 ease-in-out"
+            style={{
+              left: `${activeTab * 33.333}%`,
+              width: "33.333%",
+            }}
+          />
+
           {["Home", "Creation", "Inspiration"].map((tab, index) => (
             <button
               key={index}
@@ -187,10 +205,10 @@ const tools = [
                   navigate("/dashboard/aitools");
                 }
               }}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+              className={`relative z-10 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 min-w-[120px] ${
                 activeTab === index
-                  ? "bg-violet-700 text-white"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/60"
+                  ? "text-white"
+                  : "text-gray-400 hover:text-white"
               }`}
             >
               {tab}
@@ -206,10 +224,16 @@ const tools = [
               className="bg-[#1C1C1C] border border-gray-800/80 rounded-2xl overflow-hidden group transition-all duration-300 hover:border-violet-700/50 hover:transform hover:-translate-y-1"
             >
               <div className="overflow-hidden h-40">
-                <img src={tool.image || "/placeholder.svg"} alt={tool.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img
+                  src={tool.image || "/placeholder.svg"}
+                  alt={tool.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="p-6">
-                <h3 className="text-white text-lg font-bold mb-1">{tool.title}</h3>
+                <h3 className="text-white text-lg font-bold mb-1">
+                  {tool.title}
+                </h3>
                 <p className="text-gray-400 text-sm mb-4">{tool.subtitle}</p>
                 <Button
                   variant="outline"
@@ -224,7 +248,7 @@ const tools = [
         </div>
       </div>
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
