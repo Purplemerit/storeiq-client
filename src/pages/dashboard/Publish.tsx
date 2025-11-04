@@ -523,14 +523,36 @@ const Publish = () => {
                     </div>
 
                     {loading ? (
-                      <div className="flex flex-col items-center justify-center py-20">
-                        <div className="relative">
-                          <div className="w-16 h-16 border-4 border-slate-700 border-t-purple-500 rounded-full animate-spin"></div>
-                          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-pink-500 rounded-full animate-spin animation-delay-150"></div>
-                        </div>
-                        <p className="text-slate-400 mt-4 font-medium">
-                          Loading your videos...
-                        </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                        {[...Array(6)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden animate-pulse"
+                          >
+                            {/* Video Thumbnail Skeleton */}
+                            <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 relative">
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            </div>
+
+                            {/* Content Skeleton */}
+                            <div className="p-4 space-y-4">
+                              {/* Title */}
+                              <Skeleton className="h-6 w-3/4 bg-gray-700/50" />
+
+                              {/* Platform Selection */}
+                              <div className="flex gap-2">
+                                <Skeleton className="h-10 w-24 bg-gray-700/50 rounded-lg" />
+                                <Skeleton className="h-10 w-24 bg-gray-700/50 rounded-lg" />
+                              </div>
+
+                              {/* Action Buttons */}
+                              <div className="flex gap-2">
+                                <Skeleton className="h-10 flex-1 bg-gray-700/50 rounded-lg" />
+                                <Skeleton className="h-10 flex-1 bg-gray-700/50 rounded-lg" />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     ) : error ? (
                       <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-6 py-4 rounded-2xl flex items-center gap-3">
@@ -665,14 +687,15 @@ const Publish = () => {
                     </div>
 
                     {imagesLoading ? (
-                      <div className="flex flex-col items-center justify-center py-20">
-                        <div className="relative">
-                          <div className="w-16 h-16 border-4 border-slate-700 border-t-purple-500 rounded-full animate-spin"></div>
-                          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-pink-500 rounded-full animate-spin animation-delay-150"></div>
-                        </div>
-                        <p className="text-slate-400 mt-4 font-medium">
-                          Loading your images...
-                        </p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                        {[...Array(8)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="aspect-square rounded-xl overflow-hidden border border-storiq-border animate-pulse"
+                          >
+                            <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800" />
+                          </div>
+                        ))}
                       </div>
                     ) : imagesError ? (
                       <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-6 py-4 rounded-2xl flex items-center gap-3">
@@ -864,14 +887,28 @@ const Publish = () => {
               </div>
 
               {loading ? (
-                <div className="flex flex-col items-center justify-center py-20">
-                  <div className="relative">
-                    <div className="w-16 h-16 border-4 border-slate-700 border-t-green-500 rounded-full animate-spin"></div>
-                    <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-emerald-500 rounded-full animate-spin animation-delay-150"></div>
-                  </div>
-                  <p className="text-slate-400 mt-4 font-medium">
-                    Loading published content...
-                  </p>
+                <div className="space-y-4">
+                  {[...Array(4)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="bg-storiq-card-bg/50 border border-storiq-border rounded-xl p-4 md:p-6 animate-pulse"
+                    >
+                      <div className="flex flex-col md:flex-row gap-4">
+                        {/* Thumbnail Skeleton */}
+                        <div className="w-full md:w-48 aspect-video md:aspect-square rounded-lg bg-gradient-to-br from-gray-700 to-gray-800" />
+
+                        {/* Content Skeleton */}
+                        <div className="flex-1 space-y-3">
+                          <Skeleton className="h-6 w-3/4 bg-gray-700/50" />
+                          <Skeleton className="h-4 w-1/2 bg-gray-700/30" />
+                          <div className="flex gap-2 mt-4">
+                            <Skeleton className="h-8 w-20 bg-gray-700/50 rounded-full" />
+                            <Skeleton className="h-8 w-24 bg-gray-700/50 rounded-full" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : error ? (
                 <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-6 py-4 rounded-2xl flex items-center gap-3">

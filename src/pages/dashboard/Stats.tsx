@@ -457,14 +457,19 @@ const Stats = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           {loading ? (
-            Array.from({ length: 5 }).map((_, i) => (
+            Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6"
+                className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6 animate-pulse"
               >
-                <Skeleton className="h-3 md:h-4 w-1/3 bg-white/10 mb-2" />
-                <Skeleton className="h-6 md:h-8 w-2/3 bg-white/20 mb-2" />
-                <Skeleton className="h-4 md:h-6 w-16 bg-white/10" />
+                <div className="space-y-3">
+                  <Skeleton className="h-3 md:h-4 w-24 bg-gray-700/50 mb-2" />
+                  <Skeleton className="h-8 md:h-10 w-16 bg-gray-700/70" />
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-6 w-12 bg-green-500/20 rounded-full" />
+                    <Skeleton className="h-3 w-20 bg-gray-700/30" />
+                  </div>
+                </div>
               </div>
             ))
           ) : error ? (
@@ -560,25 +565,59 @@ const Stats = () => {
           <h3 className="text-white text-lg md:text-xl font-bold mb-4 md:mb-6">
             Overall Statistics
           </h3>
-          <div className="h-64 md:h-80 relative pr-2 md:pr-4 pb-4 md:pb-8 overflow-x-auto">
-            <ResponsiveContainer width="100%" height="100%">
-              {renderChart()}
-            </ResponsiveContainer>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
-              <span className="text-white/60 text-xs md:text-sm">
-                Video Generated
-              </span>
+          {loading ? (
+            <div className="space-y-4 animate-pulse">
+              {/* Chart Area Skeleton */}
+              <div className="h-64 md:h-80 bg-gradient-to-br from-gray-700/30 to-gray-800/30 rounded-xl relative overflow-hidden">
+                {/* Animated bars */}
+                <div className="absolute bottom-0 left-0 right-0 flex items-end justify-around px-8 pb-8 gap-2">
+                  {[40, 65, 45, 70, 55, 80, 60].map((height, i) => (
+                    <div
+                      key={i}
+                      className="bg-gray-600/40 rounded-t"
+                      style={{
+                        height: `${height}%`,
+                        width: "12%",
+                        animationDelay: `${i * 0.1}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Legend Skeleton */}
+              <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center space-x-2">
+                    <Skeleton className="w-3 h-3 rounded-full bg-gray-700/50" />
+                    <Skeleton className="h-3 w-24 bg-gray-700/30" />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-white/60 text-xs md:text-sm">
-                Video Download
-              </span>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="h-64 md:h-80 relative pr-2 md:pr-4 pb-4 md:pb-8 overflow-x-auto">
+                <ResponsiveContainer width="100%" height="100%">
+                  {renderChart()}
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3 md:gap-6 mt-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
+                  <span className="text-white/60 text-xs md:text-sm">
+                    Video Generated
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full"></div>
+                  <span className="text-white/60 text-xs md:text-sm">
+                    Video Download
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </DashboardLayout>

@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
@@ -111,6 +112,7 @@ const Exports = () => {
   const [filterStatus, setFilterStatus] = useState<
     "all" | "completed" | "failed"
   >("all");
+  const [isLoading, setIsLoading] = useState(true);
 
   // ConfirmDialog state
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -247,6 +249,7 @@ const Exports = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     try {
       const raw = localStorage.getItem("exports");
       if (raw) {
@@ -268,6 +271,8 @@ const Exports = () => {
       }
     } catch (e) {
       setExportHistory([]);
+    } finally {
+      setIsLoading(false);
     }
   }, [userId]);
 
@@ -410,80 +415,106 @@ const Exports = () => {
         {/* In Progress Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">In Progress</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-            {inProgressExports.length === 0 ? (
-              <div className="p-8 text-center text-white/60">
-                No exports in progress.
-              </div>
-            ) : (
-              inProgressExports.map((item) => (
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+              {[...Array(3)].map((_, i) => (
                 <div
-                  key={item.export_id}
-                  className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden flex flex-col"
+                  key={i}
+                  className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden animate-pulse"
                 >
-                  {/* Striped background and play button overlay */}
-                  <div className="relative h-48 w-full bg-slate-800 flex items-center justify-center">
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        backgroundImage:
-                          "repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px)",
-                      }}
-                    ></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-black/50 rounded-full h-16 w-16 flex items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="h-8 w-8 text-white"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
+                  <div className="p-4 md:p-6 space-y-4">
+                    <div className="flex justify-between items-start">
+                      <Skeleton className="h-6 w-3/4 bg-gray-700/50" />
+                      <Skeleton className="h-6 w-20 bg-gray-700/50 rounded-full" />
                     </div>
-                  </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-white text-xl font-bold mb-1 line-clamp-1">
-                      {item.filename || item.name || "Untitled"}
-                    </h3>
-                    <p className="text-white/60 text-sm mb-4">
-                      {item.status?.toLowerCase() === "processing"
-                        ? "Exporting"
-                        : item.status?.toLowerCase() === "pending"
-                        ? "Queued"
-                        : "Exporting"}{" "}
-                      • {item.resolution ? `${item.resolution} • ` : ""}
-                      {item.format || "MP4"}
-                    </p>
-                    {/* Progress Bar */}
-                    <div className="flex items-center gap-x-3 mb-4">
-                      <div className="w-full bg-storiq-dark rounded-full h-2">
-                        <div
-                          className="bg-storiq-purple h-2 rounded-full"
-                          style={{
-                            width: `${
-                              item.progress !== undefined ? item.progress : 30
-                            }%`,
-                          }}
-                        ></div>
+                    <Skeleton className="h-4 w-1/2 bg-gray-700/30" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <Skeleton className="h-4 w-16 bg-gray-700/30" />
+                        <Skeleton className="h-4 w-12 bg-gray-700/30" />
                       </div>
-                      <p className="text-storiq-purple text-sm font-medium whitespace-nowrap">
-                        {item.progress !== undefined ? item.progress : 30}%
-                      </p>
+                      <Skeleton className="h-2 w-full bg-gray-700/50 rounded-full" />
                     </div>
-                    <Button
-                      variant="outline"
-                      className="w-full border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
-                      disabled
-                    >
-                      Download
-                    </Button>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+              {inProgressExports.length === 0 ? (
+                <div className="p-8 text-center text-white/60">
+                  No exports in progress.
+                </div>
+              ) : (
+                inProgressExports.map((item) => (
+                  <div
+                    key={item.export_id}
+                    className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden flex flex-col"
+                  >
+                    {/* Striped background and play button overlay */}
+                    <div className="relative h-48 w-full bg-slate-800 flex items-center justify-center">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage:
+                            "repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px)",
+                        }}
+                      ></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="bg-black/50 rounded-full h-16 w-16 flex items-center justify-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="h-8 w-8 text-white"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-1">
+                      <h3 className="text-white text-xl font-bold mb-1 line-clamp-1">
+                        {item.filename || item.name || "Untitled"}
+                      </h3>
+                      <p className="text-white/60 text-sm mb-4">
+                        {item.status?.toLowerCase() === "processing"
+                          ? "Exporting"
+                          : item.status?.toLowerCase() === "pending"
+                          ? "Queued"
+                          : "Exporting"}{" "}
+                        • {item.resolution ? `${item.resolution} • ` : ""}
+                        {item.format || "MP4"}
+                      </p>
+                      {/* Progress Bar */}
+                      <div className="flex items-center gap-x-3 mb-4">
+                        <div className="w-full bg-storiq-dark rounded-full h-2">
+                          <div
+                            className="bg-storiq-purple h-2 rounded-full"
+                            style={{
+                              width: `${
+                                item.progress !== undefined ? item.progress : 30
+                              }%`,
+                            }}
+                          ></div>
+                        </div>
+                        <p className="text-storiq-purple text-sm font-medium whitespace-nowrap">
+                          {item.progress !== undefined ? item.progress : 30}%
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="w-full border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
+                        disabled
+                      >
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
 
         {/* Filters and Controls - Responsive */}
@@ -585,373 +616,467 @@ const Exports = () => {
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Export History</h2>
 
-          {/* Desktop Table View (hidden on mobile/tablet) */}
-          <div className="hidden lg:block bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
-            {/* Table Header */}
-            <div
-              className="p-4 grid gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20"
-              style={{
-                gridTemplateColumns:
-                  "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
-              }}
-            >
-              <div>Filename</div>
-              <div>Date</div>
-              <div>Size</div>
-              <div>Format</div>
-              <div>Status</div>
-              <div>Actions</div>
-            </div>
-            {/* Table Rows */}
-            <div className="divide-y divide-storiq-border">
-              {filteredAndSortedExports.length === 0 ? (
-                <div className="p-8 text-center text-white/60 col-span-6">
-                  No exports found. Your exported videos will appear here once
-                  you start creating them.
-                </div>
-              ) : (
-                filteredAndSortedExports.map((item) => (
+          {isLoading ? (
+            <div className="space-y-4">
+              {/* Desktop Skeleton */}
+              <div className="hidden lg:block bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden">
+                <div className="p-4 bg-storiq-purple/20 border-b border-storiq-border">
                   <div
-                    key={item.export_id}
-                    className="p-4 grid gap-4 text-white items-center"
+                    className="grid gap-4"
                     style={{
                       gridTemplateColumns:
                         "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
                     }}
                   >
-                    <div className="font-medium truncate">
-                      {item.filename || item.name || "Untitled Export"}
-                    </div>
-                    <div className="text-white/60">
-                      {item.date || item.createdAt
-                        ? new Date(
-                            item.date || item.createdAt
-                          ).toLocaleDateString()
-                        : "Unknown date"}
-                    </div>
-                    <div className="text-white/60">{item.size || "-"}</div>
-                    <div>
-                      <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-sm">
-                        {item.format || "MP4"}
-                      </span>
-                    </div>
-                    <div>
-                      <span
-                        className={`px-2 py-1 rounded-md text-sm font-medium ${
-                          item.status?.toLowerCase() === "completed"
-                            ? "bg-green-500/20 text-green-400"
-                            : item.status?.toLowerCase() === "failed"
-                            ? "bg-red-500/20 text-red-400"
-                            : "bg-yellow-500/20 text-yellow-400"
-                        }`}
-                      >
-                        {item.status || "Unknown"}
-                      </span>
-                    </div>
-                    <div className="flex gap-2 flex-wrap">
-                      {/* Download */}
-                      {item.downloadUrl || item.url ? (
-                        <a
-                          href={item.downloadUrl || item.url}
-                          download={item.filename || item.name}
-                          className="inline-flex"
-                          aria-label="Download export"
-                        >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                            aria-label="Download export"
-                          >
-                            <Icons.Download
-                              className="w-3.5 h-3.5"
-                              aria-hidden="true"
-                            />
-                          </Button>
-                        </a>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled
-                          className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
-                          aria-label="Download not available"
-                        >
-                          <Icons.Download
-                            className="w-3.5 h-3.5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      )}
-                      {/* Share (placeholder, logic unchanged) */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                        aria-label="Share export"
-                        // onClick={...} // keep logic unchanged
-                      >
-                        Share
-                      </Button>
-                      {/* Delete */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleOpenDeleteDialog(item.export_id)}
-                        className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                        aria-label="Delete export"
-                      >
-                        <Icons.Delete
-                          className="w-3.5 h-3.5"
-                          aria-hidden="true"
-                        />
-                      </Button>
-                    </div>
+                    {[...Array(6)].map((_, i) => (
+                      <Skeleton key={i} className="h-5 w-24 bg-gray-700/50" />
+                    ))}
                   </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Tablet Table View (visible on tablet only) */}
-          <div className="hidden md:block lg:hidden bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
-            {/* Table Header */}
-            <div
-              className="p-3 grid gap-3 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20 text-sm"
-              style={{
-                gridTemplateColumns:
-                  "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
-              }}
-            >
-              <div>Filename</div>
-              <div>Date</div>
-              <div>Status</div>
-              <div>Actions</div>
-            </div>
-            {/* Table Rows */}
-            <div className="divide-y divide-storiq-border">
-              {filteredAndSortedExports.length === 0 ? (
-                <div className="p-8 text-center text-white/60">
-                  No exports found. Your exported videos will appear here once
-                  you start creating them.
                 </div>
-              ) : (
-                filteredAndSortedExports.map((item) => (
+                <div className="divide-y divide-storiq-border">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="p-4 grid gap-4"
+                      style={{
+                        gridTemplateColumns:
+                          "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                      }}
+                    >
+                      <Skeleton className="h-5 w-full bg-gray-700/50" />
+                      <Skeleton className="h-5 w-20 bg-gray-700/30" />
+                      <Skeleton className="h-5 w-16 bg-gray-700/30" />
+                      <Skeleton className="h-5 w-12 bg-gray-700/30" />
+                      <Skeleton className="h-6 w-20 bg-gray-700/50 rounded-full" />
+                      <div className="flex gap-2">
+                        <Skeleton className="h-8 w-24 bg-gray-700/50 rounded-lg" />
+                        <Skeleton className="h-8 w-24 bg-gray-700/50 rounded-lg" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tablet Skeleton */}
+              <div className="hidden md:block lg:hidden bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden">
+                {[...Array(4)].map((_, i) => (
                   <div
-                    key={item.export_id}
-                    className="p-3 grid gap-3 text-white items-center text-sm"
-                    style={{
-                      gridTemplateColumns:
-                        "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
-                    }}
+                    key={i}
+                    className="p-4 border-b border-storiq-border animate-pulse"
                   >
-                    <div className="font-medium truncate">
-                      {item.filename || item.name || "Untitled Export"}
+                    <div className="flex justify-between items-start mb-3">
+                      <Skeleton className="h-6 w-48 bg-gray-700/50" />
+                      <Skeleton className="h-6 w-20 bg-gray-700/50 rounded-full" />
                     </div>
-                    <div className="text-white/60 text-xs">
-                      {item.date || item.createdAt
-                        ? new Date(
-                            item.date || item.createdAt
-                          ).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })
-                        : "Unknown"}
+                    <div className="flex gap-4 mb-3">
+                      <Skeleton className="h-4 w-24 bg-gray-700/30" />
+                      <Skeleton className="h-4 w-16 bg-gray-700/30" />
                     </div>
-                    <div>
-                      <span
-                        className={`px-2 py-1 rounded-md text-xs font-medium ${
-                          item.status?.toLowerCase() === "completed"
-                            ? "bg-green-500/20 text-green-400"
-                            : item.status?.toLowerCase() === "failed"
-                            ? "bg-red-500/20 text-red-400"
-                            : "bg-yellow-500/20 text-yellow-400"
-                        }`}
+                    <div className="flex gap-2">
+                      <Skeleton className="h-9 flex-1 bg-gray-700/50 rounded-lg" />
+                      <Skeleton className="h-9 flex-1 bg-gray-700/50 rounded-lg" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile Skeleton */}
+              <div className="md:hidden space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 animate-pulse"
+                  >
+                    <Skeleton className="h-6 w-3/4 bg-gray-700/50 mb-3" />
+                    <Skeleton className="h-4 w-1/2 bg-gray-700/30 mb-4" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-10 flex-1 bg-gray-700/50 rounded-lg" />
+                      <Skeleton className="h-10 w-20 bg-gray-700/50 rounded-lg" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Desktop Table View (hidden on mobile/tablet) */}
+              <div className="hidden lg:block bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
+                {/* Table Header */}
+                <div
+                  className="p-4 grid gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20"
+                  style={{
+                    gridTemplateColumns:
+                      "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                  }}
+                >
+                  <div>Filename</div>
+                  <div>Date</div>
+                  <div>Size</div>
+                  <div>Format</div>
+                  <div>Status</div>
+                  <div>Actions</div>
+                </div>
+                {/* Table Rows */}
+                <div className="divide-y divide-storiq-border">
+                  {filteredAndSortedExports.length === 0 ? (
+                    <div className="p-8 text-center text-white/60 col-span-6">
+                      No exports found. Your exported videos will appear here
+                      once you start creating them.
+                    </div>
+                  ) : (
+                    filteredAndSortedExports.map((item) => (
+                      <div
+                        key={item.export_id}
+                        className="p-4 grid gap-4 text-white items-center"
+                        style={{
+                          gridTemplateColumns:
+                            "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                        }}
                       >
-                        {item.status || "Unknown"}
-                      </span>
-                    </div>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {/* Download */}
-                      {item.downloadUrl || item.url ? (
-                        <a
-                          href={item.downloadUrl || item.url}
-                          download={item.filename || item.name}
-                          className="inline-flex"
-                          aria-label="Download export"
-                        >
+                        <div className="font-medium truncate">
+                          {item.filename || item.name || "Untitled Export"}
+                        </div>
+                        <div className="text-white/60">
+                          {item.date || item.createdAt
+                            ? new Date(
+                                item.date || item.createdAt
+                              ).toLocaleDateString()
+                            : "Unknown date"}
+                        </div>
+                        <div className="text-white/60">{item.size || "-"}</div>
+                        <div>
+                          <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-sm">
+                            {item.format || "MP4"}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            className={`px-2 py-1 rounded-md text-sm font-medium ${
+                              item.status?.toLowerCase() === "completed"
+                                ? "bg-green-500/20 text-green-400"
+                                : item.status?.toLowerCase() === "failed"
+                                ? "bg-red-500/20 text-red-400"
+                                : "bg-yellow-500/20 text-yellow-400"
+                            }`}
+                          >
+                            {item.status || "Unknown"}
+                          </span>
+                        </div>
+                        <div className="flex gap-2 flex-wrap">
+                          {/* Download */}
+                          {item.downloadUrl || item.url ? (
+                            <a
+                              href={item.downloadUrl || item.url}
+                              download={item.filename || item.name}
+                              className="inline-flex"
+                              aria-label="Download export"
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                                aria-label="Download export"
+                              >
+                                <Icons.Download
+                                  className="w-3.5 h-3.5"
+                                  aria-hidden="true"
+                                />
+                              </Button>
+                            </a>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              disabled
+                              className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
+                              aria-label="Download not available"
+                            >
+                              <Icons.Download
+                                className="w-3.5 h-3.5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          )}
+                          {/* Share (placeholder, logic unchanged) */}
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                            aria-label="Download export"
+                            className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                            aria-label="Share export"
+                            // onClick={...} // keep logic unchanged
                           >
-                            <Icons.Download
+                            Share
+                          </Button>
+                          {/* Delete */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              handleOpenDeleteDialog(item.export_id)
+                            }
+                            className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                            aria-label="Delete export"
+                          >
+                            <Icons.Delete
                               className="w-3.5 h-3.5"
                               aria-hidden="true"
                             />
                           </Button>
-                        </a>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled
-                          className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
-                          aria-label="Download not available"
-                        >
-                          <Icons.Download
-                            className="w-3.5 h-3.5"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      )}
-                      {/* Share */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                        aria-label="Share export"
-                      >
-                        Share
-                      </Button>
-                      {/* Delete */}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleOpenDeleteDialog(item.export_id)}
-                        className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
-                        aria-label="Delete export"
-                      >
-                        <Icons.Delete
-                          className="w-3.5 h-3.5"
-                          aria-hidden="true"
-                        />
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Mobile Card View (visible on mobile only) */}
-          <div className="md:hidden space-y-4">
-            {filteredAndSortedExports.length === 0 ? (
-              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 text-center text-white/60">
-                No exports found. Your exported videos will appear here once you
-                start creating them.
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-            ) : (
-              filteredAndSortedExports.map((item) => (
+
+              {/* Tablet Table View (visible on tablet only) */}
+              <div className="hidden md:block lg:hidden bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
+                {/* Table Header */}
                 <div
-                  key={item.export_id}
-                  className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 space-y-3"
+                  className="p-3 grid gap-3 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20 text-sm"
+                  style={{
+                    gridTemplateColumns:
+                      "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
+                  }}
                 >
-                  {/* Header Row */}
-                  <div className="flex justify-between items-start gap-2">
-                    <h3 className="text-white font-semibold text-base flex-1 line-clamp-2">
-                      {item.filename || item.name || "Untitled Export"}
-                    </h3>
-                    <span
-                      className={`px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap ${
-                        item.status?.toLowerCase() === "completed"
-                          ? "bg-green-500/20 text-green-400"
-                          : item.status?.toLowerCase() === "failed"
-                          ? "bg-red-500/20 text-red-400"
-                          : "bg-yellow-500/20 text-yellow-400"
-                      }`}
-                    >
-                      {item.status || "Unknown"}
-                    </span>
-                  </div>
-
-                  {/* Info Grid */}
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <span className="text-white/60 block mb-1">Date</span>
-                      <span className="text-white">
-                        {item.date || item.createdAt
-                          ? new Date(
-                              item.date || item.createdAt
-                            ).toLocaleDateString()
-                          : "Unknown"}
-                      </span>
+                  <div>Filename</div>
+                  <div>Date</div>
+                  <div>Status</div>
+                  <div>Actions</div>
+                </div>
+                {/* Table Rows */}
+                <div className="divide-y divide-storiq-border">
+                  {filteredAndSortedExports.length === 0 ? (
+                    <div className="p-8 text-center text-white/60">
+                      No exports found. Your exported videos will appear here
+                      once you start creating them.
                     </div>
-                    <div>
-                      <span className="text-white/60 block mb-1">Size</span>
-                      <span className="text-white">{item.size || "-"}</span>
-                    </div>
-                    <div>
-                      <span className="text-white/60 block mb-1">Format</span>
-                      <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-xs inline-block">
-                        {item.format || "MP4"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2">
-                    {/* Download */}
-                    {item.downloadUrl || item.url ? (
-                      <a
-                        href={item.downloadUrl || item.url}
-                        download={item.filename || item.name}
-                        className="flex-1"
-                        aria-label="Download export"
+                  ) : (
+                    filteredAndSortedExports.map((item) => (
+                      <div
+                        key={item.export_id}
+                        className="p-3 grid gap-3 text-white items-center text-sm"
+                        style={{
+                          gridTemplateColumns:
+                            "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
+                        }}
                       >
+                        <div className="font-medium truncate">
+                          {item.filename || item.name || "Untitled Export"}
+                        </div>
+                        <div className="text-white/60 text-xs">
+                          {item.date || item.createdAt
+                            ? new Date(
+                                item.date || item.createdAt
+                              ).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })
+                            : "Unknown"}
+                        </div>
+                        <div>
+                          <span
+                            className={`px-2 py-1 rounded-md text-xs font-medium ${
+                              item.status?.toLowerCase() === "completed"
+                                ? "bg-green-500/20 text-green-400"
+                                : item.status?.toLowerCase() === "failed"
+                                ? "bg-red-500/20 text-red-400"
+                                : "bg-yellow-500/20 text-yellow-400"
+                            }`}
+                          >
+                            {item.status || "Unknown"}
+                          </span>
+                        </div>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {/* Download */}
+                          {item.downloadUrl || item.url ? (
+                            <a
+                              href={item.downloadUrl || item.url}
+                              download={item.filename || item.name}
+                              className="inline-flex"
+                              aria-label="Download export"
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                                aria-label="Download export"
+                              >
+                                <Icons.Download
+                                  className="w-3.5 h-3.5"
+                                  aria-hidden="true"
+                                />
+                              </Button>
+                            </a>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              disabled
+                              className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
+                              aria-label="Download not available"
+                            >
+                              <Icons.Download
+                                className="w-3.5 h-3.5"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          )}
+                          {/* Share */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                            aria-label="Share export"
+                          >
+                            Share
+                          </Button>
+                          {/* Delete */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              handleOpenDeleteDialog(item.export_id)
+                            }
+                            className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                            aria-label="Delete export"
+                          >
+                            <Icons.Delete
+                              className="w-3.5 h-3.5"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Card View (visible on mobile only) */}
+              <div className="md:hidden space-y-4">
+                {filteredAndSortedExports.length === 0 ? (
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 text-center text-white/60">
+                    No exports found. Your exported videos will appear here once
+                    you start creating them.
+                  </div>
+                ) : (
+                  filteredAndSortedExports.map((item) => (
+                    <div
+                      key={item.export_id}
+                      className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 space-y-3"
+                    >
+                      {/* Header Row */}
+                      <div className="flex justify-between items-start gap-2">
+                        <h3 className="text-white font-semibold text-base flex-1 line-clamp-2">
+                          {item.filename || item.name || "Untitled Export"}
+                        </h3>
+                        <span
+                          className={`px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap ${
+                            item.status?.toLowerCase() === "completed"
+                              ? "bg-green-500/20 text-green-400"
+                              : item.status?.toLowerCase() === "failed"
+                              ? "bg-red-500/20 text-red-400"
+                              : "bg-yellow-500/20 text-yellow-400"
+                          }`}
+                        >
+                          {item.status || "Unknown"}
+                        </span>
+                      </div>
+
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                          <span className="text-white/60 block mb-1">Date</span>
+                          <span className="text-white">
+                            {item.date || item.createdAt
+                              ? new Date(
+                                  item.date || item.createdAt
+                                ).toLocaleDateString()
+                              : "Unknown"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-white/60 block mb-1">Size</span>
+                          <span className="text-white">{item.size || "-"}</span>
+                        </div>
+                        <div>
+                          <span className="text-white/60 block mb-1">
+                            Format
+                          </span>
+                          <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-xs inline-block">
+                            {item.format || "MP4"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 pt-2">
+                        {/* Download */}
+                        {item.downloadUrl || item.url ? (
+                          <a
+                            href={item.downloadUrl || item.url}
+                            download={item.filename || item.name}
+                            className="flex-1"
+                            aria-label="Download export"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                              aria-label="Download export"
+                            >
+                              <Icons.Download
+                                className="w-4 h-4"
+                                aria-hidden="true"
+                              />
+                              <span className="text-sm">Download</span>
+                            </Button>
+                          </a>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled
+                            className="flex-1 border-white/20 text-white/40 bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2"
+                            aria-label="Download not available"
+                          >
+                            <Icons.Download
+                              className="w-4 h-4"
+                              aria-hidden="true"
+                            />
+                            <span className="text-sm">Download</span>
+                          </Button>
+                        )}
+                        {/* Share */}
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
-                          aria-label="Download export"
+                          className="flex-1 border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                          aria-label="Share export"
                         >
-                          <Icons.Download
+                          <span className="text-sm">Share</span>
+                        </Button>
+                        {/* Delete */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleOpenDeleteDialog(item.export_id)}
+                          className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                          aria-label="Delete export"
+                        >
+                          <Icons.Delete
                             className="w-4 h-4"
                             aria-hidden="true"
                           />
-                          <span className="text-sm">Download</span>
                         </Button>
-                      </a>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled
-                        className="flex-1 border-white/20 text-white/40 bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2"
-                        aria-label="Download not available"
-                      >
-                        <Icons.Download
-                          className="w-4 h-4"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm">Download</span>
-                      </Button>
-                    )}
-                    {/* Share */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
-                      aria-label="Share export"
-                    >
-                      <span className="text-sm">Share</span>
-                    </Button>
-                    {/* Delete */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleOpenDeleteDialog(item.export_id)}
-                      className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
-                      aria-label="Delete export"
-                    >
-                      <Icons.Delete className="w-4 h-4" aria-hidden="true" />
-                    </Button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* ConfirmDialog for delete confirmation */}

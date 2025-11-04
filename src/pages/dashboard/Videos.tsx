@@ -603,24 +603,62 @@ const Videos = () => {
 
         {/* Loading State */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <Card
-                key={i}
-                className="overflow-hidden border-gray-700 bg-gray-800/50 backdrop-blur-sm rounded-xl"
-              >
-                <Skeleton className="h-48 w-full rounded-none bg-gradient-to-br from-gray-700 to-gray-600" />
-                <CardContent className="p-4">
-                  <Skeleton className="h-5 w-3/4 mb-3 bg-gray-600" />
-                  <Skeleton className="h-4 w-full mb-2 bg-gray-600" />
-                  <Skeleton className="h-4 w-2/3 mb-4 bg-gray-600" />
-                  <div className="flex justify-between items-center">
-                    <Skeleton className="h-8 w-20 bg-gray-600" />
-                    <Skeleton className="h-8 w-20 bg-gray-600" />
+          <div className="space-y-12">
+            {/* Header Skeleton */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <Skeleton className="h-8 w-48 mb-2 bg-gray-700/50" />
+                <Skeleton className="h-4 w-64 bg-gray-700/30" />
+              </div>
+            </div>
+
+            {/* Videos Grid Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={i}
+                  className="relative border border-storiq-border rounded-2xl overflow-hidden w-full group animate-pulse"
+                >
+                  {/* Thumbnail Skeleton */}
+                  <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 relative">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+
+                  {/* Content Skeleton */}
+                  <div className="relative z-10 p-6">
+                    <Skeleton className="h-6 w-3/4 mb-3 bg-gray-700/50" />
+                    <div className="flex items-center gap-4 mb-4">
+                      <Skeleton className="h-4 w-20 bg-gray-700/30" />
+                      <Skeleton className="h-4 w-24 bg-gray-700/30" />
+                    </div>
+                    <div className="flex gap-2">
+                      <Skeleton className="h-10 flex-1 bg-gray-700/50 rounded-lg" />
+                      <Skeleton className="h-10 flex-1 bg-gray-700/50 rounded-lg" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Images Section Skeleton */}
+            <div className="mt-12">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <Skeleton className="h-8 w-48 mb-2 bg-gray-700/50" />
+                  <Skeleton className="h-4 w-64 bg-gray-700/30" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="relative aspect-square rounded-xl overflow-hidden border border-storiq-border animate-pulse"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800" />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-800/30 rounded-2xl border border-gray-700 backdrop-blur-sm">
