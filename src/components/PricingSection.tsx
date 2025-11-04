@@ -179,7 +179,7 @@ export const PricingSection: React.FC = () => {
           price={pricingPlans[2].price}
           ctaText={pricingPlans[2].ctaText}
           onCtaClick={() => handlePlanSelect(pricingPlans[2].title)}
-          className="md:rounded-[0_16px_16px_0]"
+          className="md:rounded-[0px_16px_16px_0px]"
         />
       </div>
     </section>
