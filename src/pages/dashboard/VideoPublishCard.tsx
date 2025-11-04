@@ -65,6 +65,7 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
   const videoId = video.id || video.s3Key || "";
   const selection = platformSelections[videoId] || { yt: false, ig: false };
 
@@ -72,19 +73,33 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
     <div className="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl overflow-hidden border border-slate-600/50 transition-all duration-300 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1 backdrop-blur-sm">
       {/* Dialog and ScheduleDialog will be lazy loaded in Publish.tsx */}
       <div className="relative aspect-video bg-slate-900 overflow-hidden">
+        {/* Skeleton loader for thumbnail */}
+        {!thumbnailLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800 animate-pulse">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+        )}
         {video.thumbnail ? (
           <img
             src={video.thumbnail}
             alt={video.title || "Video thumbnail"}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+              thumbnailLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setThumbnailLoaded(true)}
+            onError={() => setThumbnailLoaded(true)}
           />
         ) : (
           <video
             src={video.url}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+              thumbnailLoaded ? "opacity-100" : "opacity-0"
+            }`}
             tabIndex={-1}
             muted
             playsInline
+            onLoadedData={() => setThumbnailLoaded(true)}
+            onError={() => setThumbnailLoaded(true)}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />

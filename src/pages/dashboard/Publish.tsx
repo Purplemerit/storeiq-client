@@ -20,6 +20,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Lazy load VideoPublishCard
 const LazyVideoPublishCard = React.lazy(() => import("./VideoPublishCard"));
 
+// Lazy load ImagePublishCard
+const LazyImagePublishCard = React.lazy(() => import("./ImagePublishCard"));
+
 // Lazy load ScheduleDialog
 const ScheduleDialog = React.lazy(() =>
   import("@/components/schedule-dialog").then((m) => ({
@@ -763,89 +766,16 @@ const Publish = () => {
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                         {imageItems.map((image) => (
-                          <div
+                          <Suspense
                             key={image.id || image.s3Key}
-                            className="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl overflow-hidden border border-slate-600/50 transition-all duration-300 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 hover:-translate-y-1 backdrop-blur-sm"
+                            fallback={<Skeleton className="h-96 w-full" />}
                           >
-                            <Suspense
-                              fallback={<Skeleton className="h-80 w-full" />}
-                            >
-                              <Dialog>
-                                <div className="relative aspect-video bg-slate-900 overflow-hidden">
-                                  <img
-                                    src={image.url}
-                                    alt={image.title || "Untitled Image"}
-                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                                  <Suspense fallback={<div>Loading...</div>}>
-                                    <DialogTrigger asChild>
-                                      <Button
-                                        size="sm"
-                                        className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100"
-                                      >
-                                        Preview
-                                      </Button>
-                                    </DialogTrigger>
-                                  </Suspense>
-                                </div>
-                                <Suspense
-                                  fallback={
-                                    <Skeleton className="h-64 w-full" />
-                                  }
-                                >
-                                  <DialogContent className="max-w-4xl w-full bg-slate-900 border-slate-700">
-                                    <DialogTitle className="text-white text-xl font-bold">
-                                      Image Preview
-                                    </DialogTitle>
-                                    <div className="w-full bg-black rounded-xl overflow-hidden">
-                                      <img
-                                        src={image.url}
-                                        alt={image.title || "Full size image"}
-                                        className="w-full h-auto"
-                                      />
-                                    </div>
-                                  </DialogContent>
-                                </Suspense>
-                              </Dialog>
-                            </Suspense>
-                            <div className="p-6">
-                              <div className="flex items-start justify-between mb-4">
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="text-white font-bold text-lg mb-2 truncate group-hover:text-purple-200 transition-colors">
-                                    {image.title || "Untitled Image"}
-                                  </h3>
-                                </div>
-                              </div>
-                              <Button
-                                className="w-full font-medium bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
-                                onClick={() =>
-                                  handlePost({
-                                    ...image,
-                                    editedTitles,
-                                    setEditedTitles,
-                                  })
-                                }
-                              >
-                                <span className="flex items-center justify-center gap-2">
-                                  <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="2"
-                                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                                    />
-                                  </svg>
-                                  Publish
-                                </span>
-                              </Button>
-                            </div>
-                          </div>
+                            <LazyImagePublishCard
+                              image={image}
+                              handlePost={handlePost}
+                              editedTitles={editedTitles}
+                            />
+                          </Suspense>
                         ))}
                       </div>
                     )}

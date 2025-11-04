@@ -813,87 +813,13 @@ const Videos = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {onlyImages.map((img, idx) => (
-                    <Card
+                    <ImageCard
                       key={img.id || img.s3Key || idx}
-                      className="group overflow-hidden border-gray-700 bg-gray-800/50 backdrop-blur-sm hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl rounded-xl"
-                    >
-                      <div className="relative h-48 overflow-hidden flex items-center justify-center bg-black">
-                        <img
-                          src={img.s3Url || img.url}
-                          alt={img.title || img.s3Key || "Image"}
-                          className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500"
-                          onClick={() => openImageModal(img)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <Button
-                            onClick={() => openImageModal(img)}
-                            className="rounded-full h-14 w-14 bg-blue-600 hover:bg-blue-700 shadow-lg"
-                            size="icon"
-                          >
-                            <Eye className="h-6 w-6 fill-current ml-1" />
-                          </Button>
-                        </div>
-                      </div>
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-start mb-3">
-                          <h3 className="text-white font-semibold line-clamp-2 flex-1 mr-2 text-lg leading-tight">
-                            {img.title || img.s3Key || "Untitled Image"}
-                          </h3>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
-                              >
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              align="end"
-                              className="bg-gray-800 border-gray-700"
-                            >
-                              <DropdownMenuItem
-                                onClick={() => openImageModal(img)}
-                                className="text-white hover:bg-gray-700"
-                              >
-                                <Eye className="h-4 w-4 mr-2" />
-                                Preview
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-red-400 hover:bg-red-500/20"
-                                onClick={() =>
-                                  handleOpenDeleteImageDialog(
-                                    img.id || img.s3Key
-                                  )
-                                }
-                                disabled={
-                                  img.id === undefined &&
-                                  img.s3Key === undefined
-                                }
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                        <p className="text-white/60 text-sm mb-2 line-clamp-2 leading-relaxed">
-                          {img.prompt ||
-                            img.description ||
-                            "No description available"}
-                        </p>
-                        <div className="flex items-center justify-between text-xs text-white/40">
-                          <div className="flex items-center">
-                            <Calendar className="h-3 w-3 mr-1" />
-                            {img.createdAt
-                              ? formatDate(img.createdAt)
-                              : "Unknown date"}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      img={img}
+                      openImageModal={openImageModal}
+                      handleOpenDeleteImageDialog={handleOpenDeleteImageDialog}
+                      formatDate={formatDate}
+                    />
                   ))}
                 </div>
               )}
@@ -995,6 +921,104 @@ const Videos = () => {
   );
 };
 
+// Image Card Component
+interface ImageCardProps {
+  img: any;
+  openImageModal: (img: any) => void;
+  handleOpenDeleteImageDialog: (imageId: string | null) => void;
+  formatDate: (dateString: string) => string;
+}
+
+const ImageCard: React.FC<ImageCardProps> = ({
+  img,
+  openImageModal,
+  handleOpenDeleteImageDialog,
+  formatDate,
+}) => {
+  const [imgLoaded, setImgLoaded] = React.useState(false);
+
+  return (
+    <Card className="group overflow-hidden border-gray-700 bg-gray-800/50 backdrop-blur-sm hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl rounded-xl">
+      <div className="relative h-48 overflow-hidden flex items-center justify-center bg-black">
+        {/* Skeleton loader for image */}
+        {!imgLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800 animate-pulse" />
+        )}
+        <img
+          src={img.s3Url || img.url}
+          alt={img.title || img.s3Key || "Image"}
+          className={`object-contain w-full h-full group-hover:scale-105 transition-all duration-500 ${
+            imgLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => openImageModal(img)}
+          style={{ cursor: "pointer" }}
+          onLoad={() => setImgLoaded(true)}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder.svg";
+            setImgLoaded(true);
+          }}
+        />
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <Button
+            onClick={() => openImageModal(img)}
+            className="rounded-full h-14 w-14 bg-blue-600 hover:bg-blue-700 shadow-lg"
+            size="icon"
+          >
+            <Eye className="h-6 w-6 fill-current ml-1" />
+          </Button>
+        </div>
+      </div>
+      <CardContent className="p-4">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-white font-semibold line-clamp-2 flex-1 mr-2 text-lg leading-tight">
+            {img.title || img.s3Key || "Untitled Image"}
+          </h3>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="bg-gray-800 border-gray-700"
+            >
+              <DropdownMenuItem
+                onClick={() => openImageModal(img)}
+                className="text-white hover:bg-gray-700"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Preview
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-400 hover:bg-red-500/20"
+                onClick={() => handleOpenDeleteImageDialog(img.id || img.s3Key)}
+                disabled={img.id === undefined && img.s3Key === undefined}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <p className="text-white/60 text-sm mb-2 line-clamp-2 leading-relaxed">
+          {img.prompt || img.description || "No description available"}
+        </p>
+        <div className="flex items-center justify-between text-xs text-white/40">
+          <div className="flex items-center">
+            <Calendar className="h-3 w-3 mr-1" />
+            {img.createdAt ? formatDate(img.createdAt) : "Unknown date"}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 // Video Card Component for better organization
 interface VideoCardProps {
   video: Video;
@@ -1021,10 +1045,19 @@ const VideoCard: React.FC<VideoCardProps> = ({
     if (!title) return "Untitled Video";
     return title.length > maxLen ? title.slice(0, maxLen) + "..." : title;
   };
+
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+
   return (
     <div className="relative border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-all duration-300 w-full max-w-xl mx-auto group">
       {/* Background Image */}
       <div className="absolute inset-0">
+        {/* Skeleton loader for thumbnail */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800 animate-pulse">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+        )}
         <img
           src={
             video.thumbnail
@@ -1034,9 +1067,13 @@ const VideoCard: React.FC<VideoCardProps> = ({
               : "/placeholder.svg"
           }
           alt={video.title || "Untitled Video"}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/placeholder.svg";
+            setImageLoaded(true);
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
