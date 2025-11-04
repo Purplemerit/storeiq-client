@@ -375,12 +375,12 @@ const Publish = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+      <div className="p-4 md:p-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
             Your Posting Queue
           </h1>
-          <p className="text-white/60">
+          <p className="text-white/60 text-sm md:text-base">
             Your content published while you sleep
           </p>
         </div>
@@ -391,32 +391,32 @@ const Publish = () => {
           onValueChange={(value: "scheduled" | "past") => setActiveTab(value)}
           className="w-full"
         >
-          <TabsList className="mb-8 bg-transparent gap-2">
+          <TabsList className="mb-6 md:mb-8 bg-transparent gap-2 flex-col sm:flex-row w-full sm:w-auto">
             <TabsTrigger
               value="scheduled"
-              className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors data-[state=active]:bg-storiq-purple data-[state=active]:text-white text-white/60 hover:text-white hover:bg-storiq-card-bg`}
+              className={`w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm font-medium transition-colors data-[state=active]:bg-storiq-purple data-[state=active]:text-white text-white/60 hover:text-white hover:bg-storiq-card-bg`}
             >
               Scheduled
             </TabsTrigger>
             <TabsTrigger
               value="past"
-              className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors data-[state=active]:bg-storiq-purple data-[state=active]:text-white text-white/60 hover:text-white hover:bg-storiq-card-bg`}
+              className={`w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm font-medium transition-colors data-[state=active]:bg-storiq-purple data-[state=active]:text-white text-white/60 hover:text-white hover:bg-storiq-card-bg`}
             >
               Past Publications
             </TabsTrigger>
           </TabsList>
 
           {/* Social Connect Banner */}
-          <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 mb-8 flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="text-2xl">🔗</div>
+          <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-6 mb-6 md:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center space-x-3 md:space-x-4">
+              <div className="text-xl md:text-2xl">🔗</div>
               <div>
-                <h3 className="text-white font-medium">
+                <h3 className="text-white font-medium text-sm md:text-base">
                   {ytConnected
                     ? "Connected to YouTube"
                     : "Connect Social Accounts to enable scheduling"}
                 </h3>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/60 text-xs md:text-sm">
                   {ytConnected
                     ? "Ready to publish and schedule videos"
                     : "To use scheduling feature, connect social accounts"}
@@ -424,11 +424,11 @@ const Publish = () => {
               </div>
             </div>
             <Button
-              className={`${
+              className={`w-full sm:w-auto ${
                 ytConnected
                   ? "bg-green-600 hover:bg-green-700 border-2 border-green-600"
                   : "bg-black border-2 border-storiq-purple hover:bg-storiq-purple/10"
-              } text-white rounded-lg`}
+              } text-white rounded-lg text-sm`}
               disabled={ytLoading}
               onClick={() => (!ytConnected ? handleYouTubeOAuth() : null)}
             >
@@ -441,12 +441,12 @@ const Publish = () => {
           </div>
 
           {/* Queue Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 md:mb-6 gap-3">
             <div>
-              <h2 className="text-2xl font-bold text-white mb-1">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-1">
                 Your Posting Queue
               </h2>
-              <p className="text-white/60">
+              <p className="text-white/60 text-sm md:text-base">
                 Your content published while you sleep
               </p>
             </div>
@@ -480,12 +480,12 @@ const Publish = () => {
               return (
                 <>
                   {/* Videos Section */}
-                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-8 mb-12">
-                    <div className="flex items-center justify-between mb-8">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8 mb-8 md:mb-12">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
+                      <div className="flex items-center gap-3 md:gap-4">
+                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
                           <svg
-                            className="w-5 h-5 text-white"
+                            className="w-4 h-4 md:w-5 md:h-5 text-white"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -499,14 +499,20 @@ const Publish = () => {
                           </svg>
                         </div>
                         <div>
-                          <h2 className="text-2xl font-bold text-white">
+                          <h2 className="text-xl md:text-2xl font-bold text-white">
                             Your Videos
                           </h2>
-                          <p className="text-slate-400 text-base mt-1">
+                          <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
                             Select and customize videos to publish across
                             platforms
                           </p>
                         </div>
+                      </div>
+                      <div className="flex sm:hidden items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-600/50 self-end">
+                        <span className="text-xs text-slate-400">Total:</span>
+                        <span className="text-base font-bold text-white">
+                          {videoItems.length}
+                        </span>
                       </div>
                       <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-xl border border-slate-600/50">
                         <span className="text-sm text-slate-400">Total:</span>
@@ -590,7 +596,7 @@ const Publish = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                         {currentVideoItems.map((video) => (
                           <Suspense
                             fallback={<Skeleton className="h-96 w-full" />}
@@ -616,12 +622,12 @@ const Publish = () => {
                     )}
                   </div>
                   {/* Images Section */}
-                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-8">
-                    <div className="flex items-center justify-between mb-8">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
+                      <div className="flex items-center gap-3 md:gap-4">
+                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
                           <svg
-                            className="w-5 h-5 text-white"
+                            className="w-4 h-4 md:w-5 md:h-5 text-white"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -635,14 +641,20 @@ const Publish = () => {
                           </svg>
                         </div>
                         <div>
-                          <h2 className="text-2xl font-bold text-white">
+                          <h2 className="text-xl md:text-2xl font-bold text-white">
                             Your Images
                           </h2>
-                          <p className="text-slate-400 text-base mt-1">
+                          <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
                             Select and customize images to publish across
                             platforms
                           </p>
                         </div>
+                      </div>
+                      <div className="flex sm:hidden items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-600/50 self-end">
+                        <span className="text-xs text-slate-400">Total:</span>
+                        <span className="text-base font-bold text-white">
+                          {imageItems.length}
+                        </span>
                       </div>
                       <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-xl border border-slate-600/50">
                         <span className="text-sm text-slate-400">Total:</span>
@@ -726,7 +738,7 @@ const Publish = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                         {imageItems.map((image) => (
                           <div
                             key={image.id || image.s3Key}
@@ -822,12 +834,12 @@ const Publish = () => {
 
           <TabsContent value="past" className="mt-6">
             {/* Past Publications Section */}
-            <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-8">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
+            <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 h-4 md:w-5 md:h-5 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -841,10 +853,10 @@ const Publish = () => {
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-xl md:text-2xl font-bold text-white">
                       Published Content
                     </h2>
-                    <p className="text-slate-400 text-base mt-1">
+                    <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
                       Your successfully published videos and scheduling history
                     </p>
                   </div>
@@ -920,7 +932,7 @@ const Publish = () => {
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                       {publishedVideoItems.map((video) => (
                         <Suspense
                           fallback={<Skeleton className="h-96 w-full" />}
