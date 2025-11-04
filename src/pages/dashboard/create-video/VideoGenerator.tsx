@@ -222,25 +222,23 @@ Each scene should have a different background. Use a modern sans-serif font and 
 
   return (
     <DashboardLayout>
-      <div className="p-2 sm:p-4 md:p-6 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
         {/* Header */}
-        <div className="mb-6 md:mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-            <span className="inline-block align-middle mr-3">
-              <Wand2 className="w-8 h-8 text-storiq-purple" />
-            </span>
-            <span className="align-middle">Text to Video</span>
+        <div className="mb-4 sm:mb-6 md:mb-8 text-center px-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2 sm:gap-3">
+            <Wand2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-storiq-purple flex-shrink-0" />
+            <span>Text to Video</span>
           </h1>
-          <p className="text-white/60 text-base md:text-lg text-center">
+          <p className="text-white/60 text-sm sm:text-base md:text-lg">
             Transform text description into videos.
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8">
           {/* Left Column - Controls */}
-          <div className="flex flex-col gap-6 md:gap-8 h-full w-full lg:w-[40%] max-lg:mb-4 overflow-y-auto lg:max-h-[calc(100vh-120px)] pr-0 lg:pr-2 scrollbar-thin scrollbar-thumb-storiq-border/40 scrollbar-track-transparent [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 h-full w-full xl:w-[45%] 2xl:w-[40%] xl:overflow-y-auto xl:max-h-[calc(100vh-140px)] xl:pr-2 scrollbar-thin scrollbar-thumb-storiq-border/40 scrollbar-track-transparent [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
             {/* Prompt Area */}
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-6">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <Textarea
                 value={prompt}
                 onChange={(e) => {
@@ -248,7 +246,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
                   if (formError) setFormError(null);
                 }}
                 placeholder="Describe your video here... Be as detailed as possible for better results."
-                className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[150px] resize-none focus:border-storiq-purple focus:ring-storiq-purple font-medium [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+                className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[120px] sm:min-h-[140px] md:min-h-[160px] resize-none focus:border-storiq-purple focus:ring-storiq-purple font-medium text-sm sm:text-base [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
               />
 
               {formError && (
@@ -267,11 +265,11 @@ Each scene should have a different background. Use a modern sans-serif font and 
             </Card>
 
             {/* Video Quality Selection */}
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-6">
-              <h3 className="text-white text-lg font-semibold mb-4">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                 Video Quality
               </h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {qualityOptions.map((quality) => (
                   <Button
                     key={quality}
@@ -279,7 +277,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     variant={
                       selectedQuality === quality ? "default" : "outline"
                     }
-                    className={`h-12 transition-all duration-200 ${
+                    className={`h-10 sm:h-11 md:h-12 text-sm sm:text-base transition-all duration-200 ${
                       selectedQuality === quality
                         ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
                         : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
@@ -300,11 +298,11 @@ Each scene should have a different background. Use a modern sans-serif font and 
             </Card>
 
             {/* Voice Speed Selection */}
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-6">
-              <h3 className="text-white text-lg font-semibold mb-4">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                 Voice Speed
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {voiceSpeedOptions.map((speed) => (
                   <Button
                     key={speed}
@@ -312,7 +310,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     variant={
                       selectedVoiceSpeed === speed ? "default" : "outline"
                     }
-                    className={`h-12 transition-all duration-200 ${
+                    className={`h-10 sm:h-11 md:h-12 text-sm sm:text-base transition-all duration-200 ${
                       selectedVoiceSpeed === speed
                         ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
                         : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
@@ -336,12 +334,13 @@ Each scene should have a different background. Use a modern sans-serif font and 
             <Button
               onClick={handleGenerateVideo}
               disabled={videoStatus === "loading" || !prompt.trim()}
-              className="h-14 bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold text-base transition-all duration-200 w-full"
+              className="h-12 sm:h-13 md:h-14 bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold text-sm sm:text-base transition-all duration-200 w-full"
             >
               {videoStatus === "loading" ? (
                 <span className="flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                  Generating...
+                  <span className="hidden xs:inline">Generating...</span>
+                  <span className="xs:hidden">Processing...</span>
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
@@ -352,9 +351,12 @@ Each scene should have a different background. Use a modern sans-serif font and 
             </Button>
 
             {/* Upload Video Section */}
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-6">
-              <form onSubmit={handleUploadVideo} className="space-y-4">
-                <h3 className="text-white text-lg font-semibold">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <form
+                onSubmit={handleUploadVideo}
+                className="space-y-3 sm:space-y-4"
+              >
+                <h3 className="text-white text-base sm:text-lg font-semibold">
                   Upload Video
                 </h3>
                 <div className="flex flex-col gap-2">
@@ -371,7 +373,7 @@ Each scene should have a different background. Use a modern sans-serif font and 
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-12 w-full border-storiq-border bg-storiq-card-bg hover:bg-storiq-card-bg/80 text-white font-semibold"
+                    className="h-10 sm:h-11 md:h-12 w-full border-storiq-border bg-storiq-card-bg hover:bg-storiq-card-bg/80 text-white font-semibold text-sm sm:text-base"
                     disabled={uploading}
                     onClick={() => {
                       if (!uploading && fileInputRef.current) {
@@ -386,14 +388,14 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     </span>
                   </Button>
                   {selectedFile && (
-                    <div className="text-white/60 text-sm">
+                    <div className="text-white/60 text-xs sm:text-sm break-all">
                       Selected: {selectedFile.name}
                     </div>
                   )}
                   {selectedFile && (
                     <Button
                       type="submit"
-                      className="h-10 bg-green-600 hover:bg-green-700 text-white font-semibold w-full"
+                      className="h-9 sm:h-10 bg-green-600 hover:bg-green-700 text-white font-semibold w-full text-sm sm:text-base"
                       disabled={uploading}
                     >
                       {uploading ? (
@@ -413,8 +415,10 @@ Each scene should have a different background. Use a modern sans-serif font and 
                   variant="destructive"
                   className="mt-4 border-red-500/50 bg-red-500/10"
                 >
-                  <AlertTitle className="text-red-200">Upload Error</AlertTitle>
-                  <AlertDescription className="text-red-300">
+                  <AlertTitle className="text-red-200 text-sm sm:text-base">
+                    Upload Error
+                  </AlertTitle>
+                  <AlertDescription className="text-red-300 text-xs sm:text-sm">
                     {uploadError}
                   </AlertDescription>
                 </Alert>
@@ -423,21 +427,21 @@ Each scene should have a different background. Use a modern sans-serif font and 
           </div>
 
           {/* Right Column - Video Preview */}
-          <div className="w-full lg:w-[60%] flex-shrink-0">
-            <div className="sticky top-6">
-              <Card className="bg-storiq-card-bg/50 border-storiq-border p-4 md:p-6 h-full flex flex-col mx-auto">
-                <h3 className="text-white text-lg font-semibold mb-4 flex items-center gap-2">
-                  <Play className="w-5 h-5 text-storiq-purple" />
+          <div className="w-full xl:w-[55%] 2xl:w-[60%] flex-shrink-0">
+            <div className="xl:sticky xl:top-6">
+              <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6 h-full flex flex-col">
+                <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                  <Play className="w-4 h-4 sm:w-5 sm:h-5 text-storiq-purple flex-shrink-0" />
                   Video Preview
                 </h3>
 
                 {videoStatus === "loading" && (
-                  <div className="flex flex-col items-center justify-center p-8 border-2 border-storiq-purple/30 rounded-lg bg-gradient-to-br from-storiq-purple/10 to-transparent">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-storiq-purple mb-4"></div>
-                    <span className="text-storiq-purple font-semibold text-lg">
+                  <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-10 border-2 border-storiq-purple/30 rounded-lg bg-gradient-to-br from-storiq-purple/10 to-transparent">
+                    <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-storiq-purple mb-3 sm:mb-4"></div>
+                    <span className="text-storiq-purple font-semibold text-base sm:text-lg text-center">
                       Generating your video...
                     </span>
-                    <p className="text-white/60 text-sm mt-2">
+                    <p className="text-white/60 text-xs sm:text-sm mt-2 text-center">
                       This may take a few moments
                     </p>
                   </div>
@@ -448,24 +452,24 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     variant="destructive"
                     className="mb-4 border-red-500/50 bg-red-500/10"
                   >
-                    <AlertTitle className="text-red-200">
+                    <AlertTitle className="text-red-200 text-sm sm:text-base">
                       Generation Failed
                     </AlertTitle>
-                    <AlertDescription className="text-red-300">
+                    <AlertDescription className="text-red-300 text-xs sm:text-sm">
                       {videoError}
                     </AlertDescription>
                   </Alert>
                 )}
 
                 {videoStatus === "success" && videoUrl && (
-                  <div className="space-y-4">
-                    <div className="p-3 border-2 border-green-500/30 rounded-xl bg-gradient-to-br from-green-500/10 to-transparent">
+                  <div className="space-y-3 sm:space-y-4">
+                    <div className="p-2 sm:p-3 border-2 border-green-500/30 rounded-xl bg-gradient-to-br from-green-500/10 to-transparent">
                       <AdvancedVideoPlayer
                         src={videoUrl}
                         onDelete={handleDeleteVideo}
                         className="w-full rounded-lg shadow-2xl"
                       />
-                      <div className="flex flex-col items-center justify-center gap-2 mt-3 text-green-400 text-sm font-semibold">
+                      <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 text-green-400 text-xs sm:text-sm font-semibold">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                         <span>Video generated successfully!</span>
                         {videoDuration && (
@@ -482,10 +486,10 @@ Each scene should have a different background. Use a modern sans-serif font and 
                         variant="destructive"
                         className="border-red-500/50 bg-red-500/10"
                       >
-                        <AlertTitle className="text-red-200">
+                        <AlertTitle className="text-red-200 text-sm sm:text-base">
                           Delete Error
                         </AlertTitle>
-                        <AlertDescription className="text-red-300">
+                        <AlertDescription className="text-red-300 text-xs sm:text-sm">
                           {deleteError}
                         </AlertDescription>
                       </Alert>
@@ -494,21 +498,21 @@ Each scene should have a different background. Use a modern sans-serif font and 
                 )}
 
                 {videoStatus === "idle" && (
-                  <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-storiq-border rounded-lg bg-gradient-to-br from-storiq-card-bg to-storiq-card-bg/30">
+                  <div className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 border-2 border-dashed border-storiq-border rounded-lg bg-gradient-to-br from-storiq-card-bg to-storiq-card-bg/30">
                     <video
                       src={promptPlaceVideo as string}
                       controls
                       autoPlay
                       loop
                       muted
-                      className="w-full max-w-lg rounded-lg shadow-lg mb-4"
+                      className="w-full max-w-lg rounded-lg shadow-lg mb-3 sm:mb-4"
                       poster=""
                     />
                     <div className="w-full flex flex-col items-center mt-2">
-                      <h4 className="text-white/60 text-base font-semibold mb-1">
+                      <h4 className="text-white/60 text-sm sm:text-base font-semibold mb-1">
                         Prompt
                       </h4>
-                      <pre className="text-white/70 text-base font-medium whitespace-pre-line text-center">
+                      <pre className="text-white/70 text-xs sm:text-sm md:text-base font-medium whitespace-pre-line text-center px-2">
                         Create a video about sustainable living tips. Feature a
                         young female character. Each scene should have a
                         different background. Use a modern sans-serif font and
