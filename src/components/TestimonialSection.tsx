@@ -5,13 +5,13 @@ const DecorativeElements: React.FC = () => {
   return (
     <>
       {/* Purple rectangle - top right */}
-      <div className="w-[143px] h-[178px] absolute bg-[#8638E5] right-0 bottom-[72px] max-md:w-20 max-md:h-[120px] max-md:right-5 max-md:bottom-10 max-sm:w-[60px] max-sm:h-20 max-sm:right-[15px] max-sm:bottom-[30px]" />
+      <div className="w-[60px] h-20 sm:w-20 sm:h-[120px] md:w-[100px] md:h-[140px] lg:w-[120px] lg:h-[160px] xl:w-[143px] xl:h-[178px] absolute bg-[#8638E5] right-[10px] bottom-[20px] sm:right-5 sm:bottom-10 md:right-8 md:bottom-12 lg:right-4 lg:bottom-[60px] xl:right-0 xl:bottom-[72px]" />
 
       {/* Dark rectangle - center right */}
-      <div className="w-[540px] h-[235px] absolute bg-[#1B1B1B] left-[498px] top-[231px] max-md:w-[calc(100%_-_40px)] max-md:h-auto max-md:min-h-[200px] max-md:box-border max-md:p-5 max-md:left-5 max-md:top-[180px] max-sm:w-[calc(100%_-_30px)] max-sm:min-h-[180px] max-sm:left-[15px] max-sm:top-[250px]" />
+      <div className="w-[calc(100%_-_200px)] h-auto min-h-[160px] sm:w-[calc(100%_-_270px)] sm:min-h-[180px] md:w-[calc(70%)] md:min-h-[200px] lg:w-[480px] lg:h-[220px] xl:w-[540px] xl:h-[235px] absolute bg-[#1B1B1B] left-[190px] top-[220px] sm:left-[250px] sm:top-[200px] md:left-[310px] md:top-[210px] lg:left-[410px] lg:top-[220px] xl:left-[498px] xl:top-[231px] box-border p-4 sm:p-5" />
 
       {/* Semi-transparent purple rectangle - bottom left */}
-      <div className="w-[498px] h-[175px] absolute bg-[rgba(134,56,229,0.50)] left-0 bottom-[74px] max-md:w-[calc(50%_-_20px)] max-md:h-[120px] max-md:left-5 max-md:bottom-10 max-sm:w-[calc(60%_-_15px)] max-sm:h-20 max-sm:left-[15px] max-sm:bottom-[30px]" />
+      <div className="w-[calc(55%_-_10px)] h-16 sm:w-[calc(50%_-_20px)] sm:h-20 md:w-[calc(45%)] md:h-[100px] lg:w-[400px] lg:h-[140px] xl:w-[498px] xl:h-[175px] absolute bg-[rgba(134,56,229,0.50)] left-[10px] bottom-[20px] sm:left-5 sm:bottom-10 md:left-8 md:bottom-12 lg:left-4 lg:bottom-[60px] xl:left-0 xl:bottom-[74px]" />
     </>
   );
 };
@@ -27,31 +27,31 @@ const NavigationArrows: React.FC<NavigationArrowsProps> = ({
 }) => {
   return (
     <>
-      {/* Left Arrow */}
+      {/* Left Arrow - positioned inside semi-transparent purple area */}
       <button
         onClick={onPrevious}
-        className="w-[58px] h-[58px] absolute left-[31px] top-[349px] max-md:left-5 max-md:top-auto max-md:bottom-5 max-sm:w-10 max-sm:h-10 max-sm:left-[15px] max-sm:bottom-[15px] hover:opacity-80 transition-opacity focus:outline-none"
+        className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-[58px] lg:h-[58px] absolute left-[20px] bottom-[30px] sm:left-6 sm:bottom-12 md:left-8 md:bottom-14 lg:left-[31px] lg:bottom-[90px] hover:opacity-80 transition-opacity focus:outline-none z-30"
         aria-label="Previous testimonial"
       >
         <ChevronLeft
-          size={58}
+          size={40}
           color="#929292"
           strokeWidth={2.5}
-          className="w-full h-full max-sm:w-10 max-sm:h-10"
+          className="w-full h-full"
         />
       </button>
 
-      {/* Right Arrow */}
+      {/* Right Arrow - positioned inside purple area */}
       <button
         onClick={onNext}
-        className="w-[58px] h-[58px] absolute right-[58px] top-[349px] max-md:right-5 max-md:top-auto max-md:bottom-5 max-sm:w-10 max-sm:h-10 max-sm:right-[15px] max-sm:bottom-[15px] hover:opacity-80 transition-opacity focus:outline-none"
+        className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-[58px] lg:h-[58px] absolute right-[20px] bottom-[30px] sm:right-6 sm:bottom-12 md:right-8 md:bottom-14 lg:right-[31px] lg:bottom-[90px] hover:opacity-80 transition-opacity focus:outline-none z-30"
         aria-label="Next testimonial"
       >
         <ChevronRight
-          size={58}
+          size={40}
           color="white"
           strokeWidth={2.5}
-          className="w-full h-full max-sm:w-10 max-sm:h-10"
+          className="w-full h-full"
         />
       </button>
     </>
@@ -73,20 +73,20 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 }) => {
   return (
     <>
-      {/* Profile Image */}
+      {/* Profile Image - positioned right next to black area */}
       <img
         src={imageUrl}
         alt={imageAlt}
-        className="w-[300px] h-[450px] absolute left-[200px] top-[80px] max-md:w-[220px] max-md:h-[330px] max-md:left-[80px] max-md:top-[60px] max-sm:w-[160px] max-sm:h-[240px] max-sm:left-[60px] max-sm:top-[50px] object-cover z-10"
+        className="w-[130px] h-[195px] sm:w-[170px] sm:h-[255px] md:w-[200px] md:h-[300px] lg:w-[250px] lg:h-[375px] xl:w-[300px] xl:h-[450px] absolute left-[55px] top-[220px] sm:left-[75px] sm:top-[200px] md:left-[105px] md:top-[210px] lg:left-[155px] lg:top-[220px] xl:left-[193px] xl:top-[231px] object-cover z-10"
       />
 
       {/* Author Name */}
-      <cite className="text-white text-[35px] font-bold leading-[30px] absolute left-[523px] top-[151px] max-md:text-[28px] max-md:left-[320px] max-md:top-[120px] max-sm:text-[22px] max-sm:left-[240px] max-sm:top-[100px] not-italic whitespace-nowrap z-20">
+      <cite className="text-white text-[18px] sm:text-[20px] md:text-[24px] lg:text-[28px] xl:text-[35px] font-bold leading-tight absolute left-[200px] top-[235px] sm:left-[265px] sm:top-[215px] md:left-[325px] md:top-[225px] lg:left-[425px] lg:top-[240px] xl:left-[523px] xl:top-[250px] not-italic whitespace-nowrap z-20">
         {name}
       </cite>
 
-      {/* Testimonial Quote */}
-      <blockquote className="w-[520px] text-white text-[26px] font-normal leading-9 absolute h-40 left-[523px] top-[240px] max-md:w-[calc(100%_-_340px)] max-md:text-xl max-md:leading-7 max-md:h-auto max-md:box-border max-md:p-5 max-md:left-[320px] max-md:top-[180px] max-sm:w-[calc(100%_-_260px)] max-sm:text-base max-sm:leading-[24px] max-sm:box-border max-sm:p-[15px] max-sm:left-[240px] max-sm:top-[150px] z-20">
+      {/* Testimonial Quote - positioned to align with black background */}
+      <blockquote className="w-[calc(100%_-_210px)] sm:w-[calc(100%_-_280px)] md:w-[calc(100%_-_340px)] lg:w-[460px] xl:w-[500px] text-white text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[22px] font-normal leading-snug sm:leading-relaxed md:leading-relaxed lg:leading-7 xl:leading-8 absolute h-auto box-border p-[8px] sm:p-[10px] md:p-3 lg:p-4 xl:p-0 left-[200px] top-[260px] sm:left-[265px] sm:top-[245px] md:left-[325px] md:top-[260px] lg:left-[425px] lg:top-[280px] xl:left-[523px] xl:top-[300px] z-20">
         {quote}
       </blockquote>
     </>
@@ -147,15 +147,15 @@ const TestimonialSection: React.FC = () => {
 
   return (
     <section
-      className="relative w-full bg-black py-20 max-md:py-16 max-sm:py-12"
+      className="relative w-full bg-black py-12 sm:py-14 md:py-16 lg:py-20"
       aria-label="Customer testimonials"
     >
-      <div className="relative w-full max-w-[1180px] h-[539px] mx-auto my-0 max-md:h-auto max-md:min-h-[400px] max-md:p-5 max-sm:h-auto max-sm:min-h-[500px] max-sm:p-[15px]">
+      <div className="relative w-full max-w-[1180px] h-auto min-h-[500px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[539px] mx-auto my-0 px-4 sm:px-5 md:px-6">
         {/* Decorative Background Elements */}
         <DecorativeElements />
 
-        {/* Section Title */}
-        <h2 className="-rotate-90 text-white text-center text-[35px] font-normal leading-[30px] absolute w-48 h-[30px] left-[85px] top-[240px] max-md:text-[28px] max-md:left-[10px] max-md:top-[200px] max-sm:text-xl max-sm:w-[150px] max-sm:left-[5px] max-sm:top-[150px] z-5">
+        {/* Section Title - positioned to the left of the image */}
+        <h2 className="-rotate-90 text-white text-center text-xl sm:text-2xl md:text-[28px] lg:text-[35px] font-normal leading-tight absolute w-[150px] sm:w-40 md:w-44 lg:w-48 h-[30px] left-[-20px] top-[270px] sm:left-[-15px] sm:top-[260px] md:left-[-10px] md:top-[280px] lg:left-[10px] lg:top-[300px] xl:left-[40px] xl:top-[320px] z-5">
           Testimonials
         </h2>
 

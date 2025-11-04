@@ -12,17 +12,17 @@ export const StepCard: React.FC<StepCardProps> = ({
   description,
 }) => {
   return (
-    <article className="w-[1164px] h-[185px] relative flex items-center bg-neutral-900 mb-10 p-0 rounded-[56px] max-md:w-full max-md:max-w-full max-md:h-auto max-md:min-h-40 max-md:flex-col max-md:text-center max-md:mb-[30px] max-md:p-5 max-md:rounded-[40px] max-sm:mb-5 max-sm:px-4 max-sm:py-6 max-sm:rounded-3xl">
-      <div className="w-[226px] h-[169px] absolute flex items-center justify-center shrink-0 bg-white rounded-[50px] left-2 top-2 max-md:w-[120px] max-md:h-[120px] max-md:relative max-md:mb-5 max-md:left-auto max-md:top-auto max-sm:w-20 max-sm:h-20 max-sm:mb-4">
-        <span className="text-black text-[56px] font-medium leading-[60px] max-md:text-4xl max-md:leading-10 max-sm:text-2xl max-sm:leading-7">
+    <article className="w-full max-w-[1164px] h-auto min-h-[185px] relative flex flex-col md:flex-row items-center bg-neutral-900 mb-6 sm:mb-8 md:mb-10 p-4 sm:p-5 md:p-0 rounded-3xl sm:rounded-[40px] md:rounded-[56px] text-center md:text-left">
+      <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-[120px] md:h-[120px] lg:w-[169px] lg:h-[169px] flex items-center justify-center shrink-0 bg-white rounded-3xl sm:rounded-[40px] md:rounded-[50px] mb-4 md:mb-0 md:ml-2 md:mr-0 md:absolute md:left-2 md:top-2">
+        <span className="text-black text-2xl sm:text-3xl md:text-4xl lg:text-[56px] font-medium leading-tight">
           {stepNumber}
         </span>
       </div>
-      <div className="flex flex-col justify-center flex-1 ml-[271px] pr-10 max-md:ml-0 max-md:text-center max-md:pr-0">
-        <h3 className="text-white text-[40px] font-medium leading-[50px] mb-3 max-md:text-[28px] max-md:leading-9 max-md:mb-2 max-sm:text-xl max-sm:leading-7 max-sm:mb-2">
+      <div className="flex flex-col justify-center flex-1 md:ml-[200px] lg:ml-[271px] md:pr-10">
+        <h3 className="text-white text-xl sm:text-2xl md:text-[28px] lg:text-[40px] font-medium leading-tight mb-2 md:mb-3">
           {title}
         </h3>
-        <p className="text-white text-lg font-light leading-6 max-md:text-base max-md:leading-5 max-sm:text-sm max-sm:leading-[18px]">
+        <p className="text-white text-sm sm:text-base md:text-lg font-light leading-relaxed">
           {description}
         </p>
       </div>
@@ -64,17 +64,17 @@ const stepsData: Step[] = [
 export const Steps: React.FC = () => {
   return (
     <section
-      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-black px-[138px] py-[72px] max-md:px-[60px] max-md:py-10 max-sm:px-5 max-sm:py-[30px]"
+      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-black px-4 sm:px-8 md:px-12 lg:px-[138px] py-10 sm:py-12 md:py-16 lg:py-[72px]"
       aria-labelledby="steps-title"
     >
-      <header className="text-center mb-[60px] max-md:mb-10 max-sm:mb-[30px]">
+      <header className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-[60px]">
         <h1
           id="steps-title"
-          className="text-white text-5xl font-medium leading-[60px] underline decoration-solid decoration-auto underline-offset-auto text-center mb-5 max-md:text-4xl max-md:leading-[44px] max-sm:text-[28px] max-sm:leading-[34px]"
+          className="text-white text-3xl sm:text-4xl md:text-5xl font-medium leading-tight underline decoration-solid decoration-auto underline-offset-auto text-center mb-3 sm:mb-4 md:mb-5"
         >
           Steps to Edit
         </h1>
-        <p className="text-white text-[28px] font-normal leading-8 text-center max-md:text-[22px] max-md:leading-[26px] max-sm:text-lg max-sm:leading-[22px]">
+        <p className="text-white text-lg sm:text-xl md:text-2xl lg:text-[28px] font-normal leading-relaxed text-center">
           Edit like a pro, without touching a timeline.
         </p>
       </header>
@@ -85,7 +85,11 @@ export const Steps: React.FC = () => {
         aria-label="Video editing steps"
       >
         {stepsData.map((step) => (
-          <div key={step.id} role="listitem">
+          <div
+            key={step.id}
+            role="listitem"
+            className="w-full flex justify-center"
+          >
             <StepCard
               stepNumber={step.number}
               title={step.title}

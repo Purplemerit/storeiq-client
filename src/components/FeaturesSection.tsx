@@ -29,7 +29,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       <img
         src="https://api.builder.io/api/v1/image/assets/TEMP/4749010bf758f21050e6a3a813ffa43ce7c9d5cd?width=96"
         alt="workflow icon"
-        className={`absolute w-12 h-12 shrink-0 left-[245px] top-[59px] max-sm:w-10 max-sm:h-10 max-sm:-translate-x-2/4 max-sm:left-2/4 max-sm:top-10 ${className}`}
+        className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-10 max-sm:h-10 max-sm:top-[25px] ${className}`}
       />
     );
   }
@@ -41,7 +41,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`absolute w-12 h-12 shrink-0 left-[245px] top-[59px] ${className}`}
+      className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-10 max-sm:h-10 max-sm:top-[25px] ${className}`}
       aria-hidden="true"
     >
       <path
@@ -143,12 +143,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       <FeatureIcon type={icon} />
 
       {/* Title */}
-      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[119px] max-sm:text-2xl max-sm:leading-7 max-sm:px-[15px] max-sm:py-0 max-sm:top-[95px]">
+      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] max-sm:text-2xl max-sm:leading-7 max-sm:px-[15px] max-sm:py-0 max-sm:top-[80px]">
         {title}
       </h2>
 
       {/* Description */}
-      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[155px] max-sm:text-sm max-sm:leading-[18px] max-sm:px-[15px] max-sm:py-0 max-sm:top-[130px]">
+      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] max-sm:text-sm max-sm:leading-[18px] max-sm:px-[15px] max-sm:py-0 max-sm:top-[115px]">
         {description}
       </p>
     </article>
@@ -203,7 +203,7 @@ const FeaturesSection: React.FC = () => {
         </p>
       </header>
 
-      <div className="grid grid-cols-[1fr_1fr] gap-10 max-w-[1104px] mx-auto my-0 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-5">
+      <div className="grid grid-cols-[1fr_1fr] gap-10 max-w-[1104px] mx-auto my-0 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-8 overflow-visible p-[30px] max-md:p-[25px] max-sm:p-5">
         {featuresData.map((feature, index) => (
           <FeatureCard
             key={index}

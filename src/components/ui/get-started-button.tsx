@@ -51,16 +51,19 @@ export const GetStartedButton: React.FC<GetStartedButtonProps> = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`group flex w-[251px] h-[68px] justify-center items-center shrink-0 bg-[#8E31FF] mx-auto my-0 p-1 rounded-[34px] overflow-hidden max-md:w-[200px] max-md:h-14 max-md:p-[3px] max-sm:w-[180px] max-sm:h-[50px] max-sm:p-0.5 max-sm:rounded-[25px] transition-all duration-200 hover:bg-[#7A2BE6] focus:outline-none focus:ring-2 focus:ring-[#8E31FF] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`group flex w-[180px] h-[50px] sm:w-[200px] sm:h-14 md:w-[220px] md:h-[60px] lg:w-[251px] lg:h-[68px] justify-center items-center shrink-0 bg-[#8E31FF] mx-auto my-0 p-0.5 sm:p-[3px] md:p-1 rounded-[25px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden transition-all duration-200 hover:bg-[#7A2BE6] focus:outline-none focus:ring-2 focus:ring-[#8E31FF] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       aria-label="Get started"
       type="button"
     >
-      <div className="flex justify-center items-center gap-2 whitespace-nowrap pl-6 pr-2 max-md:gap-2 max-md:pl-4 max-md:pr-2 max-sm:gap-1 max-sm:pl-3 max-sm:pr-1">
-        <span className="text-white text-[32px] font-normal leading-none max-md:text-[26px] max-sm:text-[22px]">
+      <div className="flex justify-center items-center gap-1.5 sm:gap-2 whitespace-nowrap pl-4 pr-1.5 sm:pl-5 sm:pr-2 md:pl-6 md:pr-2">
+        <span className="text-white text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-normal leading-none">
           Get Started
         </span>
         <div className="flex-shrink-0">
-          <ArrowIcon />
+          <ArrowIcon
+            size={42}
+            className="w-[42px] h-[42px] sm:w-[48px] sm:h-[48px] md:w-[52px] md:h-[52px] lg:w-[58px] lg:h-[58px]"
+          />
         </div>
       </div>
     </button>

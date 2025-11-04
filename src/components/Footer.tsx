@@ -2,15 +2,15 @@ import React from "react";
 
 export const FooterBrand: React.FC = () => {
   return (
-    <div className="grow pb-[78px] max-md:max-w-full max-md:mt-6">
-      <div className="flex w-full flex-col items-stretch max-md:max-w-full">
-        <div className="flex items-center gap-2 text-2xl text-white font-semibold whitespace-nowrap leading-none">
+    <div className="grow pb-10 sm:pb-12 md:pb-16 lg:pb-[78px] w-full md:w-auto">
+      <div className="flex w-full flex-col items-stretch">
+        <div className="flex items-center gap-2 text-xl sm:text-2xl text-white font-semibold whitespace-nowrap leading-none">
           <div className="self-stretch my-auto">
             <div>STORIQ</div>
           </div>
         </div>
-        <div className="text-base text-[rgba(202,207,216,1)] font-normal leading-[26px] mt-[19px] pr-7 max-md:max-w-full max-md:pr-5">
-          <div className="max-md:max-w-full">
+        <div className="text-sm sm:text-base text-[rgba(202,207,216,1)] font-normal leading-relaxed sm:leading-[26px] mt-4 sm:mt-[19px] pr-0 md:pr-7">
+          <div className="w-full">
             The AI workspace for next-gen creators. It helps modern creators
             streamline content creation, planning, and publishing like never
             before.
@@ -24,7 +24,7 @@ export const FooterBrand: React.FC = () => {
 export const FooterNavigation: React.FC = () => {
   return (
     <nav
-      className="flex grow gap-[60px_120px] flex-wrap max-md:max-w-full max-md:mt-6"
+      className="flex grow gap-6 sm:gap-10 md:gap-16 lg:gap-[60px_120px] flex-wrap w-full md:w-auto"
       role="navigation"
       aria-label="Footer navigation"
     >
@@ -139,14 +139,14 @@ export const FooterNavigation: React.FC = () => {
 
 export const FooterBottom: React.FC = () => {
   return (
-    <div className="z-10 flex w-full gap-6 text-sm leading-[1.6] flex-wrap justify-between items-center mt-[191px] max-md:max-w-full max-md:mt-10">
-      <div className="flex text-[rgba(153,160,174,1)] font-normal flex-wrap max-md:max-w-full">
+    <div className="z-10 flex w-full gap-4 sm:gap-6 text-xs sm:text-sm leading-[1.6] flex-wrap justify-between items-center mt-12 sm:mt-16 md:mt-20 lg:mt-[191px]">
+      <div className="flex text-[rgba(153,160,174,1)] font-normal flex-wrap">
         <div>
           © 2025 <span className="font-bold">STORIQ</span>
         </div>
         <div className="flex min-h-[23px]" />
       </div>
-      <div className="flex items-center gap-6 text-white font-bold flex-wrap">
+      <div className="flex items-center gap-4 sm:gap-6 text-white font-bold flex-wrap">
         <div className="self-stretch my-auto">
           <a
             href="/terms-and-conditions"
@@ -171,16 +171,16 @@ export const FooterBottom: React.FC = () => {
 const Footer: React.FC = () => {
   return (
     <footer
-      className="bg-[rgba(10,0,21,1)] pt-20 pb-12 px-4"
+      className="bg-[rgba(10,0,21,1)] pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8"
       role="contentinfo"
     >
-      <div className="w-full max-w-7xl mx-auto max-md:max-w-full">
-        <div className="w-full max-md:max-w-full">
-          <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-            <div className="w-6/12 max-md:w-full max-md:ml-0">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full">
+          <div className="gap-5 flex flex-col md:flex-row">
+            <div className="w-full md:w-6/12">
               <FooterBrand />
             </div>
-            <div className="w-6/12 ml-5 max-md:w-full max-md:ml-0">
+            <div className="w-full md:w-6/12 md:ml-5">
               <FooterNavigation />
             </div>
           </div>
