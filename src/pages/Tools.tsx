@@ -215,7 +215,7 @@ const Tools = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] font-sans">
+    <div className="min-h-screen bg-black font-sans">
       <Header />
 
       {/* Hero Section */}
