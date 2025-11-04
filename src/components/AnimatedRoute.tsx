@@ -38,12 +38,7 @@ const AnimatedRoute: React.FC<AnimatedRouteProps> = ({ children }) => {
           damping: 20,
         }}
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
           width: "100%",
-          minHeight: "100%",
           backgroundColor: "#000",
         }}
       >

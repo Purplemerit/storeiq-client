@@ -60,7 +60,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       )}
       <div
         className="flex-grow"
-        style={{ position: "relative", overflow: "hidden", minHeight: "100vh" }}
+        style={{ position: "relative", overflow: "hidden" }}
       >
         {children}
       </div>
