@@ -145,9 +145,8 @@ const Login = () => {
         </div>
       </header>
 
-      <div className="flex flex-1 pt-24">
-        {" "}
-        {/* Added padding-top to avoid overlap with header */}
+      <div className="flex flex-1 pt-32">
+        {/* Added padding-top to position form below header level */}
         {/* Left Side - Welcome Message */}
         <div className="flex-1 flex items-center justify-center px-8 z-10">
           <div className="max-w-xl">
@@ -165,9 +164,9 @@ const Login = () => {
         </div>
         {/* Right Side - Login Form */}
         <div className="flex-1 flex items-center justify-center px-8 z-10">
-          <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[420px] h-[700px] pt-[60px] pb-[40px] px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[380px] max-md:h-[650px] max-md:pt-[50px] max-md:pb-[30px] max-md:px-7 max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[550px] max-sm:pt-8 max-sm:pb-5 max-sm:px-5">
-            <div className="flex flex-col items-center gap-[80px] w-full max-md:gap-16 max-sm:gap-[50px]">
-              <div className="flex flex-col items-start gap-[35px] w-full">
+          <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[420px] h-[700px] pt-[50px] pb-[40px] px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[380px] max-md:h-[650px] max-md:pt-[45px] max-md:pb-[30px] max-md:px-7 max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[550px] max-sm:pt-8 max-sm:pb-5 max-sm:px-5">
+            <div className="flex flex-col items-center gap-[50px] w-full max-md:gap-12 max-sm:gap-[40px]">
+              <div className="flex flex-col items-start gap-[30px] w-full">
                 <section className="flex flex-col items-start gap-3 w-full">
                   <header className="flex flex-col items-start">
                     <h1 className="text-white text-3xl font-semibold">Login</h1>
@@ -319,7 +318,7 @@ const Login = () => {
 
               {/* Social Login Buttons */}
               <section
-                className="flex flex-col items-center gap-3"
+                className="flex flex-col items-center gap-2.5 w-full"
                 aria-label="Social login options"
               >
                 <div
@@ -433,7 +432,7 @@ const Login = () => {
               </section>
             </div>
 
-            <footer className="flex flex-col items-center gap-2 mt-auto">
+            <footer className="flex flex-col items-center gap-2 mt-6">
               <button
                 onClick={handleSignup}
                 className="text-white text-sm font-medium hover:underline cursor-pointer"

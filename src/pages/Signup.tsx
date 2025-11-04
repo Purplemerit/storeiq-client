@@ -156,7 +156,8 @@ const Signup = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-32">
+        {/* Added padding-top to position form below header level */}
         {/* Left Side */}
         <div className="flex-1 flex items-center justify-center px-8 z-10">
           <div className="max-w-xl">
@@ -275,9 +276,9 @@ const Signup = () => {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="flex w-full justify-center items-center gap-2.5 px-2.5 py-2.5 rounded-lg bg-gradient-to-r from-[#7CC1F3] to-[#D27EEF] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex w-full justify-center items-center gap-2.5 px-2.5 py-2.5 rounded-lg bg-gradient-to-r from-white to-[#1903db] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="text-white text-base font-semibold">
+                        <span className="text-black text-base font-semibold">
                           {loading ? "Signing up..." : "Signup"}
                         </span>
                       </button>
