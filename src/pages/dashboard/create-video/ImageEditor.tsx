@@ -162,15 +162,13 @@ const ImageEditor: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-2 sm:p-4 md:p-6 max-w-4xl mx-auto">
-        <div className="mb-6 md:mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-            <span className="inline-block align-middle mr-3">
-              <Wand2 className="w-8 h-8 text-storiq-purple animate-pulse" />
-            </span>
-            <span className="align-middle">AI Image Editor</span>
+      <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-5xl mx-auto">
+        <div className="mb-4 sm:mb-6 md:mb-8 text-center px-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2 sm:gap-3">
+            <Wand2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-storiq-purple animate-pulse flex-shrink-0" />
+            <span>AI Image Editor</span>
           </h1>
-          <p className="text-white/60 text-base md:text-lg text-center">
+          <p className="text-white/60 text-sm sm:text-base md:text-lg">
             Edit your images with AI-powered magic. Upload an image, optionally
             a mask, describe your edit, and see the result!
           </p>
@@ -178,8 +176,8 @@ const ImageEditor: React.FC = () => {
 
         {/* Main image area: loader > error > edited image > prompt placeholder */}
         {loading ? (
-          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-2xl shadow-2xl p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-8">
-            <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-fade-in w-full">
+          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 space-y-3 sm:space-y-4 animate-fade-in w-full">
               <div className="w-full max-w-md mx-auto flex justify-center">
                 <Loader
                   message="Editing your image..."
@@ -187,83 +185,89 @@ const ImageEditor: React.FC = () => {
                   overlay={false}
                 />
               </div>
-              <p className="text-gray-400 text-sm animate-pulse">
+              <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
                 This may take a few moments...
               </p>
             </div>
           </div>
         ) : error ? (
-          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-2xl shadow-2xl p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-8">
-            <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in w-full">
-              <div className="p-3 bg-red-500/10 rounded-full animate-bounce">
-                <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">!</span>
+          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col items-center justify-center py-6 sm:py-8 space-y-3 sm:space-y-4 animate-fade-in w-full">
+              <div className="p-2.5 sm:p-3 bg-red-500/10 rounded-full animate-bounce">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-500 flex items-center justify-center">
+                  <span className="text-white text-xs sm:text-sm font-bold">
+                    !
+                  </span>
                 </div>
               </div>
-              <div className="text-red-400 text-center font-medium">
+              <div className="text-red-400 text-center font-medium text-sm sm:text-base px-2">
                 {error}
               </div>
               <Button
                 onClick={handleSubmit}
                 variant="outline"
-                className="border-red-500/50 text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                className="border-red-500/50 text-red-400 hover:bg-red-500/10 transition-all duration-200 h-9 sm:h-10 text-sm"
                 disabled={loading}
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
+                <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" />
                 Try Again
               </Button>
             </div>
           </div>
         ) : editedImageUrl ? (
-          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-2xl shadow-2xl p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-8">
-            <div className="space-y-6 animate-fade-in w-full">
-              <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
-                <div className="flex flex-col items-center">
+          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6 animate-fade-in w-full">
+              <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 items-center justify-center">
+                <div className="flex flex-col items-center w-full lg:w-auto">
                   <img
                     src={originalPreview || ""}
                     alt="Original"
-                    className="rounded-lg max-h-64 border border-gray-700 mb-2"
+                    className="rounded-lg max-h-48 sm:max-h-56 md:max-h-64 w-full lg:w-auto object-contain border border-gray-700 mb-2"
                   />
-                  <span className="text-xs text-gray-400">Original</span>
+                  <span className="text-xs sm:text-sm text-gray-400">
+                    Original
+                  </span>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-full lg:w-auto">
                   <img
                     ref={editedImageRef}
                     src={editedImageUrl}
                     alt="Edited"
-                    className={`rounded-lg max-h-64 border border-storiq-purple/70 mb-2 transition-all duration-700 ${
+                    className={`rounded-lg max-h-48 sm:max-h-56 md:max-h-64 w-full lg:w-auto object-contain border border-storiq-purple/70 mb-2 transition-all duration-700 ${
                       editedImageLoaded
                         ? "opacity-100 scale-100"
                         : "opacity-0 scale-105"
                     }`}
                     onLoad={() => setEditedImageLoaded(true)}
                   />
-                  <span className="text-xs text-storiq-purple">Edited</span>
+                  <span className="text-xs sm:text-sm text-storiq-purple">
+                    Edited
+                  </span>
                   <Button
                     onClick={handleDownload}
                     size="sm"
-                    className="mt-2 bg-black/80 hover:bg-black text-white backdrop-blur-sm border border-gray-600 transition-transform duration-200 hover:scale-110"
+                    className="mt-2 bg-black/80 hover:bg-black text-white backdrop-blur-sm border border-gray-600 transition-transform duration-200 hover:scale-110 h-8 sm:h-9 text-xs sm:text-sm"
                     title="Download edited image"
                   >
-                    <Download className="w-4 h-4" />
+                    <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                     Download
                   </Button>
                 </div>
               </div>
-              <div className="bg-gray-900/30 rounded-lg p-4 border border-gray-800 transition-all duration-200 hover:border-gray-700 mt-4">
-                <p className="text-xs text-gray-400 mb-2 flex items-center gap-1">
-                  <Wand2 className="w-3 h-3" />
+              <div className="bg-gray-900/30 rounded-lg p-3 sm:p-4 border border-gray-800 transition-all duration-200 hover:border-gray-700 mt-3 sm:mt-4">
+                <p className="text-xs text-gray-400 mb-1.5 sm:mb-2 flex items-center gap-1">
+                  <Wand2 className="w-3 h-3 flex-shrink-0" />
                   Prompt used:
                 </p>
-                <p className="text-sm text-gray-300 font-medium leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
                   {prompt}
                 </p>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-2xl shadow-2xl p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-8">
-            <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
+          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 text-center space-y-4 sm:space-y-5 md:space-y-6">
               <img
                 src={imageEditorPrompt}
                 alt="Prompt placeholder"
@@ -271,10 +275,10 @@ const ImageEditor: React.FC = () => {
                 draggable={false}
               />
               <div className="w-full flex flex-col items-center mt-2">
-                <h4 className="text-white/60 text-sm font-semibold mb-1">
+                <h4 className="text-white/60 text-xs sm:text-sm font-semibold mb-1">
                   Prompt
                 </h4>
-                <pre className="text-white/70 text-sm font-medium whitespace-pre-line text-center">
+                <pre className="text-white/70 text-xs sm:text-sm font-medium whitespace-pre-line text-center px-2">
                   Ultra-realistic split-panel image. Left side: A man standing
                   on a quiet park pathway. Right side: The same man, now with
                   another person standing next to him. In between, add a bold
@@ -282,7 +286,7 @@ const ImageEditor: React.FC = () => {
                   shadows, and lifelike textures.
                 </pre>
               </div>
-              <p className="text-gray-500 text-sm animate-pulse">
+              <p className="text-gray-500 text-xs sm:text-sm animate-pulse px-2">
                 ✨ Upload an image, optionally a mask, and enter your prompt to
                 get started
               </p>
@@ -292,15 +296,15 @@ const ImageEditor: React.FC = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-storiq-card-bg/50 border-storiq-border rounded-2xl shadow-2xl p-6 mb-8 backdrop-blur-sm"
+          className="space-y-4 sm:space-y-5 md:space-y-6 bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 mb-4 sm:mb-6 md:mb-8 backdrop-blur-sm"
         >
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1 space-y-4">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-5 md:gap-6">
+            <div className="flex-1 space-y-3 sm:space-y-4">
               <label
-                className="text-white font-medium flex items-center gap-2"
+                className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
                 htmlFor="image-upload"
               >
-                <ImageIcon className="w-4 h-4 text-storiq-purple" />
+                <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
                 Image (required)
               </label>
               <Input
@@ -309,7 +313,7 @@ const ImageEditor: React.FC = () => {
                 accept="image/*"
                 onChange={handleImageChange}
                 disabled={loading}
-                className="bg-storiq-card-bg border-storiq-border text-white file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg"
+                className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
                 required
               />
               {originalPreview && (
@@ -317,7 +321,7 @@ const ImageEditor: React.FC = () => {
                   <img
                     src={originalPreview}
                     alt="Original preview"
-                    className="rounded-lg max-h-48 border border-gray-700"
+                    className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
                   />
                   <p className="text-xs text-gray-400 mt-1">
                     Original Image Preview
@@ -325,12 +329,12 @@ const ImageEditor: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-3 sm:space-y-4">
               <label
-                className="text-white font-medium flex items-center gap-2"
+                className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
                 htmlFor="mask-upload"
               >
-                <UploadCloud className="w-4 h-4 text-storiq-purple" />
+                <UploadCloud className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
                 Mask (optional)
               </label>
               <Input
@@ -339,14 +343,14 @@ const ImageEditor: React.FC = () => {
                 accept="image/*"
                 onChange={handleMaskChange}
                 disabled={loading}
-                className="bg-storiq-card-bg border-storiq-border text-white file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg"
+                className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
               />
               {maskPreview && (
                 <div className="mt-2">
                   <img
                     src={maskPreview}
                     alt="Mask preview"
-                    className="rounded-lg max-h-48 border border-gray-700"
+                    className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
                   />
                   <p className="text-xs text-gray-400 mt-1">Mask Preview</p>
                 </div>
@@ -355,10 +359,10 @@ const ImageEditor: React.FC = () => {
           </div>
           <div>
             <label
-              className="text-white font-medium flex items-center gap-2"
+              className="text-white font-medium text-sm sm:text-base flex items-center gap-2 mb-2"
               htmlFor="prompt"
             >
-              <Wand2 className="w-4 h-4 text-storiq-purple" />
+              <Wand2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
               Describe your edit
             </label>
             <Textarea
@@ -368,18 +372,19 @@ const ImageEditor: React.FC = () => {
               onChange={handlePromptChange}
               disabled={loading}
               required
-              className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[96px] py-3 text-base resize-y transition-all duration-200 focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple"
+              className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[90px] sm:min-h-[96px] py-2.5 sm:py-3 text-sm sm:text-base resize-y transition-all duration-200 focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple"
             />
           </div>
           <Button
             type="submit"
             disabled={loading || !imageFile || !prompt.trim()}
-            className="w-full bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold h-12 text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-storiq-purple/20"
+            className="w-full bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold h-11 sm:h-12 text-sm sm:text-base transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-storiq-purple/20"
           >
             {loading ? (
               <span className="flex items-center gap-2">
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                Editing...
+                <span className="hidden xs:inline">Editing...</span>
+                <span className="xs:hidden">Processing...</span>
               </span>
             ) : (
               <span className="flex items-center gap-2">
