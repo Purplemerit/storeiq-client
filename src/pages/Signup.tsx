@@ -119,15 +119,15 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-storiq-dark flex flex-col relative overflow-hidden">
       {/* Background gradient orbs */}
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-60"></div>
-      <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-storiq-purple/40 to-storiq-blue/40 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 -right-10 w-80 h-80 bg-gradient-to-br from-storiq-blue/30 to-storiq-purple/30 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-48 left-1/3 w-72 h-72 bg-gradient-to-br from-storiq-blue/20 to-storiq-purple/20 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-20 -left-10 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-50"></div>
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-60 max-md:w-56 max-md:h-56"></div>
+      <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-storiq-purple/40 to-storiq-blue/40 rounded-full blur-3xl max-md:w-40 max-md:h-40 max-md:top-10 max-md:right-10"></div>
+      <div className="absolute bottom-20 -right-10 w-80 h-80 bg-gradient-to-br from-storiq-blue/30 to-storiq-purple/30 rounded-full blur-3xl max-md:w-48 max-md:h-48 max-md:bottom-10 max-md:right-5"></div>
+      <div className="absolute bottom-48 left-1/3 w-72 h-72 bg-gradient-to-br from-storiq-blue/20 to-storiq-purple/20 rounded-full blur-3xl max-md:w-44 max-md:h-44 max-md:bottom-32"></div>
+      <div className="absolute -bottom-20 -left-10 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-50 max-md:w-56 max-md:h-56"></div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-50">
-        <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
+      <header className="absolute top-0 left-0 right-0 p-4 md:p-8 flex justify-start items-center z-50">
+        <div className="bg-white rounded-full flex items-center p-1.5 space-x-2 md:space-x-4">
           <Link
             to="/"
             className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -136,19 +136,20 @@ const Signup = () => {
               style={{
                 color: "#000",
                 fontFamily: "Orbitron",
-                fontSize: "24px",
+                fontSize: "18px",
                 fontStyle: "normal",
                 fontWeight: 600,
-                lineHeight: "24px",
-                paddingLeft: "1.5rem",
+                lineHeight: "20px",
+                paddingLeft: "1rem",
               }}
+              className="md:text-2xl md:leading-6 md:pl-6"
             >
               STORIQ
             </div>
           </Link>
           <Button
             variant="default"
-            className="bg-black text-white hover:bg-gray-800 rounded-full px-5 py-2 text-sm font-semibold"
+            className="bg-black text-white hover:bg-gray-800 rounded-full px-3 py-1.5 text-xs md:px-5 md:py-2 md:text-sm font-semibold"
           >
             SIGN UP
           </Button>
@@ -156,20 +157,20 @@ const Signup = () => {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-1 pt-32">
+      <div className="flex flex-col lg:flex-row flex-1 pt-20 md:pt-32">
         {/* Added padding-top to position form below header level */}
         {/* Left Side */}
-        <div className="flex-1 flex items-center justify-center px-8 z-10">
-          <div className="max-w-xl">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
+        <div className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 lg:py-0 z-10">
+          <div className="max-w-xl text-center lg:text-left">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 md:mb-8 leading-tight">
               Roll the Carpet.!
             </h1>
 
             <button
               onClick={handleSkipClick}
-              className="border-4 border-white px-6 py-3.5 hover:bg-white hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#070707]"
+              className="border-2 md:border-4 border-white px-4 md:px-6 py-2.5 md:py-3.5 hover:bg-white hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#070707]"
             >
-              <span className="text-white text-[32px] italic font-semibold hover:text-black">
+              <span className="text-white text-xl md:text-2xl lg:text-[32px] italic font-semibold hover:text-black">
                 Skip the lag ?
               </span>
             </button>
@@ -177,7 +178,7 @@ const Signup = () => {
         </div>
 
         {/* Right Side - Signup Form */}
-        <div className="flex-1 flex items-center justify-center px-8 z-10">
+        <div className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 lg:py-0 z-10">
           <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[420px] h-[700px] pt-[60px] pb-[40px] px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[380px] max-md:h-[650px] max-md:pt-[50px] max-md:pb-[30px] max-md:px-7 max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[550px] max-sm:pt-8 max-sm:pb-5 max-sm:px-5">
             <div className="flex flex-col items-center gap-[40px] w-full max-md:gap-8 max-sm:gap-[25px]">
               <div className="flex flex-col items-start gap-3 w-full">

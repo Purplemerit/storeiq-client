@@ -111,13 +111,13 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-storiq-dark flex flex-col relative overflow-hidden">
       {/* Background gradient orbs */}
-      <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-storiq-purple/40 to-storiq-blue/40 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-storiq-blue/30 to-storiq-purple/30 rounded-full blur-3xl"></div>
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-50"></div>
+      <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-storiq-purple/40 to-storiq-blue/40 rounded-full blur-3xl max-md:w-40 max-md:h-40 max-md:top-10 max-md:right-10"></div>
+      <div className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-storiq-blue/30 to-storiq-purple/30 rounded-full blur-3xl max-md:w-48 max-md:h-48 max-md:bottom-10 max-md:left-10"></div>
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-storiq-purple/30 to-storiq-blue/30 rounded-full blur-3xl opacity-50 max-md:w-56 max-md:h-56"></div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 p-8 flex justify-start items-center z-50">
-        <div className="bg-white rounded-full flex items-center p-1.5 space-x-4">
+      <header className="absolute top-0 left-0 right-0 p-4 md:p-8 flex justify-start items-center z-50">
+        <div className="bg-white rounded-full flex items-center p-1.5 space-x-2 md:space-x-4">
           <Link
             to="/"
             className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -126,44 +126,45 @@ const Login = () => {
               style={{
                 color: "#000",
                 fontFamily: "Orbitron",
-                fontSize: "24px",
+                fontSize: "18px",
                 fontStyle: "normal",
                 fontWeight: 600,
-                lineHeight: "24px",
-                paddingLeft: "1.5rem",
+                lineHeight: "20px",
+                paddingLeft: "1rem",
               }}
+              className="md:text-2xl md:leading-6 md:pl-6"
             >
               STORIQ
             </div>
           </Link>
           <Button
             variant="default"
-            className="bg-black text-white hover:bg-gray-800 rounded-full px-5 py-2 text-sm font-semibold"
+            className="bg-black text-white hover:bg-gray-800 rounded-full px-3 py-1.5 text-xs md:px-5 md:py-2 md:text-sm font-semibold"
           >
             SIGN UP
           </Button>
         </div>
       </header>
 
-      <div className="flex flex-1 pt-32">
+      <div className="flex flex-col lg:flex-row flex-1 pt-20 md:pt-32">
         {/* Added padding-top to position form below header level */}
         {/* Left Side - Welcome Message */}
-        <div className="flex-1 flex items-center justify-center px-8 z-10">
-          <div className="max-w-xl">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
+        <div className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 lg:py-0 z-10">
+          <div className="max-w-xl text-center lg:text-left">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 md:mb-8 leading-tight">
               Welcome Back.!
             </h1>
 
-            <div className="border border-white/20 rounded-lg px-6 py-3 inline-block">
-              <span className="text-white/70 italic text-lg">
+            <div className="border border-white/20 rounded-lg px-4 md:px-6 py-2 md:py-3 inline-block">
+              <span className="text-white/70 italic text-base md:text-lg">
                 Skip the lag ?
               </span>
-              <div className="border-t border-dashed border-white/30 mt-3"></div>
+              <div className="border-t border-dashed border-white/30 mt-2 md:mt-3"></div>
             </div>
           </div>
         </div>
         {/* Right Side - Login Form */}
-        <div className="flex-1 flex items-center justify-center px-8 z-10">
+        <div className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 lg:py-0 z-10">
           <div className="inline-flex flex-col justify-end items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-[420px] h-[700px] pt-[50px] pb-[40px] px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:w-[380px] max-md:h-[650px] max-md:pt-[45px] max-md:pb-[30px] max-md:px-7 max-sm:w-[90vw] max-sm:max-w-[350px] max-sm:h-auto max-sm:min-h-[550px] max-sm:pt-8 max-sm:pb-5 max-sm:px-5">
             <div className="flex flex-col items-center gap-[50px] w-full max-md:gap-12 max-sm:gap-[40px]">
               <div className="flex flex-col items-start gap-[30px] w-full">
