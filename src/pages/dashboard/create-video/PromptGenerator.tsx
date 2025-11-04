@@ -46,13 +46,7 @@ const PromptGenerator: React.FC = () => {
 
   // --- STATE MANAGEMENT ---
   type Status = "idle" | "loading" | "success" | "error";
-  const [prompt, setPrompt] = useState(
-    `Create a video about sustainable living tips.
-
-Feature a young female character.
-
-Each scene should have a different background. Use a modern sans-serif font and vibrant nature visuals.`
-  );
+  const [prompt, setPrompt] = useState(``);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
 
   // Status for script generation

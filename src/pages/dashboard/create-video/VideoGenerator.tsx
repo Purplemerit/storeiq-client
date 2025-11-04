@@ -26,13 +26,7 @@ const VideoGenerator = () => {
   const { user } = useAuth();
   // --- STATE MANAGEMENT ---
   type Status = "idle" | "loading" | "success" | "error";
-  const [prompt, setPrompt] = useState(
-    `Create a video about sustainable living tips.
-
-Feature a young female character.
-
-Each scene should have a different background. Use a modern sans-serif font and vibrant nature visuals.`
-  );
+  const [prompt, setPrompt] = useState(``);
   const [selectedQuality, setSelectedQuality] = useState("720P");
   const [selectedVoiceSpeed, setSelectedVoiceSpeed] = useState("1x");
   // Status for video generation
