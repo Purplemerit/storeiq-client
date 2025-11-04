@@ -61,6 +61,7 @@ const Dashboard = () => {
       title: "Setup Auto Mode",
       image:
         "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3",
+      href: "/dashboard/publish",
     },
   ];
 
