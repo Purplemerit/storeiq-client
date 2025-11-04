@@ -147,7 +147,7 @@ const TestimonialSection: React.FC = () => {
 
   return (
     <section
-      className="relative w-full bg-black py-12 sm:py-14 md:py-16 lg:py-20"
+      className="relative w-full bg-black pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-12 sm:pb-14 md:pb-16 lg:pb-20"
       aria-label="Customer testimonials"
     >
       <div className="relative w-full max-w-[1180px] h-auto min-h-[500px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[539px] mx-auto my-0 px-4 sm:px-5 md:px-6">
@@ -155,7 +155,7 @@ const TestimonialSection: React.FC = () => {
         <DecorativeElements />
 
         {/* Section Title - positioned to the left of the image */}
-        <h2 className="-rotate-90 text-white text-center text-xl sm:text-2xl md:text-[28px] lg:text-[35px] font-normal leading-tight absolute w-[150px] sm:w-40 md:w-44 lg:w-48 h-[30px] left-[-20px] top-[270px] sm:left-[-15px] sm:top-[260px] md:left-[-10px] md:top-[280px] lg:left-[10px] lg:top-[300px] xl:left-[40px] xl:top-[320px] z-5">
+        <h2 className="-rotate-90 text-white text-center text-xl sm:text-2xl md:text-[28px] lg:text-[35px] font-normal leading-tight absolute w-[150px] sm:w-40 md:w-44 lg:w-48 h-[30px] left-[-40px] top-[270px] sm:left-[-35px] sm:top-[260px] md:left-[-30px] md:top-[280px] lg:left-[-10px] lg:top-[300px] xl:left-[20px] xl:top-[320px] z-5">
           Testimonials
         </h2>
 
