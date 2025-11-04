@@ -2,14 +2,14 @@ import React from "react";
 
 export const FooterBrand: React.FC = () => {
   return (
-    <div className="grow pb-10 sm:pb-12 md:pb-16 lg:pb-[78px] w-full md:w-auto">
+    <div className="grow pb-6 sm:pb-8 md:pb-10 w-full md:w-auto">
       <div className="flex w-full flex-col items-stretch">
         <div className="flex items-center gap-2 text-xl sm:text-2xl text-white font-semibold whitespace-nowrap leading-none">
           <div className="self-stretch my-auto">
             <div>STORIQ</div>
           </div>
         </div>
-        <div className="text-sm sm:text-base text-[rgba(202,207,216,1)] font-normal leading-relaxed sm:leading-[26px] mt-4 sm:mt-[19px] pr-0 md:pr-7">
+        <div className="text-sm sm:text-base text-[rgba(202,207,216,1)] font-normal leading-relaxed sm:leading-[26px] mt-3 sm:mt-4 pr-0 md:pr-7">
           <div className="w-full">
             The AI workspace for next-gen creators. It helps modern creators
             streamline content creation, planning, and publishing like never
@@ -24,18 +24,18 @@ export const FooterBrand: React.FC = () => {
 export const FooterNavigation: React.FC = () => {
   return (
     <nav
-      className="flex grow gap-6 sm:gap-10 md:gap-16 lg:gap-[60px_120px] flex-wrap w-full md:w-auto"
+      className="flex grow gap-4 sm:gap-6 md:gap-10 lg:gap-[40px_80px] flex-wrap w-full md:w-auto"
       role="navigation"
       aria-label="Footer navigation"
     >
       <div className="text-sm text-white font-normal leading-[1.6] min-w-[120px]">
-        <div className="w-full font-bold whitespace-nowrap pb-3">
+        <div className="w-full font-bold whitespace-nowrap pb-2">
           <div className="w-full">
             <div>Home</div>
           </div>
         </div>
         <ul className="list-none p-0 m-0">
-          <li className="flex w-full items-center whitespace-nowrap mt-3">
+          <li className="flex w-full items-center whitespace-nowrap mt-2">
             <a
               href="/#features"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -43,7 +43,7 @@ export const FooterNavigation: React.FC = () => {
               <div>Features</div>
             </a>
           </li>
-          <li className="flex w-full items-center mt-3">
+          <li className="flex w-full items-center mt-2">
             <a
               href="/#steps"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -51,7 +51,7 @@ export const FooterNavigation: React.FC = () => {
               <div>Steps to Edit</div>
             </a>
           </li>
-          <li className="flex w-full items-center whitespace-nowrap mt-3">
+          <li className="flex w-full items-center whitespace-nowrap mt-2">
             <a
               href="/#pricing"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -59,7 +59,7 @@ export const FooterNavigation: React.FC = () => {
               <div>Pricing</div>
             </a>
           </li>
-          <li className="flex w-full items-center whitespace-nowrap mt-3">
+          <li className="flex w-full items-center whitespace-nowrap mt-2">
             <a
               href="/#testimonials"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -71,13 +71,13 @@ export const FooterNavigation: React.FC = () => {
       </div>
 
       <div className="min-w-[120px]">
-        <div className="w-full text-sm text-white font-bold whitespace-nowrap leading-[1.6] pb-3">
+        <div className="w-full text-sm text-white font-bold whitespace-nowrap leading-[1.6] pb-2">
           <div className="w-full">
             <div>About</div>
           </div>
         </div>
         <ul className="list-none p-0 m-0">
-          <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-3">
+          <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-2">
             <a
               href="/about#why"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -85,7 +85,7 @@ export const FooterNavigation: React.FC = () => {
               <div>Why</div>
             </a>
           </li>
-          <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-3">
+          <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-2">
             <a
               href="/about#ethics"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -93,7 +93,7 @@ export const FooterNavigation: React.FC = () => {
               <div>AI With Ethics</div>
             </a>
           </li>
-          <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-3">
+          <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-2">
             <a
               href="/about#questions"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -101,20 +101,20 @@ export const FooterNavigation: React.FC = () => {
               <div>Questions</div>
             </a>
           </li>
-          <li className="flex w-full items-center mt-3">
+          <li className="flex w-full items-center mt-2">
             <div className="self-stretch flex min-h-[23px] my-auto" />
           </li>
         </ul>
       </div>
 
       <div className="min-w-[120px]">
-        <div className="w-full text-sm text-white font-bold whitespace-nowrap leading-[1.6] pb-3">
+        <div className="w-full text-sm text-white font-bold whitespace-nowrap leading-[1.6] pb-2">
           <div className="w-full">
             <div>Tools</div>
           </div>
         </div>
         <ul className="list-none p-0 m-0">
-          <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-3">
+          <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-2">
             <a
               href="/tools"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
@@ -122,13 +122,13 @@ export const FooterNavigation: React.FC = () => {
               <div>All Free Tools</div>
             </a>
           </li>
-          <li className="flex w-full items-center mt-3">
+          <li className="flex w-full items-center mt-2">
             <div className="self-stretch flex min-h-[23px] my-auto" />
           </li>
-          <li className="flex w-full items-center mt-3">
+          <li className="flex w-full items-center mt-2">
             <div className="self-stretch flex min-h-[23px] my-auto" />
           </li>
-          <li className="flex w-full items-center mt-3">
+          <li className="flex w-full items-center mt-2">
             <div className="self-stretch flex min-h-[23px] my-auto" />
           </li>
         </ul>
@@ -139,7 +139,7 @@ export const FooterNavigation: React.FC = () => {
 
 export const FooterBottom: React.FC = () => {
   return (
-    <div className="z-10 flex w-full gap-4 sm:gap-6 text-xs sm:text-sm leading-[1.6] flex-wrap justify-between items-center mt-12 sm:mt-16 md:mt-20 lg:mt-[191px]">
+    <div className="z-10 flex w-full gap-4 sm:gap-6 text-xs sm:text-sm leading-[1.6] flex-wrap justify-between items-center mt-8 sm:mt-10 md:mt-12">
       <div className="flex text-[rgba(153,160,174,1)] font-normal flex-wrap">
         <div>
           © 2025 <span className="font-bold">STORIQ</span>
@@ -171,7 +171,7 @@ export const FooterBottom: React.FC = () => {
 const Footer: React.FC = () => {
   return (
     <footer
-      className="bg-[rgba(10,0,21,1)] pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8"
+      className="bg-[rgba(10,0,21,1)] pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 md:pb-10 px-4 sm:px-6 md:px-8"
       role="contentinfo"
     >
       <div className="w-full max-w-7xl mx-auto">
