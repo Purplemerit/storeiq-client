@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import CustomButton from "@/components/ui/custom-button";
 
@@ -113,8 +112,6 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Header />
-
       {/* Hero Section */}
       <section className="py-20 px-8 text-center">
         <div className="max-w-4xl mx-auto">

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, cubicBezier, AnimatePresence } from "framer-motion"; // Import motion, cubicBezier, and AnimatePresence
-import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
 const Tools = () => {
   const [hoveredTool, setHoveredTool] = useState(null);
@@ -216,8 +215,6 @@ const Tools = () => {
 
   return (
     <div className="min-h-screen bg-black font-sans">
-      <Header />
-
       {/* Hero Section */}
       <section className="py-20 px-8 text-center">
         <div className="max-w-4xl mx-auto">
