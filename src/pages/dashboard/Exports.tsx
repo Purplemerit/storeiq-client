@@ -394,13 +394,13 @@ const Exports = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-6 lg:p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
             Your Exports
           </h1>
-          <p className="text-white/60">
+          <p className="text-sm sm:text-base text-white/60">
             Here are all the videos that you exported.
           </p>
         </div>
@@ -410,7 +410,7 @@ const Exports = () => {
         {/* In Progress Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">In Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {inProgressExports.length === 0 ? (
               <div className="p-8 text-center text-white/60">
                 No exports in progress.
@@ -486,8 +486,8 @@ const Exports = () => {
           </div>
         </div>
 
-        {/* Filters and Controls - Table Style */}
-        <div className="flex flex-wrap gap-4 mb-8">
+        {/* Filters and Controls - Responsive */}
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 mb-8">
           {/* Date Filter */}
           <Select
             value={sortBy}
@@ -495,7 +495,7 @@ const Exports = () => {
               setSortBy(value as "filename" | "date" | "status")
             }
           >
-            <SelectTrigger className="w-32 bg-storiq-card-bg border-storiq-border text-white">
+            <SelectTrigger className="w-full sm:w-32 bg-storiq-card-bg border-storiq-border text-white">
               <SelectValue placeholder="Date" />
             </SelectTrigger>
             <SelectContent className="bg-storiq-card-bg border-storiq-border">
@@ -526,7 +526,7 @@ const Exports = () => {
               setFilterStatus(value as "all" | "completed" | "failed")
             }
           >
-            <SelectTrigger className="w-32 bg-storiq-card-bg border-storiq-border text-white">
+            <SelectTrigger className="w-full sm:w-32 bg-storiq-card-bg border-storiq-border text-white">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent className="bg-storiq-card-bg border-storiq-border">
@@ -552,7 +552,7 @@ const Exports = () => {
           </Select>
           {/* Format Filter */}
           <Select value="" onValueChange={() => {}}>
-            <SelectTrigger className="w-32 bg-storiq-card-bg border-storiq-border text-white">
+            <SelectTrigger className="w-full sm:w-32 bg-storiq-card-bg border-storiq-border text-white">
               <SelectValue placeholder="Format" />
             </SelectTrigger>
             <SelectContent className="bg-storiq-card-bg border-storiq-border">
@@ -574,19 +574,27 @@ const Exports = () => {
           <input
             type="text"
             placeholder="Search by name"
-            className="w-40 bg-storiq-card-bg border-storiq-border text-white px-3 py-2 rounded-md"
+            className="w-full sm:w-40 col-span-2 sm:col-span-1 bg-storiq-card-bg border border-storiq-border text-white px-3 py-2 rounded-md"
             onChange={(e) => {
               // Optionally implement name filtering logic here
             }}
           />
         </div>
 
-        {/* Export History - Table Layout */}
+        {/* Export History - Responsive Layout */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Export History</h2>
-          <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl">
+
+          {/* Desktop Table View (hidden on mobile/tablet) */}
+          <div className="hidden lg:block bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
             {/* Table Header */}
-            <div className="p-4 grid grid-cols-6 gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20">
+            <div
+              className="p-4 grid gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20"
+              style={{
+                gridTemplateColumns:
+                  "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+              }}
+            >
               <div>Filename</div>
               <div>Date</div>
               <div>Size</div>
@@ -605,9 +613,13 @@ const Exports = () => {
                 filteredAndSortedExports.map((item) => (
                   <div
                     key={item.export_id}
-                    className="p-4 grid grid-cols-6 gap-4 text-white items-center"
+                    className="p-4 grid gap-4 text-white items-center"
+                    style={{
+                      gridTemplateColumns:
+                        "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                    }}
                   >
-                    <div className="font-medium">
+                    <div className="font-medium truncate">
                       {item.filename || item.name || "Untitled Export"}
                     </div>
                     <div className="text-white/60">
@@ -636,7 +648,7 @@ const Exports = () => {
                         {item.status || "Unknown"}
                       </span>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       {/* Download */}
                       {item.downloadUrl || item.url ? (
                         <a
@@ -648,11 +660,11 @@ const Exports = () => {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-3 py-1 rounded-lg flex items-center gap-2 transition-all"
+                            className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
                             aria-label="Download export"
                           >
                             <Icons.Download
-                              className="w-4 h-4"
+                              className="w-3.5 h-3.5"
                               aria-hidden="true"
                             />
                           </Button>
@@ -662,11 +674,11 @@ const Exports = () => {
                           variant="outline"
                           size="sm"
                           disabled
-                          className="border-white/20 text-white/40 bg-transparent font-semibold px-3 py-1 rounded-lg flex items-center gap-2"
+                          className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
                           aria-label="Download not available"
                         >
                           <Icons.Download
-                            className="w-4 h-4"
+                            className="w-3.5 h-3.5"
                             aria-hidden="true"
                           />
                         </Button>
@@ -675,7 +687,7 @@ const Exports = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-3 py-1 rounded-lg flex items-center gap-2 transition-all"
+                        className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
                         aria-label="Share export"
                         // onClick={...} // keep logic unchanged
                       >
@@ -686,16 +698,259 @@ const Exports = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleOpenDeleteDialog(item.export_id)}
-                        className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-3 py-1 rounded-lg flex items-center gap-2 transition-all"
+                        className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
                         aria-label="Delete export"
                       >
-                        <Icons.Delete className="w-4 h-4" aria-hidden="true" />
+                        <Icons.Delete
+                          className="w-3.5 h-3.5"
+                          aria-hidden="true"
+                        />
                       </Button>
                     </div>
                   </div>
                 ))
               )}
             </div>
+          </div>
+
+          {/* Tablet Table View (visible on tablet only) */}
+          <div className="hidden md:block lg:hidden bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-x-auto">
+            {/* Table Header */}
+            <div
+              className="p-3 grid gap-3 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20 text-sm"
+              style={{
+                gridTemplateColumns:
+                  "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
+              }}
+            >
+              <div>Filename</div>
+              <div>Date</div>
+              <div>Status</div>
+              <div>Actions</div>
+            </div>
+            {/* Table Rows */}
+            <div className="divide-y divide-storiq-border">
+              {filteredAndSortedExports.length === 0 ? (
+                <div className="p-8 text-center text-white/60">
+                  No exports found. Your exported videos will appear here once
+                  you start creating them.
+                </div>
+              ) : (
+                filteredAndSortedExports.map((item) => (
+                  <div
+                    key={item.export_id}
+                    className="p-3 grid gap-3 text-white items-center text-sm"
+                    style={{
+                      gridTemplateColumns:
+                        "minmax(120px, 2fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(150px, 1.2fr)",
+                    }}
+                  >
+                    <div className="font-medium truncate">
+                      {item.filename || item.name || "Untitled Export"}
+                    </div>
+                    <div className="text-white/60 text-xs">
+                      {item.date || item.createdAt
+                        ? new Date(
+                            item.date || item.createdAt
+                          ).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : "Unknown"}
+                    </div>
+                    <div>
+                      <span
+                        className={`px-2 py-1 rounded-md text-xs font-medium ${
+                          item.status?.toLowerCase() === "completed"
+                            ? "bg-green-500/20 text-green-400"
+                            : item.status?.toLowerCase() === "failed"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-yellow-500/20 text-yellow-400"
+                        }`}
+                      >
+                        {item.status || "Unknown"}
+                      </span>
+                    </div>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {/* Download */}
+                      {item.downloadUrl || item.url ? (
+                        <a
+                          href={item.downloadUrl || item.url}
+                          download={item.filename || item.name}
+                          className="inline-flex"
+                          aria-label="Download export"
+                        >
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                            aria-label="Download export"
+                          >
+                            <Icons.Download
+                              className="w-3.5 h-3.5"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled
+                          className="border-white/20 text-white/40 bg-transparent font-semibold px-2 py-1 rounded-lg flex items-center gap-1 text-xs"
+                          aria-label="Download not available"
+                        >
+                          <Icons.Download
+                            className="w-3.5 h-3.5"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      )}
+                      {/* Share */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                        aria-label="Share export"
+                      >
+                        Share
+                      </Button>
+                      {/* Delete */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleOpenDeleteDialog(item.export_id)}
+                        className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-2 py-1 rounded-lg flex items-center gap-1 transition-all text-xs"
+                        aria-label="Delete export"
+                      >
+                        <Icons.Delete
+                          className="w-3.5 h-3.5"
+                          aria-hidden="true"
+                        />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Mobile Card View (visible on mobile only) */}
+          <div className="md:hidden space-y-4">
+            {filteredAndSortedExports.length === 0 ? (
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 text-center text-white/60">
+                No exports found. Your exported videos will appear here once you
+                start creating them.
+              </div>
+            ) : (
+              filteredAndSortedExports.map((item) => (
+                <div
+                  key={item.export_id}
+                  className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 space-y-3"
+                >
+                  {/* Header Row */}
+                  <div className="flex justify-between items-start gap-2">
+                    <h3 className="text-white font-semibold text-base flex-1 line-clamp-2">
+                      {item.filename || item.name || "Untitled Export"}
+                    </h3>
+                    <span
+                      className={`px-2 py-1 rounded-md text-xs font-medium whitespace-nowrap ${
+                        item.status?.toLowerCase() === "completed"
+                          ? "bg-green-500/20 text-green-400"
+                          : item.status?.toLowerCase() === "failed"
+                          ? "bg-red-500/20 text-red-400"
+                          : "bg-yellow-500/20 text-yellow-400"
+                      }`}
+                    >
+                      {item.status || "Unknown"}
+                    </span>
+                  </div>
+
+                  {/* Info Grid */}
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="text-white/60 block mb-1">Date</span>
+                      <span className="text-white">
+                        {item.date || item.createdAt
+                          ? new Date(
+                              item.date || item.createdAt
+                            ).toLocaleDateString()
+                          : "Unknown"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-white/60 block mb-1">Size</span>
+                      <span className="text-white">{item.size || "-"}</span>
+                    </div>
+                    <div>
+                      <span className="text-white/60 block mb-1">Format</span>
+                      <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-xs inline-block">
+                        {item.format || "MP4"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-2">
+                    {/* Download */}
+                    {item.downloadUrl || item.url ? (
+                      <a
+                        href={item.downloadUrl || item.url}
+                        download={item.filename || item.name}
+                        className="flex-1"
+                        aria-label="Download export"
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full border-green-500/70 text-green-500 hover:bg-green-500/15 hover:border-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                          aria-label="Download export"
+                        >
+                          <Icons.Download
+                            className="w-4 h-4"
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm">Download</span>
+                        </Button>
+                      </a>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled
+                        className="flex-1 border-white/20 text-white/40 bg-transparent font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2"
+                        aria-label="Download not available"
+                      >
+                        <Icons.Download
+                          className="w-4 h-4"
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm">Download</span>
+                      </Button>
+                    )}
+                    {/* Share */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 border-blue-500/70 text-blue-500 hover:bg-blue-500/15 hover:border-blue-600 focus:ring-2 focus:ring-blue-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                      aria-label="Share export"
+                    >
+                      <span className="text-sm">Share</span>
+                    </Button>
+                    {/* Delete */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleOpenDeleteDialog(item.export_id)}
+                      className="border-red-500/70 text-red-500 hover:bg-red-500/15 hover:border-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-all"
+                      aria-label="Delete export"
+                    >
+                      <Icons.Delete className="w-4 h-4" aria-hidden="true" />
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
