@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import DarkVeil from "@/components/DarkVeil";
 
 const Hero: React.FC = () => {
@@ -231,6 +232,7 @@ const PrivacyPolicy: React.FC = () => {
             <PolicyContent />
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );
