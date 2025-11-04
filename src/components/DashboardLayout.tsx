@@ -172,8 +172,19 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         >
           <Menu size={28} />
         </button>
-        <Link to="/dashboard" className="text-white font-bold text-lg">
-          STORIQ
+        <Link to="/dashboard" className="inline-block">
+          <div
+            style={{
+              color: "#fff",
+              fontFamily: "Orbitron",
+              fontSize: "24px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "24px",
+            }}
+          >
+            STORIQ
+          </div>
         </Link>
       </header>
       <div className="flex flex-1">

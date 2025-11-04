@@ -129,7 +129,7 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Options */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-3 gap-4 md:gap-6 mb-10">
           {quickOptions.map((option, index) =>
             option.href ? (
               <div
@@ -148,11 +148,11 @@ const Dashboard = () => {
                 {option.icon}
                 <div className="relative z-10">
                   {option.superTitle && (
-                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">
+                    <p className="text-gray-300 text-[10px] md:text-xs font-semibold uppercase tracking-wider mb-1">
                       {option.superTitle}
                     </p>
                   )}
-                  <h3 className="text-white text-xl font-bold">
+                  <h3 className="text-white text-sm md:text-xl font-bold">
                     {option.title}
                   </h3>
                 </div>
@@ -170,11 +170,11 @@ const Dashboard = () => {
                 {option.icon}
                 <div className="relative z-10">
                   {option.superTitle && (
-                    <p className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1">
+                    <p className="text-gray-300 text-[10px] md:text-xs font-semibold uppercase tracking-wider mb-1">
                       {option.superTitle}
                     </p>
                   )}
-                  <h3 className="text-white text-xl font-bold">
+                  <h3 className="text-white text-sm md:text-xl font-bold">
                     {option.title}
                   </h3>
                 </div>
@@ -202,10 +202,10 @@ const Dashboard = () => {
                 if (tab === "Creation") {
                   navigate("/dashboard/videos");
                 } else if (tab === "Inspiration") {
-                  navigate("/dashboard/aitools");
+                  navigate("/dashboard/create-prompt");
                 }
               }}
-              className={`relative z-10 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 min-w-[120px] ${
+              className={`relative z-10 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 flex-1 ${
                 activeTab === index
                   ? "text-white"
                   : "text-gray-400 hover:text-white"
