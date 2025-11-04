@@ -143,7 +143,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <p className="text-white/60 text-sm mb-4">
             Upgrade your free plan into Premium Plans
           </p>
-          <Button className="w-full bg-storiq-purple hover:bg-storiq-purple/80 text-white rounded-full py-2">
+          <Button className="w-full bg-black border-2 border-storiq-purple hover:bg-storiq-purple/10 text-white rounded-lg py-2">
             Upgrade Now
           </Button>
         </div>
