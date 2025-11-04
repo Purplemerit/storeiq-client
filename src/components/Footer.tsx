@@ -171,7 +171,7 @@ export const FooterBottom: React.FC = () => {
 const Footer: React.FC = () => {
   return (
     <footer
-      className="bg-[rgba(10,0,21,1)] pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8 md:pb-10 px-4 sm:px-6 md:px-8"
+      className="bg-[rgba(10,0,21,1)] pt-6 sm:pt-8 md:pt-12 pb-4 sm:pb-6 md:pb-10 px-4 sm:px-6 md:px-8"
       role="contentinfo"
     >
       <div className="w-full max-w-7xl mx-auto">

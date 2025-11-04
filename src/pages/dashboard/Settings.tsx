@@ -562,8 +562,8 @@ const Settings = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8 bg-storiq-dark min-h-screen">
-        <div className="mb-6 md:mb-8">
+      <div className="p-4 pb-2 md:p-8 bg-storiq-dark">
+        <div className="mb-4 md:mb-8">
           <div className="flex items-center gap-3 mb-2">
             <SettingsIcon active={true} />
             <h1 className="text-2xl md:text-4xl font-bold text-white">
@@ -576,7 +576,7 @@ const Settings = () => {
         </div>
 
         {/* Mobile Tab Navigation */}
-        <div className="flex md:hidden mb-4 overflow-x-auto gap-2 hide-scrollbar">
+        <div className="flex md:hidden mb-3 overflow-x-auto gap-2 hide-scrollbar">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
             return (
@@ -636,13 +636,13 @@ const Settings = () => {
             {/* Your Timezone Section */}
             {activeTab === "Your Timezone" && (
               <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl">
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
-                    <h3 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
+                    <h3 className="text-white text-xl font-semibold mb-3 md:mb-4 flex items-center gap-2">
                       <ClockIcon />
                       Timezone Settings
                     </h3>
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       <label className="block text-white/80 text-sm font-medium">
                         Select Your Timezone
                       </label>
@@ -714,12 +714,12 @@ const Settings = () => {
                     <IntegrationIcon />
                     Social Integrations
                   </h3>
-                  <p className="text-white/60 mb-6">
+                  <p className="text-white/60 mb-4 md:mb-6">
                     Connect your social media accounts to schedule content
                     seamlessly
                   </p>
 
-                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6 mb-6">
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6 mb-4 md:mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-white font-medium">
                         Current Connections
@@ -750,7 +750,7 @@ const Settings = () => {
                     )}
                   </div>
 
-                  <p className="text-white/60 text-sm mb-6">
+                  <p className="text-white/60 text-sm mb-4 md:mb-6">
                     Make sure you're logged into the account you want to connect
                     before clicking below.
                   </p>
@@ -797,7 +797,7 @@ const Settings = () => {
                     <ChannelIcon />
                     Channel Management
                   </h3>
-                  <p className="text-white/60 text-sm mb-6">
+                  <p className="text-white/60 text-sm mb-4 md:mb-6">
                     Organize your social media accounts into channels for better
                     content management
                   </p>
@@ -833,18 +833,18 @@ const Settings = () => {
             {/* Password Management Section */}
             {activeTab === "Password Management" && (
               <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
-                <div className="space-y-6 flex-1 flex flex-col">
+                <div className="space-y-4 md:space-y-6 flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <PasswordIcon />
                     Password Security
                   </h3>
 
                   <form
-                    className="space-y-6 w-full"
+                    className="space-y-4 md:space-y-6 w-full"
                     onSubmit={handlePasswordUpdate}
                     autoComplete="off"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       <div>
                         <label
                           className="block text-white/80 mb-2 text-sm font-medium"
@@ -992,13 +992,13 @@ const Settings = () => {
             {/* Account Section */}
             {activeTab === "Account" && (
               <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
-                <div className="space-y-6 flex-1 flex flex-col">
+                <div className="space-y-4 md:space-y-6 flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <AccountIcon />
                     Account Information
                   </h3>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6">
                       <div className="space-y-4">
                         {user?.username && (
