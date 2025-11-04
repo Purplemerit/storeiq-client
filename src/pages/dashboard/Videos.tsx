@@ -984,8 +984,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
     return title.length > maxLen ? title.slice(0, maxLen) + "..." : title;
   };
   return (
-    <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-colors w-full max-w-xl mx-auto">
-      <div className="h-56 relative">
+    <div className="relative border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-all duration-300 w-full max-w-xl mx-auto group">
+      {/* Background Image */}
+      <div className="absolute inset-0">
         <img
           src={
             video.thumbnail
@@ -995,28 +996,30 @@ const VideoCard: React.FC<VideoCardProps> = ({
               : "/placeholder.svg"
           }
           alt={video.title || "Untitled Video"}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/placeholder.svg";
           }}
         />
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
       </div>
-      <div className="p-6">
+
+      {/* Content */}
+      <div className="relative z-10 p-6 min-h-[280px] flex flex-col justify-end">
         <h3
-          className="text-white text-xl font-bold mb-1"
+          className="text-white text-xl font-bold mb-1 drop-shadow-lg"
           title={video.title || "Untitled Video"}
         >
           {getShortTitle(video.title)}
         </h3>
-        <p className="text-white/60 text-sm mb-4">
+        <p className="text-gray-200 text-sm mb-4 drop-shadow-md">
           {video.subtitle || video.description || "No description available"}
         </p>
         <div className="flex space-x-3">
           <Button
             variant="outline"
             size="sm"
-            className="border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
+            className="bg-black/50 backdrop-blur-sm border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
             onClick={onEdit}
           >
             Edit
@@ -1024,7 +1027,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
+            className="bg-black/50 backdrop-blur-sm border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
             onClick={onPreview}
           >
             Preview

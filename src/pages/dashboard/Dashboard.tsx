@@ -221,23 +221,29 @@ const Dashboard = () => {
           {tools.map((tool, index) => (
             <div
               key={index}
-              className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden group transition-all duration-300 hover:border-storiq-purple/50 hover:transform hover:-translate-y-1"
+              className="relative border border-storiq-border rounded-2xl overflow-hidden group transition-all duration-300 hover:border-storiq-purple/50 hover:transform hover:-translate-y-1"
             >
-              <div className="overflow-hidden h-40">
+              {/* Background Image */}
+              <div className="absolute inset-0">
                 <img
                   src={tool.image || "/placeholder.svg"}
                   alt={tool.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
               </div>
-              <div className="p-6">
-                <h3 className="text-white text-lg font-bold mb-1">
+
+              {/* Content */}
+              <div className="relative z-10 p-6 min-h-[280px] flex flex-col justify-end">
+                <h3 className="text-white text-lg font-bold mb-1 drop-shadow-lg">
                   {tool.title}
                 </h3>
-                <p className="text-gray-400 text-sm mb-4">{tool.subtitle}</p>
+                <p className="text-gray-200 text-sm mb-4 drop-shadow-md">
+                  {tool.subtitle}
+                </p>
                 <Button
                   variant="outline"
-                  className="w-auto px-5 py-2 bg-transparent border border-storiq-border text-white text-sm font-semibold rounded-lg hover:bg-storiq-purple hover:border-storiq-purple transition-colors"
+                  className="w-auto px-5 py-2 bg-black/50 backdrop-blur-sm border border-storiq-border text-white text-sm font-semibold rounded-lg hover:bg-storiq-purple hover:border-storiq-purple transition-colors"
                   onClick={() => navigate(tool.link)}
                 >
                   {tool.buttonText}
