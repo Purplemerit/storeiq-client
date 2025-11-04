@@ -8,14 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/Loader";
 import { authFetch } from "@/lib/authFetch";
-import {
-  Download,
-  RefreshCw,
-  Sparkles,
-  Wand2,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Download, RefreshCw, Sparkles, Wand2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const ImageGenerator: React.FC = () => {
@@ -73,24 +66,7 @@ const ImageGenerator: React.FC = () => {
 
     const interval = setInterval(transitionImages, 5000);
     return () => clearInterval(interval);
-  }, [imageUrl, loading, error, nextImageIdx]);
-
-  const navigateImage = (direction: "prev" | "next") => {
-    if (imageUrl || loading || error) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      if (direction === "next") {
-        setCurrentImageIdx((currentImageIdx + 1) % defaultImages.length);
-        setNextImageIdx((currentImageIdx + 2) % defaultImages.length);
-      } else {
-        setCurrentImageIdx(
-          (currentImageIdx - 1 + defaultImages.length) % defaultImages.length
-        );
-        setNextImageIdx((currentImageIdx + 1) % defaultImages.length);
-      }
-      setTimeout(() => setIsTransitioning(false), 100);
-    }, 500);
-  };
+  }, [imageUrl, loading, error, nextImageIdx, defaultImages.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +113,10 @@ const ImageGenerator: React.FC = () => {
 
   const handleRegenerate = () => {
     if (prompt.trim()) {
-      handleSubmit(new Event("submit") as React.FormEvent);
+      const fakeEvent = {
+        preventDefault: () => {},
+      } as React.FormEvent;
+      handleSubmit(fakeEvent);
     }
   };
 
@@ -156,31 +135,34 @@ const ImageGenerator: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            <span className="inline-flex items-center gap-2">
-              <Sparkles className="w-8 h-8 text-storiq-purple animate-pulse" />
+        <div className="mb-4 sm:mb-6 md:mb-8 text-center px-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
+            <span className="inline-flex items-center gap-2 sm:gap-3">
+              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-storiq-purple animate-pulse flex-shrink-0" />
               AI Image Generator
             </span>
           </h1>
-          <p className="text-white/60 text-lg">
+          <p className="text-white/60 text-sm sm:text-base md:text-lg">
             Transform your imagination into stunning visuals with AI
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8">
           {/* Left Column */}
-          <div className="w-full lg:w-[40%] space-y-6">
-            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 backdrop-blur-lg">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-3">
+          <div className="w-full xl:w-[45%] 2xl:w-[40%] space-y-4 sm:space-y-5 md:space-y-6 order-2 xl:order-1">
+            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 backdrop-blur-lg">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 sm:space-y-5 md:space-y-6"
+              >
+                <div className="space-y-2 sm:space-y-3">
                   <label
                     htmlFor="prompt"
-                    className="text-white font-medium flex items-center gap-2"
+                    className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
                   >
-                    <Wand2 className="w-4 h-4 text-storiq-purple" />
+                    <Wand2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
                     Describe your vision
                   </label>
                   <Textarea
@@ -190,24 +172,24 @@ const ImageGenerator: React.FC = () => {
                     onChange={(e) => setPrompt(e.target.value)}
                     disabled={loading}
                     autoFocus
-                    className="bg-black/40 border border-gray-700 text-white placeholder:text-white/40 min-h-[120px] text-base rounded-xl focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple transition resize-none px-4 py-3"
+                    className="bg-black/40 border border-gray-700 text-white placeholder:text-white/40 min-h-[100px] sm:min-h-[120px] text-sm sm:text-base rounded-xl focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple transition resize-none px-3 py-2 sm:px-4 sm:py-3"
                   />
                 </div>
 
                 {/* Suggestions */}
-                <div className="space-y-3">
-                  <p className="text-sm text-gray-400 flex items-center gap-2">
-                    <Sparkles className="w-3 h-3" />
+                <div className="space-y-2 sm:space-y-3">
+                  <p className="text-xs sm:text-sm text-gray-400 flex items-center gap-2">
+                    <Sparkles className="w-3 h-3 flex-shrink-0" />
                     Try these ideas:
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {promptSuggestions.map((suggestion, i) => (
                       <button
                         key={i}
                         type="button"
                         onClick={() => handleSuggestionClick(suggestion)}
                         disabled={loading}
-                        className="px-3 py-2 text-sm bg-gray-900/60 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 hover:border-storiq-purple/40 hover:scale-105 transition disabled:opacity-50"
+                        className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-900/60 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 hover:border-storiq-purple/40 hover:scale-105 transition disabled:opacity-50"
                       >
                         {suggestion}
                       </button>
@@ -218,12 +200,13 @@ const ImageGenerator: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={loading || !prompt.trim()}
-                  className="w-full bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold h-12 text-base rounded-xl transition-transform transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                  className="w-full bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold h-11 sm:h-12 text-sm sm:text-base rounded-xl transition-transform transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      Generating...
+                      <span className="hidden xs:inline">Generating...</span>
+                      <span className="xs:hidden">Creating...</span>
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
@@ -237,13 +220,13 @@ const ImageGenerator: React.FC = () => {
           </div>
 
           {/* Right Column */}
-          <div className="w-full lg:w-[60%]">
-            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 h-full backdrop-blur-lg">
+          <div className="w-full xl:w-[55%] 2xl:w-[60%] order-1 xl:order-2">
+            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 h-full backdrop-blur-lg">
               {/* Loading */}
               {loading && (
-                <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 space-y-3 sm:space-y-4">
                   <Loader message="Painting your vision..." size="small" />
-                  <p className="text-gray-400 text-sm animate-pulse">
+                  <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
                     This may take a few moments...
                   </p>
                 </div>
@@ -251,21 +234,23 @@ const ImageGenerator: React.FC = () => {
 
               {/* Error */}
               {error && (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <div className="p-3 bg-red-500/10 rounded-full animate-bounce">
-                    <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">!</span>
+                <div className="flex flex-col items-center justify-center py-6 sm:py-8 space-y-3 sm:space-y-4">
+                  <div className="p-2.5 sm:p-3 bg-red-500/10 rounded-full animate-bounce">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-500 flex items-center justify-center">
+                      <span className="text-white text-xs sm:text-sm font-bold">
+                        !
+                      </span>
                     </div>
                   </div>
-                  <div className="text-red-400 text-center font-medium">
+                  <div className="text-red-400 text-center font-medium text-sm sm:text-base px-2">
                     {error}
                   </div>
                   <Button
                     onClick={handleRegenerate}
                     variant="outline"
-                    className="border-red-500/50 text-red-400 hover:bg-red-500/10 transition"
+                    className="border-red-500/50 text-red-400 hover:bg-red-500/10 transition h-9 sm:h-10 text-sm"
                   >
-                    <RefreshCw className="w-4 h-4 mr-2" />
+                    <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" />
                     Try Again
                   </Button>
                 </div>
@@ -273,13 +258,13 @@ const ImageGenerator: React.FC = () => {
 
               {/* Generated Image */}
               {imageUrl && !loading && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-5 md:space-y-6">
                   <div className="relative group">
                     <div className="rounded-xl overflow-hidden border border-gray-700 bg-black/40">
                       <img
                         src={imageUrl}
                         alt={`Generated: ${prompt}`}
-                        className={`w-full h-auto max-h-96 object-contain transition-all duration-700 ${
+                        className={`w-full h-auto max-h-[300px] sm:max-h-[350px] md:max-h-96 object-contain transition-all duration-700 ${
                           imageLoaded
                             ? "opacity-100 scale-100"
                             : "opacity-0 scale-105"
@@ -288,36 +273,36 @@ const ImageGenerator: React.FC = () => {
                       />
                       {!imageLoaded && (
                         <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
-                          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-storiq-purple"></div>
+                          <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-storiq-purple"></div>
                         </div>
                       )}
                     </div>
 
                     {/* Floating Actions */}
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                    <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex gap-1.5 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
                       <Button
                         onClick={handleDownload}
                         size="sm"
-                        className="bg-black/70 hover:bg-black text-white border border-gray-600 hover:scale-110 transition"
+                        className="bg-black/70 hover:bg-black text-white border border-gray-600 hover:scale-110 transition h-8 sm:h-9 px-2 sm:px-3"
                         title="Download"
                       >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </Button>
                       <Button
                         onClick={handleRegenerate}
                         size="sm"
-                        className="bg-black/70 hover:bg-black text-white border border-gray-600 hover:scale-110 transition"
+                        className="bg-black/70 hover:bg-black text-white border border-gray-600 hover:scale-110 transition h-8 sm:h-9 px-2 sm:px-3"
                         title="Regenerate"
                       >
-                        <RefreshCw className="w-4 h-4" />
+                        <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </div>
 
                   {/* Info */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
-                      <span className="bg-gray-800/60 px-3 py-1 rounded-full">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-400">
+                      <span className="bg-gray-800/60 px-2.5 sm:px-3 py-1 rounded-full">
                         Generation #{generationCount}
                       </span>
                       <a
@@ -332,20 +317,20 @@ const ImageGenerator: React.FC = () => {
                     <Button
                       onClick={handleRegenerate}
                       variant="outline"
-                      className="border-storiq-purple/50 text-storiq-purple hover:bg-storiq-purple/10 transition"
+                      className="border-storiq-purple/50 text-storiq-purple hover:bg-storiq-purple/10 transition h-8 sm:h-9 text-xs sm:text-sm w-full sm:w-auto"
                     >
-                      <RefreshCw className="w-4 h-4 mr-2" />
+                      <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" />
                       Generate Another
                     </Button>
                   </div>
 
                   {/* Prompt */}
-                  <div className="bg-gray-900/40 rounded-lg p-4 border border-gray-800 hover:border-gray-700 transition">
-                    <p className="text-xs text-gray-400 mb-2 flex items-center gap-1">
-                      <Wand2 className="w-3 h-3" />
+                  <div className="bg-gray-900/40 rounded-lg p-3 sm:p-4 border border-gray-800 hover:border-gray-700 transition">
+                    <p className="text-xs text-gray-400 mb-1.5 sm:mb-2 flex items-center gap-1">
+                      <Wand2 className="w-3 h-3 flex-shrink-0" />
                       Prompt used:
                     </p>
-                    <p className="text-sm text-gray-300 font-medium">
+                    <p className="text-xs sm:text-sm text-gray-300 font-medium">
                       {prompt}
                     </p>
                   </div>
@@ -354,29 +339,13 @@ const ImageGenerator: React.FC = () => {
 
               {/* Default Carousel */}
               {!imageUrl && !loading && !error && (
-                <div className="flex flex-col items-center justify-center py-8 text-center space-y-6">
+                <div className="flex flex-col items-center justify-center py-6 sm:py-8 text-center space-y-4 sm:space-y-6">
                   <div className="relative w-full max-w-md">
-                    <button
-                      onClick={() => navigateImage("prev")}
-                      disabled={isTransitioning}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 border border-gray-600 disabled:opacity-50"
-                    >
-                      <ChevronLeft className="w-5 h-5 text-white" />
-                    </button>
-
-                    <button
-                      onClick={() => navigateImage("next")}
-                      disabled={isTransitioning}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 rounded-full p-2 border border-gray-600 disabled:opacity-50"
-                    >
-                      <ChevronRight className="w-5 h-5 text-white" />
-                    </button>
-
                     <div
                       ref={imageContainerRef}
-                      className="relative bg-gradient-to-br from-storiq-purple/10 to-blue-500/10 rounded-2xl p-6 transition-all"
+                      className="relative bg-gradient-to-br from-storiq-purple/10 to-blue-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 transition-all"
                     >
-                      <div className="relative h-64 sm:h-80">
+                      <div className="relative h-52 sm:h-64 md:h-80">
                         <img
                           src={defaultImages[currentImageIdx].src}
                           alt="Prompt example"
@@ -396,18 +365,18 @@ const ImageGenerator: React.FC = () => {
                           }`}
                         />
                       </div>
-                      <div className="mt-6 px-2">
-                        <h4 className="text-white/70 text-base font-semibold mb-3 flex items-center justify-center gap-2">
-                          <Sparkles className="w-4 h-4 text-storiq-purple" />
+                      <div className="mt-4 sm:mt-5 md:mt-6 px-2">
+                        <h4 className="text-white/70 text-sm sm:text-base font-semibold mb-2 sm:mb-3 flex items-center justify-center gap-2">
+                          <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
                           Example Prompt
                         </h4>
-                        <p className="text-sm text-gray-300 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
                           {defaultImages[currentImageIdx].description}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex justify-center mt-4 space-x-2">
+                    <div className="flex justify-center mt-3 sm:mt-4 space-x-1.5 sm:space-x-2">
                       {defaultImages.map((_, i) => (
                         <button
                           key={i}
@@ -424,16 +393,16 @@ const ImageGenerator: React.FC = () => {
                               }, 500);
                             }
                           }}
-                          className={`w-2 h-2 rounded-full transition ${
+                          className={`h-2 rounded-full transition ${
                             i === currentImageIdx
                               ? "bg-storiq-purple w-6"
-                              : "bg-gray-600 hover:bg-gray-500"
+                              : "bg-gray-600 hover:bg-gray-500 w-2"
                           }`}
                         />
                       ))}
                     </div>
                   </div>
-                  <p className="text-gray-500 text-sm animate-pulse">
+                  <p className="text-gray-500 text-xs sm:text-sm animate-pulse px-4">
                     ✨ Enter your prompt above to create amazing images
                   </p>
                 </div>
@@ -443,9 +412,9 @@ const ImageGenerator: React.FC = () => {
         </div>
 
         {(imageUrl || loading) && (
-          <div className="text-center mt-6">
-            <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
-              <Sparkles className="w-3 h-3" />
+          <div className="text-center mt-4 sm:mt-5 md:mt-6">
+            <p className="text-xs text-gray-500 flex items-center justify-center gap-2 px-2">
+              <Sparkles className="w-3 h-3 flex-shrink-0" />
               Powered by AI • Images are generated on-demand
             </p>
           </div>
