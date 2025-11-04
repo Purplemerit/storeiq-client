@@ -562,7 +562,7 @@ const Settings = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8 bg-[#111111] min-h-screen">
+      <div className="p-4 md:p-8 bg-storiq-dark min-h-screen">
         <div className="mb-6 md:mb-8">
           <div className="flex items-center gap-3 mb-2">
             <SettingsIcon active={true} />
@@ -585,8 +585,8 @@ const Settings = () => {
                 ref={(el) => (tabRefs.current[index] = el)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                   activeTab === item.label
-                    ? "bg-gradient-to-r from-[#6E42E1] to-[#8B5CF6] text-white shadow"
-                    : "text-white/70 hover:text-white hover:bg-[#6E42E1]/20"
+                    ? "bg-storiq-purple text-white shadow"
+                    : "text-white/70 hover:text-white hover:bg-storiq-purple/20"
                 }`}
                 onClick={() => {
                   setActiveTab(item.label);
@@ -608,7 +608,7 @@ const Settings = () => {
         <div className="flex flex-col md:flex-row md:gap-8 items-stretch h-full">
           {/* Enhanced Left Sidebar (hidden on mobile) */}
           <aside className="hidden md:flex md:w-80 flex-shrink-0 h-full flex-col">
-            <div className="bg-gradient-to-b from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-6 shadow-2xl flex flex-col h-full">
+            <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 shadow-2xl flex flex-col h-full">
               <div className="space-y-1 flex-1 flex flex-col">
                 {sidebarItems.map((item, index) => {
                   const IconComponent = item.icon;
@@ -617,8 +617,8 @@ const Settings = () => {
                       key={index}
                       className={`w-full flex items-center gap-4 text-left px-4 py-4 rounded-xl transition-all duration-200 text-base font-medium group ${
                         activeTab === item.label
-                          ? "bg-gradient-to-r from-[#6E42E1] to-[#8B5CF6] text-white shadow-lg"
-                          : "text-white/70 hover:text-white hover:bg-[#6E42E1]/20 hover:translate-x-1"
+                          ? "bg-storiq-purple text-white shadow-lg"
+                          : "text-white/70 hover:text-white hover:bg-storiq-purple/20 hover:translate-x-1"
                       }`}
                       onClick={() => setActiveTab(item.label)}
                     >
@@ -635,7 +635,7 @@ const Settings = () => {
           <main className="flex-1 flex flex-col h-full">
             {/* Your Timezone Section */}
             {activeTab === "Your Timezone" && (
-              <div className="bg-gradient-to-br from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-4 md:p-8 shadow-2xl">
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl">
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
@@ -651,15 +651,15 @@ const Settings = () => {
                         onValueChange={handleTimezoneChange}
                         disabled={updatingTimezone}
                       >
-                        <SelectTrigger className="w-full max-w-md bg-[#2A2A2A] border-[#3A3A3A] text-white h-12 hover:border-[#6E42E1] transition-colors">
+                        <SelectTrigger className="w-full max-w-md bg-storiq-card-bg border-storiq-border text-white h-12 hover:border-storiq-purple transition-colors">
                           <SelectValue placeholder="Select a timezone" />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#2A2A2A] border-[#3A3A3A] text-white">
+                        <SelectContent className="bg-storiq-card-bg border-storiq-border text-white">
                           {timezones.map((tz) => (
                             <SelectItem
                               key={tz}
                               value={tz}
-                              className="focus:bg-[#6E42E1] focus:text-white hover:bg-[#6E42E1]/30"
+                              className="focus:bg-storiq-purple focus:text-white hover:bg-storiq-purple/30"
                             >
                               {tz}
                             </SelectItem>
@@ -670,7 +670,7 @@ const Settings = () => {
                   </div>
 
                   {/* Enhanced Live Clock */}
-                  <div className="bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl p-4 md:p-6">
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-white font-mono text-2xl font-bold">
@@ -681,7 +681,7 @@ const Settings = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-[#6E42E1] font-semibold text-lg">
+                        <span className="text-storiq-purple font-semibold text-lg">
                           {timezone}
                         </span>
                         <div className="text-white/60 text-sm">Live</div>
@@ -689,11 +689,11 @@ const Settings = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 bg-[#2A2A2A] rounded-lg">
+                  <div className="flex items-center space-x-3 p-3 bg-storiq-card-bg rounded-lg">
                     <Switch
                       defaultChecked
                       id="email-notifications"
-                      className="data-[state=checked]:bg-[#6E42E1]"
+                      className="data-[state=checked]:bg-storiq-purple"
                     />
                     <label
                       htmlFor="email-notifications"
@@ -708,7 +708,7 @@ const Settings = () => {
 
             {/* Integrations Section */}
             {activeTab === "Integrations" && (
-              <div className="bg-gradient-to-br from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
                 <div className="flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <IntegrationIcon />
@@ -719,7 +719,7 @@ const Settings = () => {
                     seamlessly
                   </p>
 
-                  <div className="bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl p-4 md:p-6 mb-6">
+                  <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6 mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-white font-medium">
                         Current Connections
@@ -735,7 +735,7 @@ const Settings = () => {
                       </span>
                     </div>
                     {ytConnected && (
-                      <div className="flex items-center justify-between p-3 bg-[#1E1E1E] rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-storiq-dark rounded-lg">
                         <span className="text-white">YouTube</span>
                         <Button
                           variant="outline"
@@ -780,7 +780,7 @@ const Settings = () => {
                     )}
                     <Button
                       variant="outline"
-                      className="border-[#6E42E1] text-[#6E42E1] hover:bg-[#6E42E1] hover:text-white hover:scale-105 transition-transform"
+                      className="border-storiq-purple text-storiq-purple hover:bg-storiq-purple hover:text-white hover:scale-105 transition-transform"
                     >
                       + Other Platforms
                     </Button>
@@ -791,7 +791,7 @@ const Settings = () => {
 
             {/* Channel Manager Section */}
             {activeTab === "Channel Manager" && (
-              <div className="bg-gradient-to-br from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
                 <div className="flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <ChannelIcon />
@@ -809,7 +809,7 @@ const Settings = () => {
                       </label>
                       <Input
                         placeholder="Enter a descriptive channel name"
-                        className="w-full bg-[#2A2A2A] border-[#3A3A3A] text-white placeholder:text-white/40 h-12 focus:border-[#6E42E1]"
+                        className="w-full bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 h-12 focus:border-storiq-purple"
                       />
                     </div>
                     <div>
@@ -818,11 +818,11 @@ const Settings = () => {
                       </label>
                       <Textarea
                         placeholder="Describe the purpose of this channel"
-                        className="w-full bg-[#2A2A2A] border-[#3A3A3A] text-white placeholder:text-white/40 resize-none focus:border-[#6E42E1]"
+                        className="w-full bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 resize-none focus:border-storiq-purple"
                         rows={3}
                       />
                     </div>
-                    <Button className="w-full bg-gradient-to-r from-[#6E42E1] to-[#8B5CF6] hover:from-[#7d55e6] hover:to-[#9c76ff] text-white px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-semibold hover:scale-105 transition-transform">
+                    <Button className="w-full bg-storiq-purple hover:bg-storiq-purple/90 text-white px-6 py-4 md:px-8 md:py-6 text-base md:text-lg font-semibold hover:scale-105 transition-transform">
                       Create Channel
                     </Button>
                   </div>
@@ -832,7 +832,7 @@ const Settings = () => {
 
             {/* Password Management Section */}
             {activeTab === "Password Management" && (
-              <div className="bg-gradient-to-br from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
                 <div className="space-y-6 flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <PasswordIcon />
@@ -858,7 +858,7 @@ const Settings = () => {
                             type={showCurrent ? "text" : "password"}
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
-                            className="w-full bg-[#2A2A2A] border-[#3A3A3A] text-white h-12 pr-12 focus:border-[#6E42E1]"
+                            className="w-full bg-storiq-card-bg border-storiq-border text-white h-12 pr-12 focus:border-storiq-purple"
                             autoComplete="current-password"
                             placeholder="Enter current password"
                           />
@@ -889,7 +889,7 @@ const Settings = () => {
                             type={showNew ? "text" : "password"}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full bg-[#2A2A2A] border-[#3A3A3A] text-white h-12 pr-12 focus:border-[#6E42E1]"
+                            className="w-full bg-storiq-card-bg border-storiq-border text-white h-12 pr-12 focus:border-storiq-purple"
                             autoComplete="new-password"
                             placeholder="Enter new password"
                           />
@@ -920,7 +920,7 @@ const Settings = () => {
                             type={showConfirm ? "text" : "password"}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full bg-[#2A2A2A] border-[#3A3A3A] text-white h-12 pr-12 focus:border-[#6E42E1]"
+                            className="w-full bg-storiq-card-bg border-storiq-border text-white h-12 pr-12 focus:border-storiq-purple"
                             autoComplete="new-password"
                             placeholder="Confirm new password"
                           />
@@ -954,7 +954,7 @@ const Settings = () => {
                             {newPassword.length >= 8 ? "Strong" : "Weak"}
                           </span>
                         </div>
-                        <div className="w-full bg-[#2A2A2A] rounded-full h-2">
+                        <div className="w-full bg-storiq-card-bg rounded-full h-2">
                           <div
                             className={`h-full rounded-full transition-all duration-300 ${
                               newPassword.length >= 8
@@ -977,7 +977,7 @@ const Settings = () => {
 
                     <Button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-[#6E42E1] to-[#8B5CF6] hover:from-[#7d55e6] hover:to-[#9c76ff] text-white py-4 md:py-6 text-base md:text-lg font-semibold hover:scale-105 transition-transform"
+                      className="w-full bg-storiq-purple hover:bg-storiq-purple/90 text-white py-4 md:py-6 text-base md:text-lg font-semibold hover:scale-105 transition-transform"
                       disabled={passwordLoading}
                     >
                       {passwordLoading
@@ -991,7 +991,7 @@ const Settings = () => {
 
             {/* Account Section */}
             {activeTab === "Account" && (
-              <div className="bg-gradient-to-br from-[#1E1E1E] to-[#2A2A2A] border border-[#3A3A3A] rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
+              <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
                 <div className="space-y-6 flex-1 flex flex-col">
                   <h3 className="text-white text-xl font-semibold mb-2 flex items-center gap-2">
                     <AccountIcon />
@@ -999,14 +999,14 @@ const Settings = () => {
                   </h3>
 
                   <div className="space-y-4">
-                    <div className="bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl p-4 md:p-6">
+                    <div className="bg-storiq-card-bg border border-storiq-border rounded-xl p-4 md:p-6">
                       <div className="space-y-4">
                         {user?.username && (
                           <div>
                             <span className="block text-sm text-white/60 mb-2">
                               Username
                             </span>
-                            <div className="text-lg font-medium text-white bg-[#1E1E1E] px-4 py-3 rounded-lg border border-[#3A3A3A]">
+                            <div className="text-lg font-medium text-white bg-storiq-dark px-4 py-3 rounded-lg border border-storiq-border">
                               {user.username}
                             </div>
                           </div>
@@ -1015,7 +1015,7 @@ const Settings = () => {
                           <span className="block text-sm text-white/60 mb-2">
                             Email Address
                           </span>
-                          <div className="text-lg font-medium text-white bg-gradient-to-r from-[#6E42E1]/20 to-[#8B5CF6]/20 px-4 py-3 rounded-lg border border-[#6E42E1]/30">
+                          <div className="text-lg font-medium text-white bg-storiq-purple/20 px-4 py-3 rounded-lg border border-storiq-purple/30">
                             {user?.email || "Not available"}
                           </div>
                         </div>
