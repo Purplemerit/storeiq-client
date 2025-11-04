@@ -75,7 +75,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   isLeftColumn = false,
 }) => {
   return (
-    <article className="w-[538px] h-52 relative shrink-0 max-md:w-full max-md:max-w-[538px] md:w-[340px] md:h-[200px] lg:w-[440px] lg:h-52 max-sm:h-[180px] group">
+    <article className="w-full h-52 relative shrink-0 max-md:max-w-[538px] md:h-[200px] lg:h-52 max-sm:h-[180px] group">
       {/* Hover animation lines for left column */}
       {isLeftColumn && (
         <>
@@ -131,13 +131,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       )}
 
       {/* Purple shadow layer */}
-      <div className="absolute w-[526px] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)] md:w-[328px] md:h-[192px] lg:w-[428px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] md:h-[192px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
 
       {/* White background layer */}
-      <div className="absolute w-[526px] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)] md:w-[328px] md:h-[192px] lg:w-[428px] lg:h-[204px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] md:h-[192px] lg:h-[204px]" />
 
       {/* Main dark card with border */}
-      <div className="absolute w-[538px] h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-md:w-full max-sm:h-full md:w-[340px] md:h-[200px] lg:w-[440px] lg:h-52" />
+      <div className="absolute w-full h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-sm:h-full md:h-[200px] lg:h-52" />
 
       {/* Icon */}
       <FeatureIcon type={icon} />
@@ -193,7 +193,7 @@ const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section className="w-full min-h-[1002px] relative box-border bg-black px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[168px] py-[72px] max-md:py-[60px] max-sm:py-10 overflow-x-hidden">
+    <section className="w-full min-h-[1002px] relative box-border bg-black px-4 sm:px-6 md:px-8 py-[72px] max-md:py-[60px] max-sm:py-10 overflow-x-hidden">
       <header className="text-center mb-[60px] max-md:mb-10 max-sm:mb-[30px]">
         <h1 className="text-white text-5xl font-medium leading-[60px] underline decoration-solid decoration-auto underline-offset-auto mb-0.5 max-md:text-[40px] max-md:leading-[48px] max-sm:text-[32px] max-sm:leading-10">
           Features
@@ -203,7 +203,7 @@ const FeaturesSection: React.FC = () => {
         </p>
       </header>
 
-      <div className="grid grid-cols-[1fr_1fr] gap-10 max-w-[1104px] mx-auto my-0 md:gap-5 lg:gap-6 xl:gap-10 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-8 overflow-visible px-0">
+      <div className="grid grid-cols-2 gap-4 max-w-[1180px] mx-auto my-0 md:gap-5 lg:gap-6 xl:gap-8 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-8 overflow-visible px-0">
         {featuresData.map((feature, index) => (
           <FeatureCard
             key={index}

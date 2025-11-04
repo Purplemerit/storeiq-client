@@ -64,10 +64,10 @@ const stepsData: Step[] = [
 export const Steps: React.FC = () => {
   return (
     <section
-      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-black px-4 sm:px-8 md:px-12 lg:px-[138px] py-10 sm:py-12 md:py-16 lg:py-[72px]"
+      className="w-full min-h-[933px] box-border relative flex flex-col items-center bg-black px-4 sm:px-6 md:px-8 py-10 sm:py-12 md:py-16 lg:py-[72px]"
       aria-labelledby="steps-title"
     >
-      <header className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-[60px]">
+      <header className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-[60px] max-w-[1180px]">
         <h1
           id="steps-title"
           className="text-white text-3xl sm:text-4xl md:text-5xl font-medium leading-tight underline decoration-solid decoration-auto underline-offset-auto text-center mb-3 sm:mb-4 md:mb-5"
@@ -80,7 +80,7 @@ export const Steps: React.FC = () => {
       </header>
 
       <div
-        className="w-full flex flex-col items-center"
+        className="w-full max-w-[1180px] flex flex-col items-center"
         role="list"
         aria-label="Video editing steps"
       >
