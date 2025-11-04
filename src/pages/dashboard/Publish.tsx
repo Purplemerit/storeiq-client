@@ -426,8 +426,8 @@ const Publish = () => {
             <Button
               className={`${
                 ytConnected
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-storiq-purple hover:bg-storiq-purple-light"
+                  ? "bg-green-600 hover:bg-green-700 border-2 border-green-600"
+                  : "bg-black border-2 border-storiq-purple hover:bg-storiq-purple/10"
               } text-white rounded-lg`}
               disabled={ytLoading}
               onClick={() => (!ytConnected ? handleYouTubeOAuth() : null)}

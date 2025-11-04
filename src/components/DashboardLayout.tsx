@@ -47,11 +47,19 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <>
       {/* Logo */}
       <div className="p-6">
-        <Link
-          to="/dashboard"
-          className="text-white font-bold text-lg inline-block"
-        >
-          STORIQ
+        <Link to="/dashboard" className="inline-block">
+          <div
+            style={{
+              color: "#fff",
+              fontFamily: "Orbitron",
+              fontSize: "24px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "24px",
+            }}
+          >
+            STORIQ
+          </div>
         </Link>
       </div>
       {/* Navigation */}

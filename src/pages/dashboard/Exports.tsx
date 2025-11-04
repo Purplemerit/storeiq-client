@@ -400,7 +400,9 @@ const Exports = () => {
           <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
             Your Exports
           </h1>
-<p className="text-white/60">Here are all the videos that you exported.</p>
+          <p className="text-white/60">
+            Here are all the videos that you exported.
+          </p>
         </div>
 
         {/* Stats Overview */}
@@ -425,7 +427,7 @@ const Exports = () => {
                       className="absolute inset-0"
                       style={{
                         backgroundImage:
-                          'repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px)',
+                          "repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px)",
                       }}
                     ></div>
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -460,7 +462,9 @@ const Exports = () => {
                         <div
                           className="bg-storiq-purple h-2 rounded-full"
                           style={{
-                            width: `${item.progress !== undefined ? item.progress : 30}%`,
+                            width: `${
+                              item.progress !== undefined ? item.progress : 30
+                            }%`,
                           }}
                         ></div>
                       </div>
@@ -582,7 +586,7 @@ const Exports = () => {
           <h2 className="text-2xl font-bold text-white mb-6">Export History</h2>
           <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl">
             {/* Table Header */}
-            <div className="p-4 grid grid-cols-6 gap-4 text-white/60 font-semibold border-b border-storiq-border">
+            <div className="p-4 grid grid-cols-6 gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20">
               <div>Filename</div>
               <div>Date</div>
               <div>Size</div>

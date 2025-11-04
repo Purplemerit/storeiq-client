@@ -279,7 +279,11 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     variant={
                       selectedQuality === quality ? "default" : "outline"
                     }
-                    className="h-12 transition-all duration-200"
+                    className={`h-12 transition-all duration-200 ${
+                      selectedQuality === quality
+                        ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
+                        : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
+                    }`}
                   >
                     <span
                       className={
@@ -308,7 +312,11 @@ Each scene should have a different background. Use a modern sans-serif font and 
                     variant={
                       selectedVoiceSpeed === speed ? "default" : "outline"
                     }
-                    className="h-12 transition-all duration-200"
+                    className={`h-12 transition-all duration-200 ${
+                      selectedVoiceSpeed === speed
+                        ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
+                        : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
+                    }`}
                   >
                     <span
                       className={
