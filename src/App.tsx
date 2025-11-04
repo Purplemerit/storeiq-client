@@ -35,7 +35,7 @@ import SearchVideos from "./pages/dashboard/SearchVideos";
 import SearchImages from "./pages/dashboard/SearchImages";
 import VideoEditor from "./pages/dashboard/VideoEditor";
 import TextToSpeech from "./pages/dashboard/Aitextmounting";
-import AIToolsPage from "./pages/dashboard/AItools";
+// import AIToolsPage from "./pages/dashboard/AItools";
 import AIObjectBlendTool from "./pages/dashboard/ai-tools/Mobimagetool";
 import TTSPlayer from "./pages/dashboard/ai-tools/Ttscharachter";
 
@@ -187,14 +187,14 @@ const AnimatedRoutes = () => {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/dashboard/aitools"
           element={
             <ProtectedRoute>
               <AIToolsPage />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/dashboard/aitools/Mobimage"
           element={

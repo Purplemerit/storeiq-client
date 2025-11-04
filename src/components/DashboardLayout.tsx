@@ -32,7 +32,7 @@ const creationItems = [
 ];
 
 const inspirationItems = [
-  { icon: FileEdit, label: "AI-Tools", href: "/dashboard/aitools" },
+  { icon: FileEdit, label: "Scripts", href: "/dashboard/create-prompt" },
   { icon: Settings, label: "Account Settings", href: "/dashboard/settings" },
 ];
 
