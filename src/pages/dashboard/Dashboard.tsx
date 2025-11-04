@@ -120,7 +120,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-8 bg-[#121212] min-h-screen">
+      <div className="p-8 bg-storiq-dark min-h-screen">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
             Start Creating!
@@ -134,7 +134,7 @@ const Dashboard = () => {
             option.href ? (
               <div
                 key={index}
-                className="relative overflow-hidden rounded-2xl bg-[#1C1C1C] border border-gray-800/80 p-6 min-h-[180px] flex flex-col justify-end group cursor-pointer transition-all duration-300 hover:border-violet-700/60 hover:shadow-lg hover:shadow-violet-700/20"
+                className="relative overflow-hidden rounded-2xl bg-storiq-card-bg border border-storiq-border p-6 min-h-[180px] flex flex-col justify-end group cursor-pointer transition-all duration-300 hover:border-storiq-purple/60 hover:shadow-lg hover:shadow-storiq-purple/20"
                 onClick={() => navigate(option.href)}
                 role="button"
                 tabIndex={0}
@@ -160,7 +160,7 @@ const Dashboard = () => {
             ) : (
               <div
                 key={index}
-                className="relative overflow-hidden rounded-2xl bg-[#1C1C1C] border border-gray-800/80 p-6 min-h-[180px] flex flex-col justify-end group cursor-pointer transition-all duration-300 hover:border-violet-700/60 hover:shadow-lg hover:shadow-violet-700/20"
+                className="relative overflow-hidden rounded-2xl bg-storiq-card-bg border border-storiq-border p-6 min-h-[180px] flex flex-col justify-end group cursor-pointer transition-all duration-300 hover:border-storiq-purple/60 hover:shadow-lg hover:shadow-storiq-purple/20"
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-300"
@@ -184,7 +184,7 @@ const Dashboard = () => {
         </div>
 
         {/* Tabs */}
-        <div className="relative inline-flex bg-[#1C1C1C] border border-gray-800/80 rounded-xl p-1 mb-8">
+        <div className="relative inline-flex bg-storiq-card-bg border border-storiq-border rounded-xl p-1 mb-8">
           {/* Animated slider background */}
           <div
             className="absolute top-1 bottom-1 bg-storiq-purple rounded-lg transition-all duration-300 ease-in-out"
@@ -221,7 +221,7 @@ const Dashboard = () => {
           {tools.map((tool, index) => (
             <div
               key={index}
-              className="bg-[#1C1C1C] border border-gray-800/80 rounded-2xl overflow-hidden group transition-all duration-300 hover:border-violet-700/50 hover:transform hover:-translate-y-1"
+              className="bg-storiq-card-bg border border-storiq-border rounded-2xl overflow-hidden group transition-all duration-300 hover:border-storiq-purple/50 hover:transform hover:-translate-y-1"
             >
               <div className="overflow-hidden h-40">
                 <img
@@ -237,7 +237,7 @@ const Dashboard = () => {
                 <p className="text-gray-400 text-sm mb-4">{tool.subtitle}</p>
                 <Button
                   variant="outline"
-                  className="w-auto px-5 py-2 bg-transparent border border-gray-700 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 hover:border-violet-700 transition-colors"
+                  className="w-auto px-5 py-2 bg-transparent border border-storiq-border text-white text-sm font-semibold rounded-lg hover:bg-storiq-purple hover:border-storiq-purple transition-colors"
                   onClick={() => navigate(tool.link)}
                 >
                   {tool.buttonText}

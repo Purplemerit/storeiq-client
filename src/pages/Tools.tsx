@@ -214,7 +214,7 @@ const Tools = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black font-sans">
+    <div className="min-h-screen bg-storiq-dark font-sans">
       {/* Hero Section */}
       <section className="py-20 px-8 text-center">
         <div className="max-w-4xl mx-auto">

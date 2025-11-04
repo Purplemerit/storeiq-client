@@ -111,7 +111,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-storiq-dark text-white">
       {/* Hero Section */}
       <section className="py-20 px-8 text-center">
         <div className="max-w-4xl mx-auto">
@@ -139,7 +139,7 @@ const About = () => {
                 key={index}
                 onMouseEnter={() => setHoveredFeature(index)}
                 onMouseLeave={() => setHoveredFeature(null)}
-                className="relative bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 h-48 flex items-center justify-center overflow-hidden transition-all duration-300"
+                className="relative bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 h-48 flex items-center justify-center overflow-hidden transition-all duration-300"
               >
                 <video
                   src={feature.videoSrc}
@@ -154,7 +154,7 @@ const About = () => {
                         : "opacity-0 scale-100"
                     }`}
                 />
-                <div className="absolute inset-0 bg-black/60" />
+                <div className="absolute inset-0 bg-storiq-dark/60" />
                 <h3 className="relative text-3xl font-bold text-center z-10">
                   {feature.title}
                 </h3>
@@ -196,7 +196,7 @@ const About = () => {
                 </li>
               </ul>
             </div>
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 flex items-center justify-center min-h-full">
+            <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 flex items-center justify-center min-h-full">
               <h3 className="text-2xl font-bold text-center">
                 Emotion Driven Creation
               </h3>
@@ -209,7 +209,7 @@ const About = () => {
       <section className="py-20 px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 flex items-center justify-center min-h-full">
+            <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8 flex items-center justify-center min-h-full">
               <h3 className="text-2xl font-bold text-center">
                 Creator-first philosophy
               </h3>
@@ -258,7 +258,7 @@ const About = () => {
             {ethicsFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8"
+                className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-8"
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="text-4xl">{feature.icon}</div>
@@ -280,7 +280,7 @@ const About = () => {
           {faqItems.map((item) => (
             <div
               key={item.id}
-              className={`bg-[rgba(28,30,33,1)] flex w-full flex-col overflow-hidden items-stretch justify-center p-7 rounded-[20px] max-md:max-w-full max-md:px-5 ${
+              className={`bg-storiq-card-bg flex w-full flex-col overflow-hidden items-stretch justify-center p-7 rounded-[20px] max-md:max-w-full max-md:px-5 ${
                 item.id > 1 ? "mt-6" : ""
               }`}
             >

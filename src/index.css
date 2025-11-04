@@ -47,14 +47,14 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* STORIQ Dark Theme Variables */
-    --storiq-dark: 240 10% 3.9%;
+    --storiq-dark: 0 0% 0%;
     --storiq-dark-lighter: 240 8% 12%;
     --storiq-purple: 271 100% 60%;
     --storiq-purple-light: 271 100% 70%;
     --storiq-blue: 221 83% 53%;
     --storiq-gradient: linear-gradient(135deg, hsl(271 100% 60%), hsl(221 83% 53%));
-    --storiq-card-bg: 240 8% 8%;
-    --storiq-border: 240 8% 20%;
+    --storiq-card-bg: 0 0% 7%;
+    --storiq-border: 0 0% 15%;
   }
 
   .dark {
