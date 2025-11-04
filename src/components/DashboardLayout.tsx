@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Footer from "@/components/Footer";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -196,6 +197,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         {/* Main Content */}
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
+      {/* Footer below the entire dashboard layout */}
+      <Footer />
     </div>
   );
 };
