@@ -28,20 +28,22 @@ const AnimatedRoute: React.FC<AnimatedRouteProps> = ({ children }) => {
       <motion.div
         key={location.pathname}
         initial={
-          isAnimatedRoute ? { y: isForward ? "100vh" : "-100vh" } : { y: 0 }
+          isAnimatedRoute ? { y: isForward ? "100%" : "-100%" } : { y: 0 }
         }
         animate={{ y: 0 }}
-        exit={
-          isAnimatedRoute ? { y: isForward ? "-100vh" : "100vh" } : { y: 0 }
-        }
+        exit={isAnimatedRoute ? { y: isForward ? "-100%" : "100%" } : { y: 0 }}
         transition={{
           type: "spring" as const,
-          stiffness: 80,
-          damping: 18,
+          stiffness: 100,
+          damping: 20,
         }}
         style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
           width: "100%",
-          minHeight: "100vh",
+          minHeight: "100%",
           backgroundColor: "#000",
         }}
       >
