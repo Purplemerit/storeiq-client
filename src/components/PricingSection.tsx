@@ -21,18 +21,18 @@ export const PricingCard: React.FC<PricingCardProps> = ({
 }) => {
   return (
     <article
-      className={`w-full max-w-[314px] h-auto min-h-[500px] sm:min-h-[550px] md:h-[613px] flex flex-col items-center box-border relative bg-black px-6 sm:px-8 md:px-[42px] py-8 sm:py-9 md:py-10 border-2 sm:border-3 md:border-4 border-solid border-white rounded-2xl md:rounded-[16px] ${className}`}
+      className={`w-full max-w-[314px] h-auto min-h-[500px] sm:min-h-[550px] md:min-h-[580px] md:max-w-[280px] lg:min-h-[600px] lg:max-w-[300px] xl:h-[613px] xl:max-w-[314px] flex flex-col items-center box-border relative bg-black px-6 sm:px-8 md:px-6 lg:px-7 xl:px-[42px] py-8 sm:py-9 md:py-8 lg:py-9 xl:py-10 border-2 sm:border-3 md:border-3 lg:border-3 xl:border-4 border-solid border-white rounded-2xl md:rounded-[16px] ${className}`}
     >
-      <header className="text-center mb-8 sm:mb-9 md:mb-11">
-        <h3 className="text-white text-center text-2xl sm:text-[28px] md:text-[32px] font-bold leading-tight underline decoration-solid decoration-auto underline-offset-auto mb-3 sm:mb-3.5 md:mb-4">
+      <header className="text-center mb-8 sm:mb-9 md:mb-8 lg:mb-9 xl:mb-11">
+        <h3 className="text-white text-center text-2xl sm:text-[28px] md:text-2xl lg:text-[28px] xl:text-[32px] font-bold leading-tight underline decoration-solid decoration-auto underline-offset-auto mb-3 sm:mb-3.5 md:mb-3 lg:mb-3.5 xl:mb-4">
           {title}
         </h3>
-        <p className="text-white text-center text-base sm:text-[17px] md:text-lg font-normal leading-relaxed w-full">
+        <p className="text-white text-center text-base sm:text-[17px] md:text-[15px] lg:text-base xl:text-lg font-normal leading-relaxed w-full">
           {description}
         </p>
       </header>
 
-      <div className="text-white text-lg sm:text-xl md:text-2xl font-normal leading-relaxed md:leading-10 flex-1 flex flex-col w-full">
+      <div className="text-white text-lg sm:text-xl md:text-base lg:text-lg xl:text-xl font-normal leading-relaxed md:leading-7 lg:leading-8 xl:leading-10 flex-1 flex flex-col w-full">
         {features.map((feature, index) => (
           <div key={index} className="mb-1">
             • {feature}
@@ -40,7 +40,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
         ))}
         <button
           onClick={onCtaClick}
-          className="mt-4 sm:mt-4.5 md:mt-5 text-left hover:text-purple-300 transition-colors duration-200 focus:outline-none focus:text-purple-300"
+          className="mt-4 sm:mt-4.5 md:mt-4 lg:mt-4.5 xl:mt-5 text-left hover:text-purple-300 transition-colors duration-200 focus:outline-none focus:text-purple-300"
           aria-label={`${ctaText} for ${title} plan`}
         >
           [{ctaText}]
@@ -48,7 +48,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
       </div>
 
       <footer className="w-full max-w-[206px] h-8 flex items-center justify-center bg-[#8E31FF] mt-auto rounded-lg hover:bg-[#7A2BE6] transition-colors duration-200">
-        <div className="text-white text-lg sm:text-xl md:text-[22px] font-medium leading-5">
+        <div className="text-white text-lg sm:text-xl md:text-lg lg:text-xl xl:text-[22px] font-medium leading-5">
           {price}
         </div>
       </footer>
@@ -68,12 +68,13 @@ export const PricingConnector: React.FC<PricingConnectorProps> = ({
   return (
     <div className={`max-md:hidden ${className}`}>
       <svg
+        className="w-16 md:h-[580px] lg:h-[600px] xl:h-[613px] fill-[#D9D9D9] flex-shrink-0"
         width="64"
         height="613"
         viewBox="0 0 64 613"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-16 h-[613px] fill-[#D9D9D9] flex-shrink-0"
+        preserveAspectRatio="none"
         role="presentation"
         aria-hidden="true"
       >

@@ -75,7 +75,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   isLeftColumn = false,
 }) => {
   return (
-    <article className="w-[538px] h-52 relative shrink-0 max-md:w-full max-md:max-w-[538px] max-sm:h-[180px] group">
+    <article className="w-[538px] h-52 relative shrink-0 max-md:w-full max-md:max-w-[538px] md:w-[340px] md:h-[200px] lg:w-[440px] lg:h-52 max-sm:h-[180px] group">
       {/* Hover animation lines for left column */}
       {isLeftColumn && (
         <>
@@ -131,24 +131,24 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       )}
 
       {/* Purple shadow layer */}
-      <div className="absolute w-[526px] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
+      <div className="absolute w-[526px] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)] md:w-[328px] md:h-[192px] lg:w-[428px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
 
       {/* White background layer */}
-      <div className="absolute w-[526px] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)]" />
+      <div className="absolute w-[526px] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-md:w-[calc(100%_-_12px)] max-sm:h-[calc(100%_-_4px)] md:w-[328px] md:h-[192px] lg:w-[428px] lg:h-[204px]" />
 
       {/* Main dark card with border */}
-      <div className="absolute w-[538px] h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-md:w-full max-sm:h-full" />
+      <div className="absolute w-[538px] h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-md:w-full max-sm:h-full md:w-[340px] md:h-[200px] lg:w-[440px] lg:h-52" />
 
       {/* Icon */}
       <FeatureIcon type={icon} />
 
       {/* Title */}
-      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] max-sm:text-2xl max-sm:leading-7 max-sm:px-[15px] max-sm:py-0 max-sm:top-[80px]">
+      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] md:text-2xl md:leading-7 md:top-[85px] lg:text-[26px] lg:leading-[28px] lg:top-[90px] max-sm:text-2xl max-sm:leading-7 max-sm:px-[15px] max-sm:py-0 max-sm:top-[80px]">
         {title}
       </h2>
 
       {/* Description */}
-      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] max-sm:text-sm max-sm:leading-[18px] max-sm:px-[15px] max-sm:py-0 max-sm:top-[115px]">
+      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] md:text-sm md:leading-[18px] md:top-[120px] lg:text-[15px] lg:leading-[19px] lg:top-[130px] max-sm:text-sm max-sm:leading-[18px] max-sm:px-[15px] max-sm:py-0 max-sm:top-[115px]">
         {description}
       </p>
     </article>
@@ -193,17 +193,17 @@ const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section className="w-full min-h-[1002px] relative box-border bg-black px-[168px] py-[72px] max-md:px-10 max-md:py-[60px] max-sm:px-5 max-sm:py-10">
+    <section className="w-full min-h-[1002px] relative box-border bg-black px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[168px] py-[72px] max-md:py-[60px] max-sm:py-10 overflow-x-hidden">
       <header className="text-center mb-[60px] max-md:mb-10 max-sm:mb-[30px]">
         <h1 className="text-white text-5xl font-medium leading-[60px] underline decoration-solid decoration-auto underline-offset-auto mb-0.5 max-md:text-[40px] max-md:leading-[48px] max-sm:text-[32px] max-sm:leading-10">
           Features
         </h1>
-        <p className="text-white text-[28px] font-normal leading-8 max-md:text-2xl max-md:leading-7 max-sm:text-xl max-sm:leading-6">
+        <p className="text-white text-[28px] font-normal leading-8 max-md:text-2xl max-md:leading-7 max-sm:text-lg max-sm:leading-6 whitespace-nowrap">
           From concept to content — we've got your back.
         </p>
       </header>
 
-      <div className="grid grid-cols-[1fr_1fr] gap-10 max-w-[1104px] mx-auto my-0 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-8 overflow-visible p-[30px] max-md:p-[25px] max-sm:p-5">
+      <div className="grid grid-cols-[1fr_1fr] gap-10 max-w-[1104px] mx-auto my-0 md:gap-5 lg:gap-6 xl:gap-10 max-md:grid-cols-[1fr] max-md:gap-[30px] max-md:max-w-[538px] max-sm:gap-8 overflow-visible px-0">
         {featuresData.map((feature, index) => (
           <FeatureCard
             key={index}

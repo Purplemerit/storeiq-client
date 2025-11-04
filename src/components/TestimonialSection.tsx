@@ -5,13 +5,13 @@ const DecorativeElements: React.FC = () => {
   return (
     <>
       {/* Purple rectangle - top right */}
-      <div className="w-[60px] h-20 sm:w-20 sm:h-[120px] md:w-[100px] md:h-[140px] lg:w-[120px] lg:h-[160px] xl:w-[143px] xl:h-[178px] absolute bg-[#8638E5] right-[10px] bottom-[20px] sm:right-5 sm:bottom-10 md:right-8 md:bottom-12 lg:right-4 lg:bottom-[60px] xl:right-0 xl:bottom-[72px]" />
+      <div className="w-[60px] h-20 sm:w-20 sm:h-[120px] md:w-[90px] md:h-[130px] lg:w-[120px] lg:h-[160px] xl:w-[143px] xl:h-[178px] absolute bg-[#8638E5] right-[10px] bottom-[20px] sm:right-5 sm:bottom-10 md:right-6 md:bottom-10 lg:right-4 lg:bottom-[60px] xl:right-0 xl:bottom-[72px]" />
 
       {/* Dark rectangle - center right */}
-      <div className="w-[calc(100%_-_200px)] h-auto min-h-[160px] sm:w-[calc(100%_-_270px)] sm:min-h-[180px] md:w-[calc(70%)] md:min-h-[200px] lg:w-[480px] lg:h-[220px] xl:w-[540px] xl:h-[235px] absolute bg-[#1B1B1B] left-[190px] top-[220px] sm:left-[250px] sm:top-[200px] md:left-[310px] md:top-[210px] lg:left-[410px] lg:top-[220px] xl:left-[498px] xl:top-[231px] box-border p-4 sm:p-5" />
+      <div className="w-[calc(100%_-_200px)] h-auto min-h-[160px] sm:w-[calc(100%_-_270px)] sm:min-h-[180px] md:w-[450px] md:h-[200px] lg:w-[480px] lg:h-[220px] xl:w-[540px] xl:h-[235px] absolute bg-[#1B1B1B] left-[190px] top-[220px] sm:left-[250px] sm:top-[200px] md:left-[280px] md:top-[210px] lg:left-[410px] lg:top-[220px] xl:left-[498px] xl:top-[231px] box-border p-4 sm:p-5" />
 
       {/* Semi-transparent purple rectangle - bottom left */}
-      <div className="w-[calc(55%_-_10px)] h-16 sm:w-[calc(50%_-_20px)] sm:h-20 md:w-[calc(45%)] md:h-[100px] lg:w-[400px] lg:h-[140px] xl:w-[498px] xl:h-[175px] absolute bg-[rgba(134,56,229,0.50)] left-[10px] bottom-[20px] sm:left-5 sm:bottom-10 md:left-8 md:bottom-12 lg:left-4 lg:bottom-[60px] xl:left-0 xl:bottom-[74px]" />
+      <div className="w-[calc(55%_-_10px)] h-16 sm:w-[calc(50%_-_20px)] sm:h-20 md:w-[370px] md:h-[90px] lg:w-[400px] lg:h-[140px] xl:w-[498px] xl:h-[175px] absolute bg-[rgba(134,56,229,0.50)] left-[10px] bottom-[20px] sm:left-5 sm:bottom-10 md:left-6 md:bottom-10 lg:left-4 lg:bottom-[60px] xl:left-0 xl:bottom-[74px]" />
     </>
   );
 };
@@ -77,16 +77,16 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
       <img
         src={imageUrl}
         alt={imageAlt}
-        className="w-[130px] h-[195px] sm:w-[170px] sm:h-[255px] md:w-[200px] md:h-[300px] lg:w-[250px] lg:h-[375px] xl:w-[300px] xl:h-[450px] absolute left-[55px] top-[220px] sm:left-[75px] sm:top-[200px] md:left-[105px] md:top-[210px] lg:left-[155px] lg:top-[220px] xl:left-[193px] xl:top-[231px] object-cover z-10"
+        className="w-[130px] h-[195px] sm:w-[170px] sm:h-[255px] md:w-[180px] md:h-[270px] lg:w-[250px] lg:h-[375px] xl:w-[300px] xl:h-[450px] absolute left-[55px] top-[220px] sm:left-[75px] sm:top-[200px] md:left-[95px] md:top-[210px] lg:left-[155px] lg:top-[220px] xl:left-[193px] xl:top-[231px] object-cover z-10"
       />
 
       {/* Author Name */}
-      <cite className="text-white text-[18px] sm:text-[20px] md:text-[24px] lg:text-[28px] xl:text-[35px] font-bold leading-tight absolute left-[200px] top-[235px] sm:left-[265px] sm:top-[215px] md:left-[325px] md:top-[225px] lg:left-[425px] lg:top-[240px] xl:left-[523px] xl:top-[250px] not-italic whitespace-nowrap z-20">
+      <cite className="text-white text-[18px] sm:text-[20px] md:text-[22px] lg:text-[28px] xl:text-[35px] font-bold leading-tight absolute left-[200px] top-[235px] sm:left-[265px] sm:top-[215px] md:left-[295px] md:top-[225px] lg:left-[425px] lg:top-[240px] xl:left-[523px] xl:top-[250px] not-italic whitespace-nowrap z-20">
         {name}
       </cite>
 
       {/* Testimonial Quote - positioned to align with black background */}
-      <blockquote className="w-[calc(100%_-_210px)] sm:w-[calc(100%_-_280px)] md:w-[calc(100%_-_340px)] lg:w-[460px] xl:w-[500px] text-white text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[22px] font-normal leading-snug sm:leading-relaxed md:leading-relaxed lg:leading-7 xl:leading-8 absolute h-auto box-border p-[8px] sm:p-[10px] md:p-3 lg:p-4 xl:p-0 left-[200px] top-[260px] sm:left-[265px] sm:top-[245px] md:left-[325px] md:top-[260px] lg:left-[425px] lg:top-[280px] xl:left-[523px] xl:top-[300px] z-20">
+      <blockquote className="w-[calc(100%_-_210px)] sm:w-[calc(100%_-_280px)] md:w-[440px] lg:w-[460px] xl:w-[500px] text-white text-[12px] sm:text-[14px] md:text-[15px] lg:text-[18px] xl:text-[22px] font-normal leading-snug sm:leading-relaxed md:leading-relaxed lg:leading-7 xl:leading-8 absolute h-auto box-border p-[8px] sm:p-[10px] md:p-3 lg:p-4 xl:p-0 left-[200px] top-[260px] sm:left-[265px] sm:top-[245px] md:left-[295px] md:top-[255px] lg:left-[425px] lg:top-[280px] xl:left-[523px] xl:top-[300px] z-20">
         {quote}
       </blockquote>
     </>
