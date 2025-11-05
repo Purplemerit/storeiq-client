@@ -59,8 +59,14 @@ const VideoGenerator = () => {
     setVideoError(null);
     setVideoUrl(null);
     setVideoS3Key(null);
+
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+      // Show user that this will take time
+      console.log("🎬 Starting Veo-3 video generation...");
+      console.log("⏱️ This may take 1-2 minutes, please wait...");
+
       const res = await fetch(
         `${API_BASE_URL}/api/gemini-veo3/generate-video`,
         {
@@ -74,18 +80,28 @@ const VideoGenerator = () => {
           }),
         }
       );
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err?.error || "Failed to generate video.");
       }
+
       const data = await res.json();
-      if (!data?.s3Url)
-        throw new Error("No video URL returned from Gemini VEO 3.");
+      console.log("✓ Video generation response:", data);
+
+      if (!data?.s3Url) {
+        throw new Error(
+          "No video URL returned from Veo-3. The video may still be processing."
+        );
+      }
+
       setVideoUrl(data.s3Url);
       setVideoS3Key(data.s3Key || null);
       setVideoDuration(data.duration || null);
-      setVideoResolution(data.resolution || null);
+      setVideoResolution(data.resolution || selectedQuality);
       setVideoStatus("success");
+
+      console.log("✅ Video ready:", data.s3Url);
     } catch (err: unknown) {
       let message = "An unexpected error occurred while generating the video.";
       if (isErrorWithMessage(err)) {
@@ -94,6 +110,7 @@ const VideoGenerator = () => {
         const errorData = await err.json().catch(() => ({}));
         message = errorData?.error || "Failed to process the request.";
       }
+      console.error("❌ Video generation error:", message);
       setVideoError(message);
       setVideoStatus("error");
     }
@@ -433,11 +450,16 @@ const VideoGenerator = () => {
                   <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-10 border-2 border-storiq-purple/30 rounded-lg bg-gradient-to-br from-storiq-purple/10 to-transparent">
                     <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-storiq-purple mb-3 sm:mb-4"></div>
                     <span className="text-storiq-purple font-semibold text-base sm:text-lg text-center">
-                      Generating your video...
+                      Generating your video with Veo-3...
                     </span>
-                    <p className="text-white/60 text-xs sm:text-sm mt-2 text-center">
-                      This may take a few moments
+                    <p className="text-white/60 text-xs sm:text-sm mt-2 text-center max-w-md">
+                      This typically takes 1-2 minutes. The AI is creating,
+                      rendering, and uploading your video.
                     </p>
+                    <div className="mt-4 flex items-center gap-2 text-white/50 text-xs">
+                      <div className="animate-pulse">⏳</div>
+                      <span>Please don't close this page</span>
+                    </div>
                   </div>
                 )}
 
