@@ -521,9 +521,6 @@ const Stats = () => {
                         >
                           {stat.change}
                         </span>
-                        <span className="text-white/50 text-xs md:text-sm truncate">
-                          {stat.comparison}
-                        </span>
                       </div>
                     </div>
                   ));
@@ -549,9 +546,6 @@ const Stats = () => {
                         }`}
                       >
                         {stats[4].change}
-                      </span>
-                      <span className="text-white/50 text-xs md:text-sm truncate">
-                        {stats[4].comparison}
                       </span>
                     </div>
                   </div>
