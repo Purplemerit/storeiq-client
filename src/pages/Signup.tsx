@@ -277,9 +277,9 @@ const Signup = () => {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="flex w-full justify-center items-center gap-2.5 px-2.5 py-2.5 rounded-lg bg-gradient-to-r from-white to-[#1903db] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex w-full justify-center items-center gap-2.5 px-2.5 py-2.5 rounded-lg bg-gradient-to-r from-[#2E4CEE] via-[#221EBF] to-[#040F75] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <span className="text-black text-base font-semibold">
+                        <span className="text-white text-base font-semibold">
                           {loading ? "Signing up..." : "Signup"}
                         </span>
                       </button>
