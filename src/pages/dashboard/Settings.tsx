@@ -474,7 +474,7 @@ const Settings = () => {
   const sidebarItems = [
     { label: "Your Timezone", icon: ClockIcon },
     { label: "Integrations", icon: IntegrationIcon },
-    { label: "Channel Manager", icon: ChannelIcon },
+    // { label: "Channel Manager", icon: ChannelIcon },
     { label: "Password Management", icon: PasswordIcon },
     { label: "Account", icon: AccountIcon },
   ];
@@ -789,7 +789,7 @@ const Settings = () => {
               </div>
             )}
 
-            {/* Channel Manager Section */}
+            {/* Channel Manager Section
             {activeTab === "Channel Manager" && (
               <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-4 md:p-8 shadow-2xl flex flex-col h-full">
                 <div className="flex-1 flex flex-col">
@@ -828,7 +828,7 @@ const Settings = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Password Management Section */}
             {activeTab === "Password Management" && (
