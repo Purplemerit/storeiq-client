@@ -29,7 +29,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       <img
         src="https://api.builder.io/api/v1/image/assets/TEMP/4749010bf758f21050e6a3a813ffa43ce7c9d5cd?width=96"
         alt="workflow icon"
-        className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-10 max-sm:h-10 max-sm:top-[25px] ${className}`}
+        className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-8 max-sm:h-8 max-sm:top-[18px] ${className}`}
       />
     );
   }
@@ -41,7 +41,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-10 max-sm:h-10 max-sm:top-[25px] ${className}`}
+      className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-8 max-sm:h-8 max-sm:top-[18px] ${className}`}
       aria-hidden="true"
     >
       <path
@@ -75,29 +75,29 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   isLeftColumn = false,
 }) => {
   return (
-    <article className="w-full h-52 relative shrink-0 max-md:max-w-[538px] md:h-[200px] lg:h-52 max-sm:h-[180px] group">
+    <article className="w-full h-52 relative shrink-0 max-md:max-w-[538px] md:h-[200px] lg:h-52 max-sm:h-[120px] group">
       {/* Hover animation lines for left column */}
       {isLeftColumn && (
         <>
           {/* Purple line - bottom */}
           <div
-            className="absolute bottom-0 right-0 w-0 h-[2px] bg-[#8638E5] transition-all duration-500 ease-out group-hover:w-[120px] origin-right"
+            className="absolute bottom-0 right-0 w-0 h-[2px] bg-[#8638E5] transition-all duration-500 ease-out group-hover:w-[120px] origin-right max-sm:group-hover:w-[60px]"
             style={{ transform: "translateY(12px)" }}
           />
           {/* Purple line - right side */}
           <div
-            className="absolute bottom-0 right-0 w-[2px] h-0 bg-[#8638E5] transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-100"
+            className="absolute bottom-0 right-0 w-[2px] h-0 bg-[#8638E5] transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-100 max-sm:group-hover:h-[60px]"
             style={{ transform: "translateX(12px)" }}
           />
 
           {/* White line - bottom */}
           <div
-            className="absolute bottom-0 right-0 w-0 h-[2px] bg-white transition-all duration-500 ease-out group-hover:w-[120px] origin-right delay-200"
+            className="absolute bottom-0 right-0 w-0 h-[2px] bg-white transition-all duration-500 ease-out group-hover:w-[120px] origin-right delay-200 max-sm:group-hover:w-[60px]"
             style={{ transform: "translateY(20px)" }}
           />
           {/* White line - right side */}
           <div
-            className="absolute bottom-0 right-0 w-[2px] h-0 bg-white transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-300"
+            className="absolute bottom-0 right-0 w-[2px] h-0 bg-white transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-300 max-sm:group-hover:h-[60px]"
             style={{ transform: "translateX(20px)" }}
           />
         </>
@@ -108,47 +108,47 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         <>
           {/* Purple line - bottom */}
           <div
-            className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#8638E5] transition-all duration-500 ease-out group-hover:w-[120px] origin-left"
+            className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#8638E5] transition-all duration-500 ease-out group-hover:w-[120px] origin-left max-sm:group-hover:w-[60px]"
             style={{ transform: "translateY(12px)" }}
           />
           {/* Purple line - left side */}
           <div
-            className="absolute bottom-0 left-0 w-[2px] h-0 bg-[#8638E5] transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-100"
+            className="absolute bottom-0 left-0 w-[2px] h-0 bg-[#8638E5] transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-100 max-sm:group-hover:h-[60px]"
             style={{ transform: "translateX(-12px)" }}
           />
 
           {/* White line - bottom */}
           <div
-            className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-500 ease-out group-hover:w-[120px] origin-left delay-200"
+            className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-500 ease-out group-hover:w-[120px] origin-left delay-200 max-sm:group-hover:w-[60px]"
             style={{ transform: "translateY(20px)" }}
           />
           {/* White line - left side */}
           <div
-            className="absolute bottom-0 left-0 w-[2px] h-0 bg-white transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-300"
+            className="absolute bottom-0 left-0 w-[2px] h-0 bg-white transition-all duration-500 ease-out group-hover:h-[120px] origin-bottom delay-300 max-sm:group-hover:h-[60px]"
             style={{ transform: "translateX(-20px)" }}
           />
         </>
       )}
 
       {/* Purple shadow layer */}
-      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] md:h-[192px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
 
       {/* White background layer */}
-      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] md:h-[192px] lg:h-[204px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px]" />
 
       {/* Main dark card with border */}
-      <div className="absolute w-full h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-sm:h-full md:h-[200px] lg:h-52" />
+      <div className="absolute w-full h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-sm:h-full max-sm:rounded-[18px] md:h-[200px] lg:h-52" />
 
       {/* Icon */}
       <FeatureIcon type={icon} />
 
       {/* Title */}
-      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] md:text-2xl md:leading-7 md:top-[85px] lg:text-[26px] lg:leading-[28px] lg:top-[90px] max-sm:text-2xl max-sm:leading-7 max-sm:px-[15px] max-sm:py-0 max-sm:top-[80px]">
+      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] md:text-2xl md:leading-7 md:top-[85px] lg:text-[26px] lg:leading-[28px] lg:top-[90px] max-sm:text-lg max-sm:leading-5 max-sm:px-3 max-sm:py-0 max-sm:top-[58px]">
         {title}
       </h2>
 
       {/* Description */}
-      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] md:text-sm md:leading-[18px] md:top-[120px] lg:text-[15px] lg:leading-[19px] lg:top-[130px] max-sm:text-sm max-sm:leading-[18px] max-sm:px-[15px] max-sm:py-0 max-sm:top-[115px]">
+      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] md:text-sm md:leading-[18px] md:top-[120px] lg:text-[15px] lg:leading-[19px] lg:top-[130px] max-sm:text-[11px] max-sm:leading-[14px] max-sm:px-3 max-sm:py-0 max-sm:top-[84px]">
         {description}
       </p>
     </article>
