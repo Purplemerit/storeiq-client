@@ -1,4 +1,7 @@
-"use client";
+import scriptLiveImage from "@/assets/images/script-live.png";
+import imageMobingImage from "@/assets/images/image-mobing.png";
+import audioMountImage from "@/assets/images/audio-mount.png";
+("use client");
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +12,11 @@ import { Button } from "@/components/ui/button";
 import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
 import aiImagePlaceholder from "@/assets/images/ai-image-placeholder.png";
 import aiImageEditorPlaceholder from "@/assets/images/ai-imageeditor-placeholder.png";
+
 import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
+import viralPlatformImage from "@/assets/images/viral-platform.png";
+import searchImagesImage from "@/assets/images/search-images.png";
+import autoModeImage from "@/assets/images/auto-mode.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -44,22 +51,19 @@ const Dashboard = () => {
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       ),
-      image:
-        "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3",
+      image: viralPlatformImage,
       href: "/dashboard/search-videos",
     },
     {
       superTitle: "4k images",
       title: "Search Images",
-      image:
-        "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      image: searchImagesImage,
       href: "/dashboard/search-images",
     },
     {
       superTitle: "",
       title: "Setup Auto Mode",
-      image:
-        "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3",
+      image: autoModeImage,
       href: "/dashboard/publish",
     },
   ];
@@ -96,23 +100,21 @@ const Dashboard = () => {
     {
       title: "Ai-Audio Mounting",
       subtitle: "Help to Mount AI Audio to Video",
-      image: "./ai-voice-mounting.jpeg",
+      image: audioMountImage,
       buttonText: "Try Now",
       link: "/dashboard/aitextmounting",
     },
     {
       title: "Image mobing tool",
       subtitle: "Add object to other background scene",
-      image:
-        "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/WhatsApp+Image+2025-09-24+at+15.54.32.jpeg",
+      image: imageMobingImage,
       buttonText: "Try Now",
       link: "/dashboard/aitools/Mobimage",
     },
     {
       title: "Script to Live Analyzer",
       subtitle: "Generate audio automatically",
-      image:
-        "https://store-iq-bucket.s3.ap-south-1.amazonaws.com/dashboard-images-static/Screenshot+2025-09-26+110713.png",
+      image: scriptLiveImage,
       buttonText: "Try Now",
       link: "/dashboard/aitools/tts",
     },
