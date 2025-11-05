@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Play, Sparkles, Zap } from "lucide-react";
 
 // Import images from assets
 import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
@@ -190,14 +189,28 @@ const Dashboard = () => {
           <div
             className="absolute top-1 bottom-1 bg-storiq-purple rounded-lg transition-all duration-300 ease-in-out"
             style={{
-              left: `${activeTab * 33.333}%`,
-              width: "33.333%",
+              left: `var(--slider-left, 0px)`,
+              width: `var(--slider-width, 0px)`,
             }}
           />
-
           {["Home", "Creation", "Inspiration"].map((tab, index) => (
             <button
               key={index}
+              ref={(el) => {
+                if (activeTab === index && el) {
+                  const parent = el.parentElement;
+                  if (parent) {
+                    parent.style.setProperty(
+                      "--slider-left",
+                      el.offsetLeft + "px"
+                    );
+                    parent.style.setProperty(
+                      "--slider-width",
+                      el.offsetWidth + "px"
+                    );
+                  }
+                }
+              }}
               onClick={() => {
                 setActiveTab(index);
                 if (tab === "Creation") {
@@ -206,11 +219,12 @@ const Dashboard = () => {
                   navigate("/dashboard/create-prompt");
                 }
               }}
-              className={`relative z-10 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 flex-1 ${
+              className={`relative z-10 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 ${
                 activeTab === index
                   ? "text-white"
                   : "text-gray-400 hover:text-white"
               }`}
+              style={{ zIndex: 10 }}
             >
               {tab}
             </button>
