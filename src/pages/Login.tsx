@@ -154,12 +154,14 @@ const Login = () => {
               Welcome Back.!
             </h1>
 
-            <div className="border border-white/20 rounded-lg px-4 md:px-6 py-2 md:py-3 inline-block">
-              <span className="text-white/70 italic text-base md:text-lg">
+            <button
+              onClick={() => navigate("/")}
+              className="border-2 md:border-4 border-white px-4 md:px-6 py-2.5 md:py-3.5 hover:bg-white hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#070707]"
+            >
+              <span className="text-white text-xl md:text-2xl lg:text-[32px] italic font-semibold hover:text-black">
                 Skip the lag ?
               </span>
-              <div className="border-t border-dashed border-white/30 mt-2 md:mt-3"></div>
-            </div>
+            </button>
           </div>
         </div>
         {/* Right Side - Login Form */}
