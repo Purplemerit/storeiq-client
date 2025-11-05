@@ -247,7 +247,66 @@ const AnimatedRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        toastOptions={{
+          // Default options
+          className: "",
+          duration: 4000,
+          style: {
+            background: "#1a1a1a",
+            color: "#fff",
+            border: "1px solid rgba(139, 92, 246, 0.3)",
+            borderRadius: "12px",
+            padding: "16px 20px",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow:
+              "0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.1)",
+            backdropFilter: "blur(10px)",
+            maxWidth: "400px",
+          },
+          // Success toast
+          success: {
+            duration: 3500,
+            style: {
+              background: "linear-gradient(135deg, #1a1a1a 0%, #1e293b 100%)",
+              border: "1px solid rgba(34, 197, 94, 0.4)",
+              boxShadow:
+                "0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(34, 197, 94, 0.2)",
+            },
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#fff",
+            },
+          },
+          // Error toast
+          error: {
+            duration: 4500,
+            style: {
+              background: "linear-gradient(135deg, #1a1a1a 0%, #1e1b1b 100%)",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              boxShadow:
+                "0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(239, 68, 68, 0.2)",
+            },
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#fff",
+            },
+          },
+          // Loading toast
+          loading: {
+            style: {
+              background: "linear-gradient(135deg, #1a1a1a 0%, #1e293b 100%)",
+              border: "1px solid rgba(139, 92, 246, 0.4)",
+              boxShadow:
+                "0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)",
+            },
+          },
+        }}
+      />
       <Sonner />
       <LoaderProvider>
         <BrowserRouter>
