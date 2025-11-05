@@ -179,7 +179,7 @@ const Signup = () => {
 
         {/* Right Side - Signup Form */}
         <div className="flex-1 flex items-center justify-center px-4 md:px-8 py-8 lg:py-0 z-10">
-          <div className="inline-flex flex-col justify-center items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-full max-w-[360px] h-[700px] py-8 px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:max-w-[320px] max-md:h-[650px] max-md:py-7 max-md:px-6 max-sm:max-w-[300px] max-sm:h-auto max-sm:min-h-[550px] max-sm:py-6 max-sm:px-5">
+          <div className="inline-flex flex-col justify-center items-center border shadow-[-8px_4px_5px_0_rgba(0,0,0,0.24)] backdrop-blur-[26.5px] w-full max-w-[420px] h-[700px] py-8 px-8 rounded-[20px] border-solid border-[#AFAFAF] max-md:max-w-[320px] max-md:h-[650px] max-md:py-7 max-md:px-6 max-sm:max-w-[300px] max-sm:h-auto max-sm:min-h-[550px] max-sm:py-6 max-sm:px-5">
             <div className="flex flex-col items-center gap-[40px] w-full max-md:gap-8 max-sm:gap-[25px]">
               <div className="flex flex-col items-start gap-3 w-full">
                 <header className="flex flex-col items-start gap-3 w-full">
