@@ -625,10 +625,10 @@ const Exports = () => {
                     className="grid gap-4"
                     style={{
                       gridTemplateColumns:
-                        "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                        "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
                     }}
                   >
-                    {[...Array(6)].map((_, i) => (
+                    {[...Array(5)].map((_, i) => (
                       <Skeleton key={i} className="h-5 w-24 bg-gray-700/50" />
                     ))}
                   </div>
@@ -640,12 +640,11 @@ const Exports = () => {
                       className="p-4 grid gap-4"
                       style={{
                         gridTemplateColumns:
-                          "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                          "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
                       }}
                     >
                       <Skeleton className="h-5 w-full bg-gray-700/50" />
                       <Skeleton className="h-5 w-20 bg-gray-700/30" />
-                      <Skeleton className="h-5 w-16 bg-gray-700/30" />
                       <Skeleton className="h-5 w-12 bg-gray-700/30" />
                       <Skeleton className="h-6 w-20 bg-gray-700/50 rounded-full" />
                       <div className="flex gap-2">
@@ -706,12 +705,11 @@ const Exports = () => {
                   className="p-4 grid gap-4 text-white font-semibold border-b border-storiq-border bg-storiq-purple/20"
                   style={{
                     gridTemplateColumns:
-                      "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                      "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
                   }}
                 >
                   <div>Filename</div>
                   <div>Date</div>
-                  <div>Size</div>
                   <div>Format</div>
                   <div>Status</div>
                   <div>Actions</div>
@@ -719,7 +717,7 @@ const Exports = () => {
                 {/* Table Rows */}
                 <div className="divide-y divide-storiq-border">
                   {filteredAndSortedExports.length === 0 ? (
-                    <div className="p-8 text-center text-white/60 col-span-6">
+                    <div className="p-8 text-center text-white/60 col-span-5">
                       No exports found. Your exported videos will appear here
                       once you start creating them.
                     </div>
@@ -730,7 +728,7 @@ const Exports = () => {
                         className="p-4 grid gap-4 text-white items-center"
                         style={{
                           gridTemplateColumns:
-                            "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
+                            "minmax(150px, 2fr) minmax(100px, 1fr) minmax(80px, 0.8fr) minmax(100px, 1fr) minmax(200px, 1.5fr)",
                         }}
                       >
                         <div className="font-medium truncate">
@@ -743,7 +741,6 @@ const Exports = () => {
                               ).toLocaleDateString()
                             : "Unknown date"}
                         </div>
-                        <div className="text-white/60">{item.size || "-"}</div>
                         <div>
                           <span className="bg-storiq-purple/20 text-storiq-purple font-semibold px-2 py-1 rounded-md text-sm">
                             {item.format || "MP4"}
@@ -995,10 +992,6 @@ const Exports = () => {
                                 ).toLocaleDateString()
                               : "Unknown"}
                           </span>
-                        </div>
-                        <div>
-                          <span className="text-white/60 block mb-1">Size</span>
-                          <span className="text-white">{item.size || "-"}</span>
                         </div>
                         <div>
                           <span className="text-white/60 block mb-1">
