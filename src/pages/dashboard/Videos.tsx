@@ -864,17 +864,36 @@ const VideoCard: React.FC<VideoCardProps> = ({
   formatDuration,
   formatDate,
 }) => {
-  // Use the same card structure and styling as testfile.tsx
-  // Helper to truncate title
-  const getShortTitle = (title?: string, maxLen = 20) => {
-    if (!title) return "Untitled Video";
-    return title.length > maxLen ? title.slice(0, maxLen) + "..." : title;
+  // Clean up the title to show only the meaningful part
+  const getCleanTitle = (rawTitle: string) => {
+    if (!rawTitle) return "Untitled Video";
+
+    // Remove file extension
+    let cleanTitle = rawTitle.replace(/\.(mp4|mov|webm|avi|mkv)$/i, "");
+
+    // Remove timestamp and UUID pattern (e.g., -1762402988644-09ff3d85)
+    cleanTitle = cleanTitle.replace(/-\d{13}-[a-f0-9]{8}$/i, "");
+
+    // Replace hyphens with spaces and capitalize words
+    cleanTitle = cleanTitle
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    // Truncate if too long
+    const maxLen = 18;
+    if (cleanTitle.length > maxLen) {
+      cleanTitle = cleanTitle.slice(0, maxLen) + "...";
+    }
+
+    return cleanTitle;
   };
 
   const [imageLoaded, setImageLoaded] = React.useState(false);
 
   // Extract meaningful filename from s3Key if title is not available
-  const displayTitle = video.title || extractMeaningfulFilename(video.s3Key);
+  const rawTitle = video.title || extractMeaningfulFilename(video.s3Key);
+  const displayTitle = getCleanTitle(rawTitle);
 
   return (
     <div className="relative border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-all duration-300 w-full max-w-xl mx-auto group">
@@ -911,9 +930,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
       <div className="relative z-10 p-6 min-h-[280px] flex flex-col justify-end">
         <h3
           className="text-white text-xl font-bold mb-4 drop-shadow-lg"
-          title={displayTitle}
+          title={rawTitle}
         >
-          {getShortTitle(displayTitle)}
+          {displayTitle}
         </h3>
         <div className="flex space-x-3">
           <Button

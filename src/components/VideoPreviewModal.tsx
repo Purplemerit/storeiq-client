@@ -42,6 +42,33 @@ const VideoPreviewModal: React.FC<VideoPreviewModalProps> = ({
   onLoadedData,
   onError,
 }) => {
+  // Clean up the title to show only the meaningful part
+  const getCleanTitle = (rawTitle: string) => {
+    if (!rawTitle) return "Untitled Video";
+
+    // Remove file extension
+    let cleanTitle = rawTitle.replace(/\.(mp4|mov|webm|avi|mkv)$/i, "");
+
+    // Remove timestamp and UUID pattern (e.g., -1762402988644-09ff3d85)
+    cleanTitle = cleanTitle.replace(/-\d{13}-[a-f0-9]{8}$/i, "");
+
+    // Replace hyphens with spaces and capitalize words
+    cleanTitle = cleanTitle
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    // Truncate if too long
+    const maxLen = 50;
+    if (cleanTitle.length > maxLen) {
+      cleanTitle = cleanTitle.slice(0, maxLen) + "...";
+    }
+
+    return cleanTitle;
+  };
+
+  const displayTitle = getCleanTitle(title);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
@@ -59,7 +86,7 @@ const VideoPreviewModal: React.FC<VideoPreviewModalProps> = ({
                     <div className="w-1 h-6 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full"></div>
                     <h2 className="text-lg font-semibold text-white flex items-center gap-2">
                       <Play className="h-4 w-4 text-purple-400" />
-                      {title}
+                      {displayTitle}
                     </h2>
                   </div>
                   <button
