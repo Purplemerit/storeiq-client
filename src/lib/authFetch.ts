@@ -172,6 +172,14 @@ export async function authFetch(input: RequestInfo, init?: RequestInit) {
         errorData = { error: `Request failed with status ${response.status}` };
       }
 
+      // Log the error for debugging
+      console.error('[authFetch] Request failed:', {
+        url: url.toString(),
+        status: response.status,
+        error: errorData,
+        hasToken: !!authState.token
+      });
+
       if (response.status === 401) {
         // Clear auth state and redirect to login
         updateAuthState({
