@@ -8,16 +8,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/Loader";
 import { authFetch } from "@/lib/authFetch";
-import { Download, RefreshCw, Sparkles, Wand2 } from "lucide-react";
+import { Download, RefreshCw, Sparkles, Wand2, Maximize2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const ImageGenerator: React.FC = () => {
   const [prompt, setPrompt] = useState("");
+  const [aspectRatio, setAspectRatio] = useState("1:1");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generationCount, setGenerationCount] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Aspect ratio options
+  const aspectRatioOptions = [
+    { value: "1:1", label: "Square (1:1)", description: "1024x1024" },
+    { value: "16:9", label: "Landscape (16:9)", description: "1344x768" },
+    { value: "9:16", label: "Portrait (9:16)", description: "768x1344" },
+    { value: "4:3", label: "Standard (4:3)", description: "1152x896" },
+    { value: "3:4", label: "Portrait (3:4)", description: "896x1152" },
+  ];
 
   // Default images
   const defaultImages = [
@@ -84,7 +94,7 @@ const ImageGenerator: React.FC = () => {
       const res = await authFetch("/api/ai/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, aspectRatio }),
       });
 
       if (!res.ok) {
@@ -176,6 +186,39 @@ const ImageGenerator: React.FC = () => {
                   />
                 </div>
 
+                {/* Aspect Ratio Selector */}
+                <div className="space-y-2 sm:space-y-3">
+                  <label
+                    htmlFor="aspectRatio"
+                    className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
+                    Aspect Ratio
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {aspectRatioOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setAspectRatio(option.value)}
+                        disabled={loading}
+                        className={`p-2.5 sm:p-3 rounded-lg border-2 transition-all text-left ${
+                          aspectRatio === option.value
+                            ? "border-storiq-purple bg-storiq-purple/10 text-white"
+                            : "border-gray-700 bg-gray-900/60 text-gray-300 hover:border-gray-600"
+                        } disabled:opacity-50`}
+                      >
+                        <div className="font-semibold text-xs sm:text-sm">
+                          {option.label}
+                        </div>
+                        <div className="text-[10px] sm:text-xs text-gray-400 mt-0.5">
+                          {option.description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Suggestions */}
                 <div className="space-y-2 sm:space-y-3">
                   <p className="text-xs sm:text-sm text-gray-400 flex items-center gap-2">
@@ -221,10 +264,10 @@ const ImageGenerator: React.FC = () => {
 
           {/* Right Column */}
           <div className="w-full xl:w-[55%] 2xl:w-[60%] order-1 xl:order-2">
-            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 h-full backdrop-blur-lg">
+            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 backdrop-blur-lg flex flex-col min-h-[500px] max-h-[600px]">
               {/* Loading */}
               {loading && (
-                <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 space-y-3 sm:space-y-4">
+                <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4">
                   <Loader message="Painting your vision..." size="small" />
                   <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
                     This may take a few moments...
@@ -234,7 +277,7 @@ const ImageGenerator: React.FC = () => {
 
               {/* Error */}
               {error && (
-                <div className="flex flex-col items-center justify-center py-6 sm:py-8 space-y-3 sm:space-y-4">
+                <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4">
                   <div className="p-2.5 sm:p-3 bg-red-500/10 rounded-full animate-bounce">
                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-500 flex items-center justify-center">
                       <span className="text-white text-xs sm:text-sm font-bold">
@@ -339,7 +382,7 @@ const ImageGenerator: React.FC = () => {
 
               {/* Default Carousel */}
               {!imageUrl && !loading && !error && (
-                <div className="flex flex-col items-center justify-center py-6 sm:py-8 text-center space-y-4 sm:space-y-6">
+                <div className="flex flex-col items-center justify-center flex-1 text-center space-y-4 sm:space-y-6 overflow-auto">
                   <div className="relative w-full max-w-md">
                     <div
                       ref={imageContainerRef}

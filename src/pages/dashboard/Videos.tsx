@@ -25,19 +25,12 @@ import {
   Clock,
   Calendar,
   Download,
-  MoreVertical,
   FileVideo,
   Eye,
   Film,
   Youtube,
   Wand2,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 const ConfirmDialog = React.lazy(() =>
   import("@/components/confirm-dialog").then((m) => ({
     default: m.ConfirmDialog,
@@ -847,9 +840,9 @@ const Videos = () => {
           }}
         >
           <Suspense fallback={<div>Loading...</div>}>
-            <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
+            <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl max-h-[90vh] flex flex-col">
               <Suspense fallback={<div>Loading...</div>}>
-                <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
+                <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700 flex-shrink-0">
                   <Suspense fallback={<div>Loading...</div>}>
                     <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
                       <Eye className="h-5 w-5 text-blue-400" />
@@ -858,12 +851,12 @@ const Videos = () => {
                   </Suspense>
                 </DialogHeader>
               </Suspense>
-              <div className="relative px-6 py-4 flex items-center justify-center bg-black">
+              <div className="relative px-6 py-4 flex items-center justify-center bg-black flex-1 overflow-auto">
                 {imageModal.src && (
                   <img
                     src={imageModal.src}
                     alt={imageModal.title}
-                    className="object-contain max-h-[60vh] w-full"
+                    className="object-contain max-h-full w-auto max-w-full"
                     // fallback for modal: if src is not s3Url, try to find the image by id in onlyImages
                     onError={(e) => {
                       const imgObj = onlyImages.find(
@@ -879,7 +872,7 @@ const Videos = () => {
                 )}
               </div>
               <Suspense fallback={<div>Loading...</div>}>
-                <DialogFooter className="flex flex-col gap-4 px-6 pb-6 pt-4 bg-gray-800/50">
+                <DialogFooter className="flex flex-col gap-4 px-6 pb-6 pt-4 bg-gray-800/50 flex-shrink-0">
                   {/* Show prompt if available */}
                   {imageModal.prompt && (
                     <div className="w-full bg-gray-900/60 rounded-lg p-4 border border-gray-700">
@@ -895,14 +888,7 @@ const Videos = () => {
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center w-full">
-                    <div className="text-white/60 text-sm">
-                      {imageModal.imageId && (
-                        <span className="text-xs bg-gray-700/50 px-2 py-1 rounded">
-                          ID: {imageModal.imageId.substring(0, 8)}...
-                        </span>
-                      )}
-                    </div>
+                  <div className="flex justify-end items-center w-full">
                     <div className="flex gap-3">
                       <Button
                         variant="outline"
@@ -1002,40 +988,9 @@ const ImageCard: React.FC<ImageCardProps> = ({
       </div>
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-3">
-          <h3 className="text-white font-semibold line-clamp-2 flex-1 mr-2 text-lg leading-tight">
+          <h3 className="text-white font-semibold line-clamp-2 flex-1 text-lg leading-tight">
             {img.title || img.s3Key || "Untitled Image"}
           </h3>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white/60 hover:text-white hover:bg-white/10 rounded-lg"
-              >
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-gray-800 border-gray-700"
-            >
-              <DropdownMenuItem
-                onClick={() => openImageModal(img)}
-                className="text-white hover:bg-gray-700"
-              >
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-400 hover:bg-red-500/20"
-                onClick={() => handleOpenDeleteImageDialog(img.id || img.s3Key)}
-                disabled={img.id === undefined && img.s3Key === undefined}
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
         <p className="text-white/60 text-sm mb-2 line-clamp-2 leading-relaxed">
           {img.prompt || img.description || "No description available"}
