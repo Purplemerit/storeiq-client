@@ -145,7 +145,7 @@ const ImageGenerator: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
+      <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto overflow-x-hidden">
         {/* Header */}
         <div className="mb-4 sm:mb-6 md:mb-8 text-center px-2">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
@@ -159,9 +159,9 @@ const ImageGenerator: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8 overflow-x-hidden">
           {/* Left Column */}
-          <div className="w-full xl:w-[45%] 2xl:w-[40%] space-y-4 sm:space-y-5 md:space-y-6 order-2 xl:order-1">
+          <div className="w-full xl:w-[45%] 2xl:w-[40%] space-y-4 sm:space-y-5 md:space-y-6 order-2 xl:order-1 max-w-full">
             <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 backdrop-blur-lg">
               <form
                 onSubmit={handleSubmit}
@@ -182,7 +182,8 @@ const ImageGenerator: React.FC = () => {
                     onChange={(e) => setPrompt(e.target.value)}
                     disabled={loading}
                     autoFocus
-                    className="bg-black/40 border border-gray-700 text-white placeholder:text-white/40 min-h-[100px] sm:min-h-[120px] text-sm sm:text-base rounded-xl focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple transition resize-none px-3 py-2 sm:px-4 sm:py-3"
+                    className="bg-black/40 border border-gray-700 text-white placeholder:text-white/40 min-h-[100px] sm:min-h-[120px] text-sm sm:text-base rounded-xl focus:ring-2 focus:ring-storiq-purple/50 focus:border-storiq-purple transition resize-none px-3 py-2 sm:px-4 sm:py-3 scrollbar-hide"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                   />
                 </div>
 
@@ -263,11 +264,11 @@ const ImageGenerator: React.FC = () => {
           </div>
 
           {/* Right Column */}
-          <div className="w-full xl:w-[55%] 2xl:w-[60%] order-1 xl:order-2">
-            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 backdrop-blur-lg flex flex-col min-h-[500px] max-h-[600px]">
+          <div className="w-full xl:w-[55%] 2xl:w-[60%] order-1 xl:order-2 max-w-full">
+            <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 md:p-5 lg:p-6 backdrop-blur-lg flex flex-col min-h-[400px] sm:min-h-[500px] md:min-h-[600px] max-w-full overflow-hidden">
               {/* Loading */}
               {loading && (
-                <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4">
+                <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4 min-h-[350px] sm:min-h-[450px] md:min-h-[550px]">
                   <Loader message="Painting your vision..." size="small" />
                   <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
                     This may take a few moments...

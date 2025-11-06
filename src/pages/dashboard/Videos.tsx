@@ -86,6 +86,7 @@ const Videos = () => {
     src: string | null;
     title: string;
     videoId: string | null;
+    prompt: string | null;
     loading: boolean;
     error: string | null;
   }>({
@@ -93,6 +94,7 @@ const Videos = () => {
     src: null,
     title: "",
     videoId: null,
+    prompt: null,
     loading: true,
     error: null,
   });
@@ -233,6 +235,7 @@ const Videos = () => {
       src: video.url || "",
       title: modalTitle,
       videoId: video.id || null,
+      prompt: video.prompt || null,
       loading: true,
       error: null,
     });
@@ -243,6 +246,7 @@ const Videos = () => {
       src: null,
       title: "",
       videoId: null,
+      prompt: null,
       loading: true,
       error: null,
     });
@@ -478,12 +482,15 @@ const Videos = () => {
             }}
           >
             <Suspense fallback={<div>Loading...</div>}>
-              <DialogContent className="max-w-4xl p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl">
+              <DialogContent
+                className="max-w-7xl w-[98vw] p-0 overflow-hidden bg-black/98 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl max-h-[98vh] flex flex-col"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
                 <Suspense fallback={<div>Loading...</div>}>
-                  <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700">
+                  <DialogHeader className="px-6 py-4 flex-shrink-0 bg-black/40">
                     <Suspense fallback={<div>Loading...</div>}>
-                      <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
-                        <Play className="h-5 w-5 text-blue-400" />
+                      <DialogTitle className="text-xl font-medium text-white/90 tracking-wide flex items-center gap-2">
+                        <Play className="h-5 w-5 text-purple-400" />
                         {modal.title}
                       </DialogTitle>
                     </Suspense>
@@ -491,10 +498,10 @@ const Videos = () => {
                 </Suspense>
 
                 {/* Video Player Container */}
-                <div className="relative px-6 py-4">
+                <div className="relative px-6 py-4 flex items-center justify-center bg-black flex-1 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                   <AspectRatio
                     ratio={16 / 9}
-                    className="bg-black rounded-xl overflow-hidden border border-gray-700"
+                    className="bg-black rounded-xl overflow-hidden w-full"
                   >
                     {/* Overlay: Loading spinner */}
                     {modal.loading && (
@@ -560,19 +567,34 @@ const Videos = () => {
 
                 {/* Action Buttons */}
                 <Suspense fallback={<div>Loading...</div>}>
-                  <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
-                    <div className="flex gap-3">
+                  <DialogFooter className="flex flex-col gap-4 px-6 py-4 bg-black/40 flex-shrink-0">
+                    {/* Show prompt if available */}
+                    {modal.prompt && (
+                      <div className="w-full bg-white/5 rounded-xl p-4 border border-white/10">
+                        <div className="flex items-start gap-2 mb-2">
+                          <Wand2 className="h-4 w-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                          <p className="text-xs text-white/50 font-medium uppercase tracking-widest">
+                            Prompt
+                          </p>
+                        </div>
+                        <p className="text-sm text-white/80 leading-relaxed">
+                          {modal.prompt}
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-center w-full">
                       <Button
                         variant="outline"
                         onClick={closeModal}
-                        className="border-gray-600 text-white hover:bg-gray-700"
+                        className="border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 transition-all"
                       >
                         Close
                       </Button>
                       <Button
                         variant="destructive"
                         onClick={() => handleOpenDeleteDialog(modal.videoId)}
-                        className="gap-2 bg-red-600 hover:bg-red-700"
+                        className="gap-2 bg-red-600/90 hover:bg-red-600 border-0"
                       >
                         <Trash2 className="h-4 w-4" />
                         Delete Video
@@ -815,7 +837,7 @@ const Videos = () => {
                   <p className="text-white/40 text-lg">No images found</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {onlyImages.map((img, idx) => (
                     <ImageCard
                       key={img.id || img.s3Key || idx}
@@ -840,24 +862,28 @@ const Videos = () => {
           }}
         >
           <Suspense fallback={<div>Loading...</div>}>
-            <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl max-h-[90vh] flex flex-col">
+            <DialogContent
+              className="max-w-7xl w-[98vw] p-0 overflow-hidden bg-black/98 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl max-h-[98vh] flex flex-col"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {/* Header with Title */}
               <Suspense fallback={<div>Loading...</div>}>
-                <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-700 flex-shrink-0">
+                <DialogHeader className="px-6 py-4 flex-shrink-0 bg-black/40">
                   <Suspense fallback={<div>Loading...</div>}>
-                    <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
-                      <Eye className="h-5 w-5 text-blue-400" />
+                    <DialogTitle className="text-xl font-medium text-white/90 tracking-wide">
                       {imageModal.title}
                     </DialogTitle>
                   </Suspense>
                 </DialogHeader>
               </Suspense>
-              <div className="relative px-6 py-4 flex items-center justify-center bg-black flex-1 overflow-auto">
+
+              {/* Image Container - scrollbar hidden */}
+              <div className="relative px-6 py-4 flex items-center justify-center bg-black flex-1 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {imageModal.src && (
                   <img
                     src={imageModal.src}
                     alt={imageModal.title}
                     className="object-contain max-h-full w-auto max-w-full"
-                    // fallback for modal: if src is not s3Url, try to find the image by id in onlyImages
                     onError={(e) => {
                       const imgObj = onlyImages.find(
                         (img) =>
@@ -871,43 +897,43 @@ const Videos = () => {
                   />
                 )}
               </div>
+
+              {/* Footer with Prompt and Delete Button */}
               <Suspense fallback={<div>Loading...</div>}>
-                <DialogFooter className="flex flex-col gap-4 px-6 pb-6 pt-4 bg-gray-800/50 flex-shrink-0">
+                <DialogFooter className="flex flex-col gap-4 px-6 py-4 bg-black/40 flex-shrink-0">
                   {/* Show prompt if available */}
                   {imageModal.prompt && (
-                    <div className="w-full bg-gray-900/60 rounded-lg p-4 border border-gray-700">
+                    <div className="w-full bg-white/5 rounded-xl p-4 border border-white/10">
                       <div className="flex items-start gap-2 mb-2">
                         <Wand2 className="h-4 w-4 text-purple-400 mt-0.5 flex-shrink-0" />
-                        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">
-                          Generation Prompt
+                        <p className="text-xs text-white/50 font-medium uppercase tracking-widest">
+                          Prompt
                         </p>
                       </div>
-                      <p className="text-sm text-gray-300 leading-relaxed">
+                      <p className="text-sm text-white/80 leading-relaxed">
                         {imageModal.prompt}
                       </p>
                     </div>
                   )}
 
-                  <div className="flex justify-end items-center w-full">
-                    <div className="flex gap-3">
-                      <Button
-                        variant="outline"
-                        onClick={closeImageModal}
-                        className="border-gray-600 text-white hover:bg-gray-700"
-                      >
-                        Close
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() =>
-                          handleOpenDeleteImageDialog(imageModal.imageId)
-                        }
-                        className="gap-2 bg-red-600 hover:bg-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Delete Image
-                      </Button>
-                    </div>
+                  <div className="flex justify-between items-center w-full">
+                    <Button
+                      variant="outline"
+                      onClick={closeImageModal}
+                      className="border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 transition-all"
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() =>
+                        handleOpenDeleteImageDialog(imageModal.imageId)
+                      }
+                      className="gap-2 bg-red-600/90 hover:bg-red-600 border-0"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete Image
+                    </Button>
                   </div>
                 </DialogFooter>
               </Suspense>
@@ -955,54 +981,66 @@ const ImageCard: React.FC<ImageCardProps> = ({
 }) => {
   const [imgLoaded, setImgLoaded] = React.useState(false);
 
+  // Helper to truncate title
+  const getShortTitle = (title?: string, maxLen = 20) => {
+    if (!title) return "Untitled Image";
+    return title.length > maxLen ? title.slice(0, maxLen) + "..." : title;
+  };
+
+  const displayTitle = img.title || img.s3Key || "Untitled Image";
+
   return (
-    <Card className="group overflow-hidden border-gray-700 bg-gray-800/50 backdrop-blur-sm hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl rounded-xl">
-      <div className="relative h-48 overflow-hidden flex items-center justify-center bg-black">
+    <div
+      className="relative border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-all duration-300 w-full group cursor-pointer"
+      onClick={() => openImageModal(img)}
+    >
+      {/* Background Image */}
+      <div className="absolute inset-0">
         {/* Skeleton loader for image */}
         {!imgLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800 animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800 animate-pulse">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
         )}
         <img
           src={img.s3Url || img.url}
-          alt={img.title || img.s3Key || "Image"}
-          className={`object-contain w-full h-full group-hover:scale-105 transition-all duration-500 ${
+          alt={displayTitle}
+          className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
             imgLoaded ? "opacity-100" : "opacity-0"
           }`}
-          onClick={() => openImageModal(img)}
-          style={{ cursor: "pointer" }}
           onLoad={() => setImgLoaded(true)}
           onError={(e) => {
             (e.target as HTMLImageElement).src = "/placeholder.svg";
             setImgLoaded(true);
           }}
         />
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 p-6 min-h-[280px] flex flex-col justify-end">
+        <h3
+          className="text-white text-xl font-bold mb-4 drop-shadow-lg"
+          title={displayTitle}
+        >
+          {getShortTitle(displayTitle)}
+        </h3>
+        <div className="flex space-x-3">
           <Button
-            onClick={() => openImageModal(img)}
-            className="rounded-full h-14 w-14 bg-blue-600 hover:bg-blue-700 shadow-lg"
-            size="icon"
+            variant="outline"
+            size="sm"
+            className="bg-black/50 backdrop-blur-sm border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple"
+            onClick={(e) => {
+              e.stopPropagation();
+              openImageModal(img);
+            }}
           >
-            <Eye className="h-6 w-6 fill-current ml-1" />
+            <Eye className="h-4 w-4 mr-2" />
+            Preview
           </Button>
         </div>
       </div>
-      <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-white font-semibold line-clamp-2 flex-1 text-lg leading-tight">
-            {img.title || img.s3Key || "Untitled Image"}
-          </h3>
-        </div>
-        <p className="text-white/60 text-sm mb-2 line-clamp-2 leading-relaxed">
-          {img.prompt || img.description || "No description available"}
-        </p>
-        <div className="flex items-center justify-between text-xs text-white/40">
-          <div className="flex items-center">
-            <Calendar className="h-3 w-3 mr-1" />
-            {img.createdAt ? formatDate(img.createdAt) : "Unknown date"}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 };
 
