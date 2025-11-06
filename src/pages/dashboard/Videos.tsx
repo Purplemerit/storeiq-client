@@ -799,6 +799,21 @@ const Videos = () => {
               )}
             </section>
 
+            {/* Separator Line */}
+            <div className="relative flex items-center justify-center my-12">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gradient-to-r from-transparent via-storiq-border to-transparent"></div>
+              </div>
+              <div className="relative flex items-center justify-center">
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-storiq-purple/50 to-transparent"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-storiq-bg px-4">
+                    <div className="h-2 w-2 rounded-full bg-storiq-purple/50 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Images Section */}
             <section>
               <div className="flex items-center justify-between mb-6">

@@ -235,8 +235,6 @@ const Publish = () => {
       if (!res.ok) throw new Error("Failed to fetch videos");
       const data = await res.json();
       setVideos(Array.isArray(data) ? data : []);
-      // Debug: log what we get from backend
-      console.log("Fetched videos:", data);
       return {};
     } catch (err) {
       const error = (err as Error)?.message || "Unknown error";
@@ -744,6 +742,22 @@ const Publish = () => {
                       </>
                     )}
                   </div>
+
+                  {/* Separator Line */}
+                  <div className="relative flex items-center justify-center my-12">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gradient-to-r from-transparent via-storiq-border to-transparent"></div>
+                    </div>
+                    <div className="relative flex items-center justify-center">
+                      <div className="w-full h-px bg-gradient-to-r from-transparent via-storiq-purple/50 to-transparent"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="bg-storiq-bg px-4">
+                          <div className="h-2 w-2 rounded-full bg-storiq-purple/50 animate-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Images Section */}
                   <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
