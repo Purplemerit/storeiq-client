@@ -60,41 +60,80 @@ const AIObjectBlendTool: React.FC = () => {
     setError(null);
 
     try {
+      console.log(
+        "[AIObjectBlend] Starting background removal with Vertex AI..."
+      );
       const formData = new FormData();
       formData.append("image", objectFile);
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/remove-bg`, {
+      const API_BASE_URL =
+        import.meta.env.VITE_API_BASE_URL || "https://api.example.com";
+      const res = await fetch(`${API_BASE_URL}/api/remove-bg`, {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error(`Backend error: ${res.statusText}`);
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("[AIObjectBlend] Backend error:", res.status, errorData);
+        throw new Error(
+          errorData.details ||
+            errorData.error ||
+            `Backend error: ${res.statusText}`
+        );
+      }
+
       const data = await res.json();
-      if (!data.url) throw new Error("No AI image returned from backend");
+      console.log("[AIObjectBlend] Response:", data);
+
+      if (!data.url) {
+        throw new Error("No processed image returned from server");
+      }
 
       const objectUrl = data.url;
       const canvas = canvasRef.current;
-      if (!canvas) return;
+      if (!canvas) {
+        throw new Error("Canvas not available");
+      }
+
       const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+      if (!ctx) {
+        throw new Error("Canvas context not available");
+      }
+
+      // Redraw the scene
       ctx.drawImage(sceneImgRef.current, 0, 0);
 
+      // Calculate click position relative to canvas
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX - 200;
+      const x = (e.clientX - rect.left) * scaleX - 200; // Center object on click (200px = half of 400px object size)
       const y = (e.clientY - rect.top) * scaleY - 200;
 
+      console.log("[AIObjectBlend] Placing object at:", { x, y });
+
+      // Load and draw the AI-processed object
       const objImg = new Image();
       objImg.crossOrigin = "anonymous";
       objImg.src = objectUrl;
+
       objImg.onload = () => {
+        console.log("[AIObjectBlend] Object loaded, drawing on canvas");
         ctx.drawImage(objImg, x, y, 400, 400);
         setLoading(false);
       };
+
+      objImg.onerror = (err) => {
+        console.error("[AIObjectBlend] Failed to load processed image:", err);
+        setError("Failed to load the processed image. Please try again.");
+        setLoading(false);
+      };
     } catch (err) {
-      console.error(err);
-      setError(err instanceof Error ? err.message : "Failed to blend AI object.");
+      console.error("[AIObjectBlend] Error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to blend AI object.";
+      setError(errorMessage);
       setLoading(false);
     }
   };
@@ -133,18 +172,30 @@ const AIObjectBlendTool: React.FC = () => {
             </span>
           </h1>
           <p className="text-white/60 text-lg">
-            Upload a scene and object → click to place the object → download your result.
+            Upload a scene and object → AI removes background → click to place →
+            download your result.
+          </p>
+          <p className="text-white/40 text-sm mt-2">
+            Powered by Google Vertex AI • Imagen 3 Background Removal
           </p>
         </div>
 
         {/* Workflow steps */}
         <div className="flex justify-center mb-8">
           <div className="flex items-center space-x-6 text-white/60">
-            <div className={`flex items-center ${sceneFile ? "text-green-400" : ""}`}>
+            <div
+              className={`flex items-center ${
+                sceneFile ? "text-green-400" : ""
+              }`}
+            >
               <CheckCircle2 className="mr-2 h-5 w-5" /> Scene
             </div>
             <div>—</div>
-            <div className={`flex items-center ${objectFile ? "text-green-400" : ""}`}>
+            <div
+              className={`flex items-center ${
+                objectFile ? "text-green-400" : ""
+              }`}
+            >
               <CheckCircle2 className="mr-2 h-5 w-5" /> Object
             </div>
             <div>—</div>
@@ -157,7 +208,9 @@ const AIObjectBlendTool: React.FC = () => {
         {/* Upload Section */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Scene Upload */}
-          <div className={`bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 backdrop-blur-lg`}>
+          <div
+            className={`bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 backdrop-blur-lg`}
+          >
             <h3 className="text-xl font-semibold flex items-center mb-4 text-white">
               <ImageIcon className="mr-2 text-storiq-purple" /> Background Scene
             </h3>
@@ -166,17 +219,30 @@ const AIObjectBlendTool: React.FC = () => {
               onClick={() => fileInputSceneRef.current?.click()}
               tabIndex={0}
               aria-label="Upload background scene"
-              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") fileInputSceneRef.current?.click(); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ")
+                  fileInputSceneRef.current?.click();
+              }}
             >
               <Upload className="mx-auto h-12 w-12 mb-4 text-storiq-purple/40" />
-              <p className="text-sm font-medium text-white">{sceneFile ? sceneFile.name : "Click to upload scene image"}</p>
+              <p className="text-sm font-medium text-white">
+                {sceneFile ? sceneFile.name : "Click to upload scene image"}
+              </p>
               <p className="text-xs text-white/40">JPG, PNG up to 10MB</p>
-              <input ref={fileInputSceneRef} type="file" accept="image/*" onChange={handleSceneUpload} className="hidden" />
+              <input
+                ref={fileInputSceneRef}
+                type="file"
+                accept="image/*"
+                onChange={handleSceneUpload}
+                className="hidden"
+              />
             </div>
           </div>
 
           {/* Object Upload */}
-          <div className={`bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 backdrop-blur-lg`}>
+          <div
+            className={`bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 backdrop-blur-lg`}
+          >
             <h3 className="text-xl font-semibold flex items-center mb-4 text-white">
               <ImageIcon className="mr-2 text-storiq-blue" /> Object
             </h3>
@@ -185,12 +251,23 @@ const AIObjectBlendTool: React.FC = () => {
               onClick={() => fileInputObjectRef.current?.click()}
               tabIndex={0}
               aria-label="Upload object image"
-              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") fileInputObjectRef.current?.click(); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ")
+                  fileInputObjectRef.current?.click();
+              }}
             >
               <Upload className="mx-auto h-12 w-12 mb-4 text-storiq-blue/40" />
-              <p className="text-sm font-medium text-white">{objectFile ? objectFile.name : "Click to upload object image"}</p>
+              <p className="text-sm font-medium text-white">
+                {objectFile ? objectFile.name : "Click to upload object image"}
+              </p>
               <p className="text-xs text-white/40">JPG, PNG up to 10MB</p>
-              <input ref={fileInputObjectRef} type="file" accept="image/*" onChange={handleObjectUpload} className="hidden" />
+              <input
+                ref={fileInputObjectRef}
+                type="file"
+                accept="image/*"
+                onChange={handleObjectUpload}
+                className="hidden"
+              />
             </div>
           </div>
         </div>
@@ -199,7 +276,9 @@ const AIObjectBlendTool: React.FC = () => {
         {sceneFile && (
           <div className="bg-storiq-card-bg/60 border border-storiq-border rounded-2xl shadow-lg p-6 mb-8 backdrop-blur-lg">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-white">Click to Place Object</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Click to Place Object
+              </h3>
               <Button
                 onClick={resetAll}
                 variant="outline"
@@ -213,7 +292,9 @@ const AIObjectBlendTool: React.FC = () => {
             {!objectFile && (
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-4 flex items-center">
                 <AlertCircle className="h-4 w-4 text-yellow-400 mr-2" />
-                <p className="text-yellow-200 text-sm">Please upload an object image before placing.</p>
+                <p className="text-yellow-200 text-sm">
+                  Please upload an object image before placing.
+                </p>
               </div>
             )}
 
@@ -222,7 +303,9 @@ const AIObjectBlendTool: React.FC = () => {
                 ref={canvasRef}
                 onClick={handleCanvasClick}
                 className={`border-2 border-storiq-border rounded-lg shadow-sm max-w-full h-auto ${
-                  sceneFile && objectFile ? "cursor-crosshair hover:border-storiq-purple" : "cursor-not-allowed"
+                  sceneFile && objectFile
+                    ? "cursor-crosshair hover:border-storiq-purple"
+                    : "cursor-not-allowed"
                 }`}
                 style={{ maxHeight: "500px" }}
                 tabIndex={0}
@@ -256,8 +339,15 @@ const AIObjectBlendTool: React.FC = () => {
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-12 space-y-4">
-            <Loader message="AI is blending your object…" size="small" overlay={false} />
-            <p className="text-white/60 text-sm">Click on the canvas to place the object.</p>
+            <Loader
+              message="AI is removing background and blending your object…"
+              size="small"
+              overlay={false}
+            />
+            <p className="text-white/60 text-sm">
+              Using Vertex AI Imagen 3 for processing...
+            </p>
+            <p className="text-white/40 text-xs">This may take a few moments</p>
           </div>
         )}
 
