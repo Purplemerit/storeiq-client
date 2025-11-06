@@ -23,6 +23,11 @@ const LazyVideoPublishCard = React.lazy(() => import("./VideoPublishCard"));
 // Lazy load ImagePublishCard
 const LazyImagePublishCard = React.lazy(() => import("./ImagePublishCard"));
 
+// Lazy load ImagePreviewModal
+const ImagePreviewModal = React.lazy(
+  () => import("@/components/ImagePreviewModal")
+);
+
 // Lazy load ScheduleDialog
 const ScheduleDialog = React.lazy(() =>
   import("@/components/schedule-dialog").then((m) => ({
@@ -115,6 +120,15 @@ const Publish = () => {
   const [postingId, setPostingId] = useState<string | null>(null);
   const [schedulingLoading, setSchedulingLoading] = useState<boolean>(false);
 
+  // Image preview modal state
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string | null;
+    title: string;
+    id: string | null;
+    prompt: string | null;
+  }>({ src: null, title: "", id: null, prompt: null });
+
   // Platform selection per video
   type PlatformSelections = { [videoId: string]: { yt: boolean; ig: boolean } };
   const [platformSelections, setPlatformSelections] =
@@ -161,6 +175,47 @@ const Publish = () => {
       return { error };
     } finally {
       setImagesLoading(false);
+    }
+  };
+
+  // Handle image preview
+  const handleImagePreview = (image: {
+    id?: string;
+    url: string;
+    s3Key?: string;
+    title?: string;
+    prompt?: string;
+  }) => {
+    setSelectedImage({
+      src: image.url,
+      title: image.title || "Untitled Image",
+      id: image.id || image.s3Key || null,
+      prompt: image.prompt || null,
+    });
+    setImagePreviewOpen(true);
+  };
+
+  const handleCloseImagePreview = () => {
+    setImagePreviewOpen(false);
+    setSelectedImage({ src: null, title: "", id: null, prompt: null });
+  };
+
+  const handleDeleteImage = async (imageId: string | null) => {
+    if (!imageId) return;
+
+    try {
+      const res = await authFetch(`/api/images/${imageId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Failed to delete image");
+
+      toast.success("Image deleted successfully");
+      setImagePreviewOpen(false);
+      await fetchImages(); // Refresh the images list
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error((err as Error)?.message || "Failed to delete image");
     }
   };
 
@@ -429,8 +484,8 @@ const Publish = () => {
             <Button
               className={`w-full sm:w-auto ${
                 ytConnected
-                  ? "bg-green-600 hover:bg-green-700 border-2 border-green-600"
-                  : "bg-black border-2 border-storiq-purple hover:bg-storiq-purple/10"
+                  ? "bg-storiq-purple hover:bg-storiq-purple/80 border-2 border-storiq-purple"
+                  : "bg-storiq-purple hover:bg-storiq-purple/80 border-2 border-storiq-purple"
               } text-white rounded-lg text-sm`}
               disabled={ytLoading}
               onClick={() => (!ytConnected ? handleYouTubeOAuth() : null)}
@@ -774,6 +829,7 @@ const Publish = () => {
                               image={image}
                               handlePost={handlePost}
                               editedTitles={editedTitles}
+                              onPreview={handleImagePreview}
                             />
                           </Suspense>
                         ))}
@@ -928,12 +984,23 @@ const Publish = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Image Preview Modal */}
+        <Suspense fallback={null}>
+          <ImagePreviewModal
+            open={imagePreviewOpen}
+            src={selectedImage.src}
+            title={selectedImage.title}
+            imageId={selectedImage.id}
+            prompt={selectedImage.prompt}
+            onClose={handleCloseImagePreview}
+            onDelete={handleDeleteImage}
+            fallbackImages={images}
+          />
+        </Suspense>
       </div>
     </DashboardLayout>
   );
 };
 
 export default Publish;
-/* Removed duplicate VideoPublishCardProps and VideoPublishCard implementation.
-   VideoPublishCard is now imported via React.lazy from './VideoPublishCard'.
-*/

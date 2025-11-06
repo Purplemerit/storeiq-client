@@ -257,7 +257,7 @@ const VideoPublishCard: React.FC<VideoPublishCardProps> = ({
             className={`flex-1 font-medium transition-all duration-300 ${
               !selection.yt || !ytConnected
                 ? "bg-slate-700/50 hover:bg-slate-600/50 text-slate-400 border border-slate-600/50"
-                : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                : "bg-storiq-purple hover:bg-storiq-purple/80 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]"
             }`}
             onClick={() => handlePost(video)}
             disabled={postingId === videoId || !selection.yt || !ytConnected}
