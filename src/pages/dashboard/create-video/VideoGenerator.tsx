@@ -29,6 +29,7 @@ const VideoGenerator = () => {
   const [prompt, setPrompt] = useState(``);
   const [selectedQuality, setSelectedQuality] = useState("720P");
   const [selectedVoiceSpeed, setSelectedVoiceSpeed] = useState("1x");
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
   // Status for video generation
   const [videoStatus, setVideoStatus] = useState<Status>("idle");
   const [videoError, setVideoError] = useState<string | null>(null);
@@ -77,6 +78,7 @@ const VideoGenerator = () => {
             prompt,
             quality: selectedQuality,
             voiceSpeed: selectedVoiceSpeed,
+            audioLanguage: selectedLanguage, // Add language parameter
           }),
         }
       );
@@ -119,6 +121,20 @@ const VideoGenerator = () => {
   // --- DATA ---
   const qualityOptions = ["480P", "720P", "1080P"];
   const voiceSpeedOptions = ["1x", "2x"];
+  const languageOptions = [
+    "English",
+    "Spanish",
+    "French",
+    "German",
+    "Italian",
+    "Portuguese",
+    "Russian",
+    "Chinese",
+    "Japanese",
+    "Korean",
+    "Hindi",
+    "Arabic",
+  ];
 
   // --- UPLOAD VIDEO HANDLER ---
   const handleUploadVideo = async (e: React.FormEvent) => {
@@ -339,6 +355,31 @@ const VideoGenerator = () => {
                   </Button>
                 ))}
               </div>
+            </Card>
+
+            {/* Audio Language Selection */}
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+                Audio Language
+              </h3>
+              <select
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="w-full h-10 sm:h-11 md:h-12 px-3 sm:px-4 bg-storiq-card-bg border-2 border-storiq-border text-white rounded-md focus:border-storiq-purple focus:ring-2 focus:ring-storiq-purple/50 transition-all duration-200 text-sm sm:text-base cursor-pointer hover:border-storiq-purple/50"
+              >
+                {languageOptions.map((language) => (
+                  <option
+                    key={language}
+                    value={language}
+                    className="bg-storiq-card-bg text-white"
+                  >
+                    {language}
+                  </option>
+                ))}
+              </select>
+              <p className="text-white/50 text-xs sm:text-sm mt-2">
+                The AI will generate narration in the selected language
+              </p>
             </Card>
 
             {/* Generate Button */}
