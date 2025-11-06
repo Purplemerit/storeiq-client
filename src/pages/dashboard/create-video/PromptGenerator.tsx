@@ -16,8 +16,6 @@ import {
   Star,
   Download,
   Share2,
-  ThumbsUp,
-  ThumbsDown,
   RefreshCw,
   BookOpen,
   Clock,
