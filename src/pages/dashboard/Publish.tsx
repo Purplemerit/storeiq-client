@@ -540,31 +540,14 @@ const Publish = () => {
                   {/* Videos Section */}
                   <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8 mb-8 md:mb-12">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
-                      <div className="flex items-center gap-3 md:gap-4">
-                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
-                          <svg
-                            className="w-4 h-4 md:w-5 md:h-5 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                        <div>
-                          <h2 className="text-xl md:text-2xl font-bold text-white">
-                            Your Videos
-                          </h2>
-                          <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
-                            Select and customize videos to publish across
-                            platforms
-                          </p>
-                        </div>
+                      <div>
+                        <h2 className="text-xl md:text-2xl font-bold text-white">
+                          Your Videos
+                        </h2>
+                        <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
+                          Select and customize videos to publish across
+                          platforms
+                        </p>
                       </div>
                       <div className="flex sm:hidden items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-600/50 self-end">
                         <span className="text-xs text-slate-400">Total:</span>
@@ -704,31 +687,14 @@ const Publish = () => {
                   {/* Images Section */}
                   <div className="bg-storiq-card-bg border border-storiq-border rounded-xl md:rounded-2xl p-4 md:p-8">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
-                      <div className="flex items-center gap-3 md:gap-4">
-                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg">
-                          <svg
-                            className="w-4 h-4 md:w-5 md:h-5 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                        <div>
-                          <h2 className="text-xl md:text-2xl font-bold text-white">
-                            Your Images
-                          </h2>
-                          <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
-                            Select and customize images to publish across
-                            platforms
-                          </p>
-                        </div>
+                      <div>
+                        <h2 className="text-xl md:text-2xl font-bold text-white">
+                          Your Images
+                        </h2>
+                        <p className="text-slate-400 text-sm md:text-base mt-0.5 md:mt-1">
+                          Select and customize images to publish across
+                          platforms
+                        </p>
                       </div>
                       <div className="flex sm:hidden items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-600/50 self-end">
                         <span className="text-xs text-slate-400">Total:</span>
