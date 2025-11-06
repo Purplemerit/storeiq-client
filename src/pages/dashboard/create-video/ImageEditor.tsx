@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/Loader";
 import { authFetch } from "@/lib/authFetch";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Download, RefreshCw, Image as ImageIcon, Wand2 } from "lucide-react";
+import {
+  Download,
+  RefreshCw,
+  Image as ImageIcon,
+  Wand2,
+  X,
+} from "lucide-react";
 
 import imageEditorPrompt from "@/assets/images/image-editor-prompt.png";
 
@@ -35,6 +41,20 @@ const ImageEditor: React.FC = () => {
 
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value);
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setOriginalPreview(null);
+    setEditedImageUrl(null);
+    setError(null);
+    // Reset the file input
+    const fileInput = document.getElementById(
+      "image-upload"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -225,6 +245,34 @@ const ImageEditor: React.FC = () => {
               </div>
             </div>
           </div>
+        ) : originalPreview ? (
+          <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8 relative">
+            <Button
+              onClick={handleRemoveImage}
+              variant="outline"
+              size="sm"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-red-500/10 hover:bg-red-500/20 border-red-500/50 text-red-400 hover:text-red-300 transition-all duration-200 h-8 w-8 p-0 rounded-full z-10"
+              title="Remove image"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+            <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 text-center space-y-4 sm:space-y-5 md:space-y-6 w-full">
+              <div className="w-full flex flex-col items-center space-y-2">
+                <h4 className="text-white/80 text-sm sm:text-base font-semibold">
+                  Selected Image
+                </h4>
+                <img
+                  src={originalPreview}
+                  alt="Selected preview"
+                  className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-xl shadow-lg border border-storiq-purple/50 bg-black/30 object-contain max-h-64 sm:max-h-72 md:max-h-80"
+                  draggable={false}
+                />
+              </div>
+              <p className="text-gray-400 text-xs sm:text-sm px-2">
+                ✨ Now add a prompt below to edit your image
+              </p>
+            </div>
+          </div>
         ) : (
           <div className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 flex flex-col items-center mx-auto backdrop-blur-sm mb-4 sm:mb-6 md:mb-8">
             <div className="flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 text-center space-y-4 sm:space-y-5 md:space-y-6">
@@ -274,18 +322,6 @@ const ImageEditor: React.FC = () => {
               className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
               required
             />
-            {originalPreview && (
-              <div className="mt-2">
-                <img
-                  src={originalPreview}
-                  alt="Original preview"
-                  className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
-                />
-                <p className="text-xs text-gray-400 mt-1">
-                  Original Image Preview
-                </p>
-              </div>
-            )}
           </div>
           <div>
             <label
