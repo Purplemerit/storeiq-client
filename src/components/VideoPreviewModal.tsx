@@ -74,37 +74,37 @@ const VideoPreviewModal: React.FC<VideoPreviewModalProps> = ({
       <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
         <Suspense fallback={<div>Loading...</div>}>
           <DialogContent
-            className="max-w-5xl w-[95vw] p-0 bg-transparent border-0 shadow-none"
+            className="max-w-5xl w-[95vw] max-h-[95vh] p-0 bg-transparent border-0 shadow-none overflow-hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {/* Main Glass Container */}
-            <div className="flex flex-col h-full bg-black/40 backdrop-blur-2xl rounded-2xl border border-white/15 overflow-hidden">
+            {/* Main Glass Container - iOS-like */}
+            <div className="flex flex-col max-h-[95vh] bg-white/5 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
               {/* Compact Header */}
-              <div className="px-6 py-4 flex-shrink-0 bg-white/5 backdrop-blur-md border-b border-white/10">
+              <div className="px-4 md:px-6 py-3 md:py-4 flex-shrink-0 bg-white/5 backdrop-blur-md border-b border-white/10">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-1 h-6 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full"></div>
-                    <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                      <Play className="h-4 w-4 text-purple-400" />
-                      {displayTitle}
+                  <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                    <div className="w-1 h-5 md:h-6 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full flex-shrink-0"></div>
+                    <h2 className="text-base md:text-lg font-semibold text-white flex items-center gap-2 truncate">
+                      <Play className="h-3.5 w-3.5 md:h-4 md:w-4 text-purple-400 flex-shrink-0" />
+                      <span className="truncate">{displayTitle}</span>
                     </h2>
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-200"
+                    className="p-1.5 md:p-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-200 flex-shrink-0"
                     aria-label="Close modal"
                   >
-                    <X className="h-4 w-4 text-white/80" />
+                    <X className="h-3.5 w-3.5 md:h-4 md:w-4 text-white/80" />
                   </button>
                 </div>
               </div>
 
               {/* Video Player Container */}
-              <div className="flex-1 p-6 flex items-center justify-center bg-black/20">
-                <div className="w-full max-w-4xl">
+              <div className="flex-1 min-h-0 p-4 md:p-6 pb-6 md:pb-8 flex items-center justify-center bg-gradient-to-b from-black/10 to-black/20 overflow-hidden">
+                <div className="w-full max-w-3xl flex items-center">
                   <AspectRatio
                     ratio={16 / 9}
-                    className="bg-black rounded-xl overflow-hidden"
+                    className="bg-black rounded-xl overflow-visible w-full"
                   >
                     {/* Overlay: Loading spinner */}
                     {loading && (
@@ -157,17 +157,17 @@ const VideoPreviewModal: React.FC<VideoPreviewModalProps> = ({
               </div>
 
               {/* Compact Footer */}
-              <div className="flex-shrink-0 bg-white/5 backdrop-blur-md border-t border-white/10">
+              <div className="flex-shrink-0 bg-white/5 backdrop-blur-md border-t border-white/10 max-h-[30vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
                 {/* Prompt Section - Only if exists */}
                 {prompt && (
-                  <div className="px-6 pt-4 pb-3 border-b border-white/5">
+                  <div className="px-4 md:px-6 pt-3 md:pt-4 pb-2 md:pb-3 border-b border-white/5">
                     <div className="flex items-start gap-3">
                       <Wand2 className="h-4 w-4 text-purple-300 mt-1 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-purple-300/80 font-medium uppercase tracking-wider mb-1">
                           AI Prompt
                         </p>
-                        <p className="text-sm text-white/80 leading-relaxed line-clamp-2">
+                        <p className="text-sm text-white/80 leading-relaxed line-clamp-3">
                           {prompt}
                         </p>
                       </div>
@@ -176,18 +176,18 @@ const VideoPreviewModal: React.FC<VideoPreviewModalProps> = ({
                 )}
 
                 {/* Action Buttons - Compact */}
-                <div className="px-6 py-4 flex justify-between items-center gap-4">
+                <div className="px-4 md:px-6 py-3 md:py-4 flex justify-between items-center gap-4">
                   <Button
                     variant="outline"
                     onClick={onClose}
-                    className="border-white/20 bg-white/10 text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200 px-4 py-2 h-auto text-sm"
+                    className="border-white/20 bg-white/10 text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200 px-4 py-2 h-auto text-sm rounded-xl backdrop-blur-sm"
                   >
                     Close
                   </Button>
                   <Button
                     variant="destructive"
                     onClick={() => onDelete(videoId)}
-                    className="gap-2 bg-red-500/90 hover:bg-red-500 border-red-400/30 px-4 py-2 h-auto text-sm"
+                    className="gap-2 bg-red-500/80 hover:bg-red-500 border-red-400/20 px-4 py-2 h-auto text-sm rounded-xl backdrop-blur-sm"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                     Delete Video
