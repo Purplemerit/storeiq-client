@@ -30,6 +30,7 @@ import {
   Eye,
   Film,
   Youtube,
+  Wand2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -68,6 +69,8 @@ interface Video {
   duration?: number;
   subtitle?: string;
   description?: string;
+  prompt?: string; // AI generation prompt
+  provider?: string; // AI provider (e.g., 'gemini-imagen-3', 'gemini-veo-3')
   createdAt?: string;
   s3Key?: string;
   publishCount?: number;
@@ -363,6 +366,7 @@ const Videos = () => {
     src: string | null;
     title: string;
     imageId: string | null;
+    prompt: string | null; // Add prompt field
     loading: boolean;
     error: string | null;
   }>({
@@ -370,6 +374,7 @@ const Videos = () => {
     src: null,
     title: "",
     imageId: null,
+    prompt: null,
     loading: true,
     error: null,
   });
@@ -383,6 +388,7 @@ const Videos = () => {
       src: img.s3Url || img.url || "",
       title: img.title || img.s3Key || "Untitled Image",
       imageId: img.id || img.s3Key || null,
+      prompt: img.prompt || img.description || null, // Get prompt from image data
       loading: false,
       error: null,
     });
@@ -393,6 +399,7 @@ const Videos = () => {
       src: null,
       title: "",
       imageId: null,
+      prompt: null,
       loading: false,
       error: null,
     });
@@ -872,28 +879,49 @@ const Videos = () => {
                 )}
               </div>
               <Suspense fallback={<div>Loading...</div>}>
-                <DialogFooter className="flex justify-between items-center px-6 pb-6 pt-4 bg-gray-800/50">
-                  <div className="text-white/60 text-sm">
-                    Image ID: {imageModal.imageId || "N/A"}
-                  </div>
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={closeImageModal}
-                      className="border-gray-600 text-white hover:bg-gray-700"
-                    >
-                      Close
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() =>
-                        handleOpenDeleteImageDialog(imageModal.imageId)
-                      }
-                      className="gap-2 bg-red-600 hover:bg-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      Delete Image
-                    </Button>
+                <DialogFooter className="flex flex-col gap-4 px-6 pb-6 pt-4 bg-gray-800/50">
+                  {/* Show prompt if available */}
+                  {imageModal.prompt && (
+                    <div className="w-full bg-gray-900/60 rounded-lg p-4 border border-gray-700">
+                      <div className="flex items-start gap-2 mb-2">
+                        <Wand2 className="h-4 w-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">
+                          Generation Prompt
+                        </p>
+                      </div>
+                      <p className="text-sm text-gray-300 leading-relaxed">
+                        {imageModal.prompt}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center w-full">
+                    <div className="text-white/60 text-sm">
+                      {imageModal.imageId && (
+                        <span className="text-xs bg-gray-700/50 px-2 py-1 rounded">
+                          ID: {imageModal.imageId.substring(0, 8)}...
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={closeImageModal}
+                        className="border-gray-600 text-white hover:bg-gray-700"
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() =>
+                          handleOpenDeleteImageDialog(imageModal.imageId)
+                        }
+                        className="gap-2 bg-red-600 hover:bg-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete Image
+                      </Button>
+                    </div>
                   </div>
                 </DialogFooter>
               </Suspense>
