@@ -6,25 +6,17 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/Loader";
 import { authFetch } from "@/lib/authFetch";
 import DashboardLayout from "@/components/DashboardLayout";
-import {
-  Download,
-  RefreshCw,
-  Image as ImageIcon,
-  Wand2,
-  UploadCloud,
-} from "lucide-react";
+import { Download, RefreshCw, Image as ImageIcon, Wand2 } from "lucide-react";
 
 import imageEditorPrompt from "@/assets/images/image-editor-prompt.png";
 
 const ImageEditor: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [maskFile, setMaskFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editedImageUrl, setEditedImageUrl] = useState<string | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
-  const [maskPreview, setMaskPreview] = useState<string | null>(null);
   const [editedImageLoaded, setEditedImageLoaded] = useState(false);
 
   const editedImageRef = useRef<HTMLImageElement>(null);
@@ -38,16 +30,6 @@ const ImageEditor: React.FC = () => {
       setOriginalPreview(URL.createObjectURL(file));
     } else {
       setOriginalPreview(null);
-    }
-  };
-
-  const handleMaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setMaskFile(file);
-    if (file) {
-      setMaskPreview(URL.createObjectURL(file));
-    } else {
-      setMaskPreview(null);
     }
   };
 
@@ -91,35 +73,11 @@ const ImageEditor: React.FC = () => {
       });
       if (!putImageRes.ok) throw new Error("Failed to upload image to S3");
 
-      let maskS3Key = undefined;
-      if (maskFile) {
-        // 3. Get signed upload URL for mask
-        const maskUploadRes = await authFetch("/api/s3/generate-upload-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            filename: maskFile.name,
-            contentType: maskFile.type,
-          }),
-        });
-        if (!maskUploadRes.ok) throw new Error("Failed to get mask upload URL");
-        const maskUploadData = await maskUploadRes.json();
-        // 4. Upload mask to S3
-        const putMaskRes = await fetch(maskUploadData.uploadUrl, {
-          method: "PUT",
-          body: maskFile,
-          headers: { "Content-Type": maskFile.type },
-        });
-        if (!putMaskRes.ok) throw new Error("Failed to upload mask to S3");
-        maskS3Key = maskUploadData.key;
-      }
-
       // 5. Call backend with S3 keys
-      const payload: any = {
+      const payload = {
         prompt,
         imageS3Key: imageUploadData.key,
       };
-      if (maskS3Key) payload.maskS3Key = maskS3Key;
 
       const res = await authFetch("/api/ai/edit-image", {
         method: "POST",
@@ -142,8 +100,10 @@ const ImageEditor: React.FC = () => {
       } else {
         setError("No edited image returned from server.");
       }
-    } catch (err: any) {
-      setError(err?.message || "Network error. Please try again.");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Network error. Please try again.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -169,8 +129,8 @@ const ImageEditor: React.FC = () => {
             <span>AI Image Editor</span>
           </h1>
           <p className="text-white/60 text-sm sm:text-base md:text-lg">
-            Edit your images with AI-powered magic. Upload an image, optionally
-            a mask, describe your edit, and see the result!
+            Edit your images with AI-powered magic. Upload an image, describe
+            your edit, and see the result!
           </p>
         </div>
 
@@ -287,8 +247,7 @@ const ImageEditor: React.FC = () => {
                 </pre>
               </div>
               <p className="text-gray-500 text-xs sm:text-sm animate-pulse px-2">
-                ✨ Upload an image, optionally a mask, and enter your prompt to
-                get started
+                ✨ Upload an image and enter your prompt to get started
               </p>
             </div>
           </div>
@@ -298,64 +257,35 @@ const ImageEditor: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-4 sm:space-y-5 md:space-y-6 bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 md:p-6 mb-4 sm:mb-6 md:mb-8 backdrop-blur-sm"
         >
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-5 md:gap-6">
-            <div className="flex-1 space-y-3 sm:space-y-4">
-              <label
-                className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
-                htmlFor="image-upload"
-              >
-                <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
-                Image (required)
-              </label>
-              <Input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                disabled={loading}
-                className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
-                required
-              />
-              {originalPreview && (
-                <div className="mt-2">
-                  <img
-                    src={originalPreview}
-                    alt="Original preview"
-                    className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
-                  />
-                  <p className="text-xs text-gray-400 mt-1">
-                    Original Image Preview
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="flex-1 space-y-3 sm:space-y-4">
-              <label
-                className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
-                htmlFor="mask-upload"
-              >
-                <UploadCloud className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
-                Mask (optional)
-              </label>
-              <Input
-                id="mask-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleMaskChange}
-                disabled={loading}
-                className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
-              />
-              {maskPreview && (
-                <div className="mt-2">
-                  <img
-                    src={maskPreview}
-                    alt="Mask preview"
-                    className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
-                  />
-                  <p className="text-xs text-gray-400 mt-1">Mask Preview</p>
-                </div>
-              )}
-            </div>
+          <div className="space-y-3 sm:space-y-4">
+            <label
+              className="text-white font-medium text-sm sm:text-base flex items-center gap-2"
+              htmlFor="image-upload"
+            >
+              <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-storiq-purple flex-shrink-0" />
+              Image (required)
+            </label>
+            <Input
+              id="image-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={loading}
+              className="bg-storiq-card-bg border-storiq-border text-white text-sm sm:text-base file:bg-storiq-purple/80 file:text-white file:border-0 file:rounded-lg file:text-sm file:py-1.5 file:px-3"
+              required
+            />
+            {originalPreview && (
+              <div className="mt-2">
+                <img
+                  src={originalPreview}
+                  alt="Original preview"
+                  className="rounded-lg max-h-40 sm:max-h-44 md:max-h-48 w-full object-contain border border-gray-700"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Original Image Preview
+                </p>
+              </div>
+            )}
           </div>
           <div>
             <label
