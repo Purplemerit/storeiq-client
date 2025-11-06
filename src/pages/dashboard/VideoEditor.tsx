@@ -62,6 +62,9 @@ const VideoEditor: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [exportDisabled, setExportDisabled] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
+  const [exportName, setExportName] = useState("");
+  const [exportNameError, setExportNameError] = useState("");
 
   // Video control states
   const [isPlaying, setIsPlaying] = useState(false);
@@ -207,6 +210,105 @@ const VideoEditor: React.FC = () => {
   const resetCrop = () => {
     setStart(0);
     setEnd(duration);
+  };
+
+  const handleExportClick = () => {
+    // Open the export dialog
+    setExportName(video?.title || "");
+    setExportNameError("");
+    setShowExportDialog(true);
+  };
+
+  const handleExportConfirm = async () => {
+    // Validate export name
+    const trimmedName = exportName.trim();
+    if (!trimmedName) {
+      setExportNameError("Video name is required");
+      return;
+    }
+
+    if (trimmedName.length < 3) {
+      setExportNameError("Video name must be at least 3 characters");
+      return;
+    }
+
+    setShowExportDialog(false);
+    setIsExporting(true);
+
+    try {
+      if (
+        !video?.url ||
+        typeof start !== "number" ||
+        typeof end !== "number" ||
+        start < 0 ||
+        end <= start ||
+        isNaN(start) ||
+        isNaN(end)
+      ) {
+        alert(
+          "Invalid crop parameters. Please check start/end times and video URL."
+        );
+        setIsExporting(false);
+        return;
+      }
+      if (!userId) {
+        alert("User not authenticated. Please log in again.");
+        setIsExporting(false);
+        return;
+      }
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      console.log("[VIDEO-EDITOR] Sending crop request:", {
+        videoUrl: video.url,
+        start: Number(start),
+        end: Number(end),
+        userId: userId,
+        aspectRatio: aspectRatio,
+        exportName: trimmedName,
+      });
+      const response = await fetch(`${API_BASE_URL}/api/video/crop`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          videoUrl: video.url,
+          start: Number(start),
+          end: Number(end),
+          userId: userId,
+          aspectRatio: aspectRatio,
+          exportName: trimmedName,
+        }),
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to export video");
+      const data = await response.json();
+      const jobId = data.job_id || data.jobId;
+      const exportEntry = {
+        filename: trimmedName,
+        date: new Date().toISOString(),
+        crop: { start, end },
+        url: video.url,
+        job_id: jobId,
+        status: data.status,
+        export_id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        userId: userId,
+      };
+      const existing = JSON.parse(localStorage.getItem("exports") || "[]");
+      existing.push(exportEntry);
+      localStorage.setItem("exports", JSON.stringify(existing));
+      toast.success(`"${trimmedName}" added to export queue!`, {
+        duration: 4000,
+        icon: "✅",
+      });
+      setExportDisabled(true);
+    } catch (err) {
+      toast.error("Export failed. Please try again.", {
+        duration: 4000,
+        icon: "❌",
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (loading) {
@@ -526,90 +628,7 @@ const VideoEditor: React.FC = () => {
                   disabled={
                     start >= end || !userId || isExporting || exportDisabled
                   }
-                  onClick={async () => {
-                    if (isExporting) return;
-                    setIsExporting(true);
-                    try {
-                      if (
-                        !video?.url ||
-                        typeof start !== "number" ||
-                        typeof end !== "number" ||
-                        start < 0 ||
-                        end <= start ||
-                        isNaN(start) ||
-                        isNaN(end)
-                      ) {
-                        alert(
-                          "Invalid crop parameters. Please check start/end times and video URL."
-                        );
-                        setIsExporting(false);
-                        return;
-                      }
-                      if (!userId) {
-                        alert("User not authenticated. Please log in again.");
-                        setIsExporting(false);
-                        return;
-                      }
-                      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-                      console.log("[VIDEO-EDITOR] Sending crop request:", {
-                        videoUrl: video.url,
-                        start: Number(start),
-                        end: Number(end),
-                        userId: userId,
-                        aspectRatio: aspectRatio,
-                      });
-                      const response = await fetch(
-                        `${API_BASE_URL}/api/video/crop`,
-                        {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          body: JSON.stringify({
-                            videoUrl: video.url,
-                            start: Number(start),
-                            end: Number(end),
-                            userId: userId,
-                            aspectRatio: aspectRatio,
-                          }),
-                          credentials: "include",
-                        }
-                      );
-                      if (!response.ok)
-                        throw new Error("Failed to export video");
-                      const data = await response.json();
-                      const jobId = data.job_id || data.jobId;
-                      const exportEntry = {
-                        filename: video.title || "Untitled",
-                        date: new Date().toISOString(),
-                        crop: { start, end },
-                        url: video.url,
-                        job_id: jobId,
-                        status: data.status,
-                        export_id: `${Date.now()}-${Math.random()
-                          .toString(36)
-                          .substr(2, 9)}`,
-                        userId: userId,
-                      };
-                      const existing = JSON.parse(
-                        localStorage.getItem("exports") || "[]"
-                      );
-                      existing.push(exportEntry);
-                      localStorage.setItem("exports", JSON.stringify(existing));
-                      toast.success("Video added to export queue!", {
-                        duration: 4000,
-                        icon: "✅",
-                      });
-                      setExportDisabled(true);
-                    } catch (err) {
-                      toast.error("Export failed. Please try again.", {
-                        duration: 4000,
-                        icon: "❌",
-                      });
-                    } finally {
-                      setIsExporting(false);
-                    }
-                  }}
+                  onClick={handleExportClick}
                 >
                   {isExporting ? (
                     <>
@@ -646,6 +665,106 @@ const VideoEditor: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Export Name Dialog */}
+      {showExportDialog && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.7)",
+            zIndex: 1500,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+          onClick={() => setShowExportDialog(false)}
+        >
+          <div
+            style={{
+              background: "#1a1a2e",
+              borderRadius: "12px",
+              padding: "2rem",
+              maxWidth: "500px",
+              width: "100%",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-bold text-white mb-4">Export Video</h2>
+            <p className="text-white/60 text-sm mb-4">
+              Enter a name for your exported video
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="export-name"
+                  className="text-white text-sm font-medium block mb-2"
+                >
+                  Video Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="export-name"
+                  type="text"
+                  value={exportName}
+                  onChange={(e) => {
+                    setExportName(e.target.value);
+                    setExportNameError("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleExportConfirm();
+                    }
+                  }}
+                  placeholder="e.g., My Awesome Video"
+                  className="w-full rounded-lg px-4 py-3 bg-storiq-border text-white border border-storiq-border focus:border-purple-500 focus:outline-none placeholder:text-white/40"
+                  autoFocus
+                />
+                {exportNameError && (
+                  <p className="text-red-500 text-sm mt-2">{exportNameError}</p>
+                )}
+              </div>
+
+              <div className="bg-storiq-border rounded-lg p-3 text-sm">
+                <div className="flex justify-between text-white/60 mb-1">
+                  <span>Duration:</span>
+                  <span className="text-white">{formatTime(end - start)}</span>
+                </div>
+                <div className="flex justify-between text-white/60 mb-1">
+                  <span>Aspect Ratio:</span>
+                  <span className="text-white">{aspectRatio}</span>
+                </div>
+                <div className="flex justify-between text-white/60">
+                  <span>Format:</span>
+                  <span className="text-white">MP4</span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <Button
+                  variant="outline"
+                  className="flex-1 text-white border-white/20 hover:bg-white/10"
+                  onClick={() => setShowExportDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="flex-1 bg-purple-600 hover:bg-purple-700"
+                  onClick={handleExportConfirm}
+                >
+                  <Download size={16} className="mr-2" />
+                  Confirm Export
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 };
