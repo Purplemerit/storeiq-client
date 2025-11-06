@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import useYouTubeConnect from "@/hooks/useYouTubeConnect";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Lazy load VideoPublishCard
 const LazyVideoPublishCard = React.lazy(() => import("./VideoPublishCard"));
@@ -119,6 +120,12 @@ const Publish = () => {
   const [imagesError, setImagesError] = useState<string | null>(null);
   const [postingId, setPostingId] = useState<string | null>(null);
   const [schedulingLoading, setSchedulingLoading] = useState<boolean>(false);
+
+  // Pagination state
+  const [currentVideoPage, setCurrentVideoPage] = useState(1);
+  const [currentImagePage, setCurrentImagePage] = useState(1);
+  const [currentPastVideoPage, setCurrentPastVideoPage] = useState(1);
+  const itemsPerPage = 9;
 
   // Image preview modal state
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
@@ -659,29 +666,82 @@ const Publish = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-                        {currentVideoItems.map((video) => (
-                          <Suspense
-                            fallback={<Skeleton className="h-96 w-full" />}
-                          >
-                            <Suspense fallback={<div>Loading...</div>}>
-                              <LazyVideoPublishCard
-                                key={video.id || video.s3Key}
-                                video={video}
-                                ytConnected={ytConnected}
-                                igConnected={igConnected}
-                                platformSelections={platformSelections}
-                                handlePlatformChange={handlePlatformChange}
-                                handlePost={handlePost}
-                                postingId={postingId}
-                                schedulingLoading={schedulingLoading}
-                                editedTitles={editedTitles}
-                                setEditedTitles={setEditedTitles}
-                              />
-                            </Suspense>
-                          </Suspense>
-                        ))}
-                      </div>
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                          {currentVideoItems
+                            .slice(
+                              (currentVideoPage - 1) * itemsPerPage,
+                              currentVideoPage * itemsPerPage
+                            )
+                            .map((video) => (
+                              <Suspense
+                                fallback={<Skeleton className="h-96 w-full" />}
+                              >
+                                <Suspense fallback={<div>Loading...</div>}>
+                                  <LazyVideoPublishCard
+                                    key={video.id || video.s3Key}
+                                    video={video}
+                                    ytConnected={ytConnected}
+                                    igConnected={igConnected}
+                                    platformSelections={platformSelections}
+                                    handlePlatformChange={handlePlatformChange}
+                                    handlePost={handlePost}
+                                    postingId={postingId}
+                                    schedulingLoading={schedulingLoading}
+                                    editedTitles={editedTitles}
+                                    setEditedTitles={setEditedTitles}
+                                  />
+                                </Suspense>
+                              </Suspense>
+                            ))}
+                        </div>
+                        {currentVideoItems.length > itemsPerPage && (
+                          <div className="flex justify-center items-center gap-2 mt-8">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setCurrentVideoPage((prev) =>
+                                  Math.max(prev - 1, 1)
+                                )
+                              }
+                              disabled={currentVideoPage === 1}
+                              className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <span className="text-white/60 text-sm">
+                              Page {currentVideoPage} of{" "}
+                              {Math.ceil(
+                                currentVideoItems.length / itemsPerPage
+                              )}
+                            </span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setCurrentVideoPage((prev) =>
+                                  Math.min(
+                                    prev + 1,
+                                    Math.ceil(
+                                      currentVideoItems.length / itemsPerPage
+                                    )
+                                  )
+                                )
+                              }
+                              disabled={
+                                currentVideoPage ===
+                                Math.ceil(
+                                  currentVideoItems.length / itemsPerPage
+                                )
+                              }
+                              className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                   {/* Images Section */}
@@ -785,21 +845,68 @@ const Publish = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-                        {imageItems.map((image) => (
-                          <Suspense
-                            key={image.id || image.s3Key}
-                            fallback={<Skeleton className="h-96 w-full" />}
-                          >
-                            <LazyImagePublishCard
-                              image={image}
-                              handlePost={handlePost}
-                              editedTitles={editedTitles}
-                              onPreview={handleImagePreview}
-                            />
-                          </Suspense>
-                        ))}
-                      </div>
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                          {imageItems
+                            .slice(
+                              (currentImagePage - 1) * itemsPerPage,
+                              currentImagePage * itemsPerPage
+                            )
+                            .map((image) => (
+                              <Suspense
+                                key={image.id || image.s3Key}
+                                fallback={<Skeleton className="h-96 w-full" />}
+                              >
+                                <LazyImagePublishCard
+                                  image={image}
+                                  handlePost={handlePost}
+                                  editedTitles={editedTitles}
+                                  onPreview={handleImagePreview}
+                                />
+                              </Suspense>
+                            ))}
+                        </div>
+                        {imageItems.length > itemsPerPage && (
+                          <div className="flex justify-center items-center gap-2 mt-8">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setCurrentImagePage((prev) =>
+                                  Math.max(prev - 1, 1)
+                                )
+                              }
+                              disabled={currentImagePage === 1}
+                              className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <span className="text-white/60 text-sm">
+                              Page {currentImagePage} of{" "}
+                              {Math.ceil(imageItems.length / itemsPerPage)}
+                            </span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setCurrentImagePage((prev) =>
+                                  Math.min(
+                                    prev + 1,
+                                    Math.ceil(imageItems.length / itemsPerPage)
+                                  )
+                                )
+                              }
+                              disabled={
+                                currentImagePage ===
+                                Math.ceil(imageItems.length / itemsPerPage)
+                              }
+                              className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </>
@@ -921,29 +1028,82 @@ const Publish = () => {
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-                      {publishedVideoItems.map((video) => (
-                        <Suspense
-                          fallback={<Skeleton className="h-96 w-full" />}
-                        >
-                          <Suspense fallback={<div>Loading...</div>}>
-                            <LazyVideoPublishCard
-                              key={video.id || video.s3Key}
-                              video={video}
-                              ytConnected={ytConnected}
-                              igConnected={igConnected}
-                              platformSelections={platformSelections}
-                              handlePlatformChange={handlePlatformChange}
-                              handlePost={handlePost}
-                              postingId={postingId}
-                              schedulingLoading={schedulingLoading}
-                              editedTitles={editedTitles}
-                              setEditedTitles={setEditedTitles}
-                            />
-                          </Suspense>
-                        </Suspense>
-                      ))}
-                    </div>
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                        {publishedVideoItems
+                          .slice(
+                            (currentPastVideoPage - 1) * itemsPerPage,
+                            currentPastVideoPage * itemsPerPage
+                          )
+                          .map((video) => (
+                            <Suspense
+                              fallback={<Skeleton className="h-96 w-full" />}
+                            >
+                              <Suspense fallback={<div>Loading...</div>}>
+                                <LazyVideoPublishCard
+                                  key={video.id || video.s3Key}
+                                  video={video}
+                                  ytConnected={ytConnected}
+                                  igConnected={igConnected}
+                                  platformSelections={platformSelections}
+                                  handlePlatformChange={handlePlatformChange}
+                                  handlePost={handlePost}
+                                  postingId={postingId}
+                                  schedulingLoading={schedulingLoading}
+                                  editedTitles={editedTitles}
+                                  setEditedTitles={setEditedTitles}
+                                />
+                              </Suspense>
+                            </Suspense>
+                          ))}
+                      </div>
+                      {publishedVideoItems.length > itemsPerPage && (
+                        <div className="flex justify-center items-center gap-2 mt-8">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setCurrentPastVideoPage((prev) =>
+                                Math.max(prev - 1, 1)
+                              )
+                            }
+                            disabled={currentPastVideoPage === 1}
+                            className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                          <span className="text-white/60 text-sm">
+                            Page {currentPastVideoPage} of{" "}
+                            {Math.ceil(
+                              publishedVideoItems.length / itemsPerPage
+                            )}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              setCurrentPastVideoPage((prev) =>
+                                Math.min(
+                                  prev + 1,
+                                  Math.ceil(
+                                    publishedVideoItems.length / itemsPerPage
+                                  )
+                                )
+                              )
+                            }
+                            disabled={
+                              currentPastVideoPage ===
+                              Math.ceil(
+                                publishedVideoItems.length / itemsPerPage
+                              )
+                            }
+                            className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   );
                 })()
               )}

@@ -18,6 +18,8 @@ import {
   Film,
   Youtube,
   Wand2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 const ConfirmDialog = React.lazy(() =>
   import("@/components/confirm-dialog").then((m) => ({
@@ -79,6 +81,12 @@ const Videos = () => {
   });
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [deleteVideoId, setDeleteVideoId] = useState<string | null>(null);
+
+  // Pagination state
+  const [currentVideoPage, setCurrentVideoPage] = useState(1);
+  const [currentImagePage, setCurrentImagePage] = useState(1);
+  const [currentEditedVideoPage, setCurrentEditedVideoPage] = useState(1);
+  const itemsPerPage = 9;
 
   // No longer needed: editedVideoUrls state removed
 
@@ -618,30 +626,78 @@ const Videos = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {originalVideos.map((video: Video, index) => (
-                    <VideoCard
-                      key={video.id || index}
-                      video={video}
-                      generatedThumbs={generatedThumbs}
-                      onPreview={() => openModal(video)}
-                      onEdit={() => {
-                        if (video.s3Key) {
-                          navigate(`/dashboard/video-editor/${video.s3Key}`, {
-                            state: { url: video.url },
-                          });
-                        } else if (video.id) {
-                          navigate(`/dashboard/video-editor/${video.id}`, {
-                            state: { url: video.url },
-                          });
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {originalVideos
+                      .slice(
+                        (currentVideoPage - 1) * itemsPerPage,
+                        currentVideoPage * itemsPerPage
+                      )
+                      .map((video: Video, index) => (
+                        <VideoCard
+                          key={video.id || index}
+                          video={video}
+                          generatedThumbs={generatedThumbs}
+                          onPreview={() => openModal(video)}
+                          onEdit={() => {
+                            if (video.s3Key) {
+                              navigate(
+                                `/dashboard/video-editor/${video.s3Key}`,
+                                {
+                                  state: { url: video.url },
+                                }
+                              );
+                            } else if (video.id) {
+                              navigate(`/dashboard/video-editor/${video.id}`, {
+                                state: { url: video.url },
+                              });
+                            }
+                          }}
+                          onDelete={() => handleOpenDeleteDialog(video.id)}
+                          formatDuration={formatDuration}
+                          formatDate={formatDate}
+                        />
+                      ))}
+                  </div>
+                  {originalVideos.length > itemsPerPage && (
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentVideoPage((prev) => Math.max(prev - 1, 1))
                         }
-                      }}
-                      onDelete={() => handleOpenDeleteDialog(video.id)}
-                      formatDuration={formatDuration}
-                      formatDate={formatDate}
-                    />
-                  ))}
-                </div>
+                        disabled={currentVideoPage === 1}
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <span className="text-white/60 text-sm">
+                        Page {currentVideoPage} of{" "}
+                        {Math.ceil(originalVideos.length / itemsPerPage)}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentVideoPage((prev) =>
+                            Math.min(
+                              prev + 1,
+                              Math.ceil(originalVideos.length / itemsPerPage)
+                            )
+                          )
+                        }
+                        disabled={
+                          currentVideoPage ===
+                          Math.ceil(originalVideos.length / itemsPerPage)
+                        }
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </section>
 
@@ -666,30 +722,80 @@ const Videos = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {editedVideos.map((video: Video, index) => (
-                    <VideoCard
-                      key={video.id || index}
-                      video={video}
-                      generatedThumbs={generatedThumbs}
-                      onPreview={() => openModal(video)}
-                      onEdit={() => {
-                        if (video.s3Key) {
-                          navigate(`/dashboard/video-editor/${video.s3Key}`, {
-                            state: { url: video.url },
-                          });
-                        } else if (video.id) {
-                          navigate(`/dashboard/video-editor/${video.id}`, {
-                            state: { url: video.url },
-                          });
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {editedVideos
+                      .slice(
+                        (currentEditedVideoPage - 1) * itemsPerPage,
+                        currentEditedVideoPage * itemsPerPage
+                      )
+                      .map((video: Video, index) => (
+                        <VideoCard
+                          key={video.id || index}
+                          video={video}
+                          generatedThumbs={generatedThumbs}
+                          onPreview={() => openModal(video)}
+                          onEdit={() => {
+                            if (video.s3Key) {
+                              navigate(
+                                `/dashboard/video-editor/${video.s3Key}`,
+                                {
+                                  state: { url: video.url },
+                                }
+                              );
+                            } else if (video.id) {
+                              navigate(`/dashboard/video-editor/${video.id}`, {
+                                state: { url: video.url },
+                              });
+                            }
+                          }}
+                          onDelete={() => handleOpenDeleteDialog(video.id)}
+                          formatDuration={formatDuration}
+                          formatDate={formatDate}
+                        />
+                      ))}
+                  </div>
+                  {editedVideos.length > itemsPerPage && (
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentEditedVideoPage((prev) =>
+                            Math.max(prev - 1, 1)
+                          )
                         }
-                      }}
-                      onDelete={() => handleOpenDeleteDialog(video.id)}
-                      formatDuration={formatDuration}
-                      formatDate={formatDate}
-                    />
-                  ))}
-                </div>
+                        disabled={currentEditedVideoPage === 1}
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <span className="text-white/60 text-sm">
+                        Page {currentEditedVideoPage} of{" "}
+                        {Math.ceil(editedVideos.length / itemsPerPage)}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentEditedVideoPage((prev) =>
+                            Math.min(
+                              prev + 1,
+                              Math.ceil(editedVideos.length / itemsPerPage)
+                            )
+                          )
+                        }
+                        disabled={
+                          currentEditedVideoPage ===
+                          Math.ceil(editedVideos.length / itemsPerPage)
+                        }
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </section>
 
@@ -700,6 +806,9 @@ const Videos = () => {
                   <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                     Images in Collection
                   </h2>
+                  <p className="text-white/60">
+                    Here are all the images that you created.
+                  </p>
                 </div>
               </div>
               {onlyImages.length === 0 ? (
@@ -712,17 +821,64 @@ const Videos = () => {
                   <p className="text-white/40 text-lg">No images found</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {onlyImages.map((img, idx) => (
-                    <ImageCard
-                      key={img.id || img.s3Key || idx}
-                      img={img}
-                      openImageModal={openImageModal}
-                      handleOpenDeleteImageDialog={handleOpenDeleteImageDialog}
-                      formatDate={formatDate}
-                    />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {onlyImages
+                      .slice(
+                        (currentImagePage - 1) * itemsPerPage,
+                        currentImagePage * itemsPerPage
+                      )
+                      .map((img, idx) => (
+                        <ImageCard
+                          key={img.id || img.s3Key || idx}
+                          img={img}
+                          openImageModal={openImageModal}
+                          handleOpenDeleteImageDialog={
+                            handleOpenDeleteImageDialog
+                          }
+                          formatDate={formatDate}
+                        />
+                      ))}
+                  </div>
+                  {onlyImages.length > itemsPerPage && (
+                    <div className="flex justify-center items-center gap-2 mt-8">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentImagePage((prev) => Math.max(prev - 1, 1))
+                        }
+                        disabled={currentImagePage === 1}
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <span className="text-white/60 text-sm">
+                        Page {currentImagePage} of{" "}
+                        {Math.ceil(onlyImages.length / itemsPerPage)}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentImagePage((prev) =>
+                            Math.min(
+                              prev + 1,
+                              Math.ceil(onlyImages.length / itemsPerPage)
+                            )
+                          )
+                        }
+                        disabled={
+                          currentImagePage ===
+                          Math.ceil(onlyImages.length / itemsPerPage)
+                        }
+                        className="bg-storiq-card-bg border-storiq-border text-white hover:bg-storiq-purple hover:border-storiq-purple disabled:opacity-50"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </section>
           </div>
