@@ -2,6 +2,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
+import { extractMeaningfulFilename } from "@/lib/extractFilename";
 import {
   // Dialog,
   // DialogContent,
@@ -228,10 +229,13 @@ const Videos = () => {
 
   // Modal handlers
   const openModal = (video: Video) => {
+    // Extract meaningful filename for modal title
+    const modalTitle = video.title || extractMeaningfulFilename(video.s3Key);
+
     setModal({
       open: true,
       src: video.url || "",
-      title: video.title || "Untitled Video",
+      title: modalTitle,
       videoId: video.id || null,
       loading: true,
       error: null,
@@ -1048,6 +1052,9 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   const [imageLoaded, setImageLoaded] = React.useState(false);
 
+  // Extract meaningful filename from s3Key if title is not available
+  const displayTitle = video.title || extractMeaningfulFilename(video.s3Key);
+
   return (
     <div className="relative border border-storiq-border rounded-2xl overflow-hidden hover:border-storiq-purple/50 transition-all duration-300 w-full max-w-xl mx-auto group">
       {/* Background Image */}
@@ -1066,7 +1073,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
               ? generatedThumbs[video.id || video.url]
               : "/placeholder.svg"
           }
-          alt={video.title || "Untitled Video"}
+          alt={displayTitle}
           className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
@@ -1082,14 +1089,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
       {/* Content */}
       <div className="relative z-10 p-6 min-h-[280px] flex flex-col justify-end">
         <h3
-          className="text-white text-xl font-bold mb-1 drop-shadow-lg"
-          title={video.title || "Untitled Video"}
+          className="text-white text-xl font-bold mb-4 drop-shadow-lg"
+          title={displayTitle}
         >
-          {getShortTitle(video.title)}
+          {getShortTitle(displayTitle)}
         </h3>
-        <p className="text-gray-200 text-sm mb-4 drop-shadow-md">
-          {video.subtitle || video.description || "No description available"}
-        </p>
         <div className="flex space-x-3">
           <Button
             variant="outline"
