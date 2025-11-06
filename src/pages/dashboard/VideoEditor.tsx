@@ -55,7 +55,6 @@ const VideoEditor: React.FC = () => {
   const params = useParams();
   const location = useLocation();
   const { user } = useAuth();
-  console.log("user", user);
   const userId = user && user.id ? user.id : null;
   const wildcard = params["*"];
   const [video, setVideo] = useState<Video | null>(null);

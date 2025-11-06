@@ -266,7 +266,27 @@ const Videos = () => {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete video");
+
+      // Remove from videos state
       setVideos((prev) => prev.filter((v) => v.id !== deleteVideoId));
+
+      // Also remove from export history in localStorage
+      try {
+        const exportsRaw = localStorage.getItem("exports");
+        if (exportsRaw) {
+          const exports = JSON.parse(exportsRaw);
+          if (Array.isArray(exports)) {
+            // Filter out any export entries that match this s3Key
+            const updatedExports = exports.filter(
+              (item: any) => item.s3Key !== videoToDelete.s3Key
+            );
+            localStorage.setItem("exports", JSON.stringify(updatedExports));
+          }
+        }
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+
       setDeleteVideoId(null);
       setDeleteConfirmOpen(false);
       closeModal();
