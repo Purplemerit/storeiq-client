@@ -905,24 +905,38 @@ const VideoCard: React.FC<VideoCardProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           </div>
         )}
-        <img
-          src={
-            video.thumbnail
-              ? video.thumbnail
-              : generatedThumbs[video.id || video.url]
-              ? generatedThumbs[video.id || video.url]
-              : "/placeholder.svg"
-          }
-          alt={displayTitle}
-          className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
-            imageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/placeholder.svg";
-            setImageLoaded(true);
-          }}
-        />
+        {video.thumbnail || generatedThumbs[video.id || video.url] ? (
+          <img
+            src={
+              video.thumbnail
+                ? video.thumbnail
+                : generatedThumbs[video.id || video.url]
+                ? generatedThumbs[video.id || video.url]
+                : "/placeholder.svg"
+            }
+            alt={displayTitle}
+            className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/placeholder.svg";
+              setImageLoaded(true);
+            }}
+          />
+        ) : (
+          <video
+            src={video.url}
+            className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            tabIndex={-1}
+            muted
+            playsInline
+            onLoadedData={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(true)}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
       </div>
 
