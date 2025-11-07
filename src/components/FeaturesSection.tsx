@@ -29,7 +29,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       <img
         src="https://api.builder.io/api/v1/image/assets/TEMP/4749010bf758f21050e6a3a813ffa43ce7c9d5cd?width=96"
         alt="workflow icon"
-        className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-8 max-sm:h-8 max-sm:top-[18px] ${className}`}
+        className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[44px] max-sm:w-8 max-sm:h-8 max-sm:top-[28px] ${className}`}
       />
     );
   }
@@ -41,7 +41,7 @@ const FeatureIcon: React.FC<FeatureIconProps> = ({ type, className = "" }) => {
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[30px] max-sm:w-8 max-sm:h-8 max-sm:top-[18px] ${className}`}
+      className={`absolute w-12 h-12 shrink-0 left-1/2 -translate-x-1/2 top-[44px] max-sm:w-8 max-sm:h-8 max-sm:top-[28px] ${className}`}
       aria-hidden="true"
     >
       <path
@@ -143,12 +143,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       <FeatureIcon type={icon} />
 
       {/* Title */}
-      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[95px] md:text-2xl md:leading-7 md:top-[85px] lg:text-[26px] lg:leading-[28px] lg:top-[90px] max-sm:text-lg max-sm:leading-5 max-sm:px-3 max-sm:py-0 max-sm:top-[58px]">
+      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[109px] md:text-2xl md:leading-7 md:top-[99px] lg:text-[26px] lg:leading-[28px] lg:top-[104px] max-sm:text-lg max-sm:leading-5 max-sm:px-3 max-sm:py-0 max-sm:top-[68px]">
         {title}
       </h2>
 
       {/* Description */}
-      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[135px] md:text-sm md:leading-[18px] md:top-[120px] lg:text-[15px] lg:leading-[19px] lg:top-[130px] max-sm:text-[11px] max-sm:leading-[14px] max-sm:px-3 max-sm:py-0 max-sm:top-[84px]">
+      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[149px] md:text-sm md:leading-[18px] md:top-[134px] lg:text-[15px] lg:leading-[19px] lg:top-[144px] max-sm:text-[11px] max-sm:leading-[14px] max-sm:px-3 max-sm:py-0 max-sm:top-[94px]">
         {description}
       </p>
     </article>
