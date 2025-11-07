@@ -15,6 +15,7 @@ import {
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Footer from "@/components/Footer";
+import UserProfile from "@/components/UserProfile";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -46,25 +47,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Sidebar content as a variable to avoid duplication
   const sidebarContent = (
     <>
-      {/* Logo */}
-      <div className="p-6">
-        <Link to="/dashboard" className="inline-block">
-          <div
-            style={{
-              color: "#fff",
-              fontFamily: "Orbitron",
-              fontSize: "24px",
-              fontStyle: "normal",
-              fontWeight: 600,
-              lineHeight: "24px",
-            }}
-          >
-            STORIQ
-          </div>
-        </Link>
-      </div>
       {/* Navigation */}
-      <nav className="flex-1 px-6 space-y-8">
+      <nav className="flex-1 px-6 space-y-8 pt-6">
         {/* Create New Video Button */}
         <div className="space-y-2">
           <Link
@@ -186,7 +170,28 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             STORIQ
           </div>
         </Link>
+        <UserProfile />
       </header>
+
+      {/* Header for desktop */}
+      <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-storiq-border bg-storiq-dark">
+        <Link to="/dashboard" className="inline-block">
+          <div
+            style={{
+              color: "#fff",
+              fontFamily: "Orbitron",
+              fontSize: "28px",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "28px",
+            }}
+          >
+            STORIQ
+          </div>
+        </Link>
+        <UserProfile />
+      </header>
+
       <div className="flex flex-1">
         {/* Sidebar: Sheet on mobile, aside on desktop */}
         {isMobile ? (
@@ -200,7 +205,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </SheetContent>
           </Sheet>
         ) : (
-          <aside className="w-64 bg-storiq-dark border-r border-storiq-border flex flex-col flex-shrink-0 hidden md:flex">
+          <aside className="w-64 bg-storiq-dark border-r border-storiq-border flex-col flex-shrink-0 hidden md:flex">
             {sidebarContent}
           </aside>
         )}

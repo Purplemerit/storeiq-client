@@ -13,6 +13,7 @@ interface User {
   email: string;
   username?: string;
   timezone?: string;
+  avatar?: string;
 }
 
 interface AuthContextType {
