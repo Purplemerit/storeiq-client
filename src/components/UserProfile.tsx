@@ -13,7 +13,13 @@ const UserProfile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Reset image error when user avatar changes
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.avatar]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,6 +40,11 @@ const UserProfile = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  // Reset image error when user avatar changes
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.avatar]);
 
   const handleLogout = () => {
     logout();
@@ -65,6 +76,26 @@ const UserProfile = () => {
     return "U";
   };
 
+  // Get proxied avatar URL to bypass CORS/ORB issues
+  const getAvatarUrl = () => {
+    if (!user.avatar) return null;
+
+    // If it's a Google/Facebook/GitHub avatar, proxy it through our backend
+    const needsProxy =
+      user.avatar.includes("googleusercontent.com") ||
+      user.avatar.includes("githubusercontent.com") ||
+      user.avatar.includes("fbcdn.net") ||
+      user.avatar.includes("graph.facebook.com");
+
+    if (needsProxy) {
+      return `${
+        import.meta.env.VITE_API_BASE_URL
+      }/api/auth/avatar-proxy?url=${encodeURIComponent(user.avatar)}`;
+    }
+
+    return user.avatar;
+  };
+
   return (
     <div className="flex items-center gap-3">
       {/* Settings Icon Button - Desktop Only */}
@@ -88,11 +119,15 @@ const UserProfile = () => {
         >
           {/* Profile Picture or Avatar */}
           <div className="relative">
-            {user.avatar ? (
+            {user.avatar && !imageError ? (
               <img
-                src={user.avatar}
+                src={getAvatarUrl() || undefined}
                 alt={user.username || user.email}
+                referrerPolicy="no-referrer"
                 className="w-9 h-9 rounded-full object-cover ring-2 ring-storiq-purple/20 group-hover:ring-storiq-purple/50 transition-all"
+                onError={() => {
+                  setImageError(true);
+                }}
               />
             ) : (
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-storiq-purple to-purple-700 flex items-center justify-center text-white font-semibold text-sm ring-2 ring-storiq-purple/20 group-hover:ring-storiq-purple/50 transition-all">
