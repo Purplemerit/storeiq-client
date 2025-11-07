@@ -63,6 +63,26 @@ export default function TextToSpeech() {
   const [showVoiceDropdown, setShowVoiceDropdown] = useState(false);
   const [inputHidden, setInputHidden] = useState(false);
 
+  // Queue state for TTS
+  const [ttsJobId, setTtsJobId] = useState<string | null>(null);
+  const [ttsQueuePosition, setTtsQueuePosition] = useState<number | null>(null);
+  const [ttsQueueLength, setTtsQueueLength] = useState<number | null>(null);
+  const [ttsEstimatedWaitTime, setTtsEstimatedWaitTime] = useState<
+    number | null
+  >(null);
+  const ttsPollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Queue state for audio mounting
+  const [mountJobId, setMountJobId] = useState<string | null>(null);
+  const [mountQueuePosition, setMountQueuePosition] = useState<number | null>(
+    null
+  );
+  const [mountQueueLength, setMountQueueLength] = useState<number | null>(null);
+  const [mountEstimatedWaitTime, setMountEstimatedWaitTime] = useState<
+    number | null
+  >(null);
+  const mountPollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   const getToken = () => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("token");
@@ -144,6 +164,142 @@ export default function TextToSpeech() {
     fetchVideos();
   }, [fetchVideos]);
 
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (ttsPollingIntervalRef.current) {
+        clearInterval(ttsPollingIntervalRef.current);
+      }
+      if (mountPollingIntervalRef.current) {
+        clearInterval(mountPollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll for TTS job status
+  const pollTtsJobStatus = async (currentJobId: string) => {
+    try {
+      const statusRes = await fetchWithAuth(
+        `${API_BASE_URL}/video-tts/tts-status/${currentJobId}`
+      );
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to get job status");
+      }
+
+      // Check if response is JSON or audio data
+      const contentType = statusRes.headers.get("content-type");
+
+      if (contentType && contentType.includes("audio")) {
+        // Stop polling - audio is ready
+        if (ttsPollingIntervalRef.current) {
+          clearInterval(ttsPollingIntervalRef.current);
+          ttsPollingIntervalRef.current = null;
+        }
+
+        const audioBlob = await statusRes.blob();
+        setAudioUrl(URL.createObjectURL(audioBlob));
+        setCurrentStep(3);
+        setInputHidden(true);
+        setLoadingAudio(false);
+        setTtsJobId(null);
+        setTtsQueuePosition(null);
+        setTtsQueueLength(null);
+        setTtsEstimatedWaitTime(null);
+      } else {
+        // JSON status response
+        const statusData = await statusRes.json();
+
+        if (statusData.status === "failed") {
+          // Stop polling
+          if (ttsPollingIntervalRef.current) {
+            clearInterval(ttsPollingIntervalRef.current);
+            ttsPollingIntervalRef.current = null;
+          }
+
+          alert(`TTS generation failed: ${statusData.error}`);
+          setLoadingAudio(false);
+          setTtsJobId(null);
+          setTtsQueuePosition(null);
+          setTtsQueueLength(null);
+          setTtsEstimatedWaitTime(null);
+        } else if (
+          statusData.status === "queued" ||
+          statusData.status === "processing"
+        ) {
+          // Update queue position
+          setTtsQueuePosition(statusData.position || null);
+          setTtsQueueLength(statusData.queueLength || null);
+          setTtsEstimatedWaitTime(statusData.estimatedWaitTime || null);
+        }
+      }
+    } catch (err) {
+      console.error("[TTS] Polling error:", err);
+      // Don't stop polling on network errors, continue trying
+    }
+  };
+
+  // Poll for audio mounting job status
+  const pollMountJobStatus = async (currentJobId: string) => {
+    try {
+      const statusRes = await fetchWithAuth(
+        `${API_BASE_URL}/api/video/mount-audio-status/${currentJobId}`
+      );
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to get job status");
+      }
+
+      const statusData = await statusRes.json();
+
+      if (statusData.status === "completed") {
+        // Stop polling
+        if (mountPollingIntervalRef.current) {
+          clearInterval(mountPollingIntervalRef.current);
+          mountPollingIntervalRef.current = null;
+        }
+
+        setMountedVideo({
+          id: statusData.s3Key,
+          url: statusData.url,
+          title: "Mounted Video",
+        });
+        setCurrentStep(5);
+        setLoadingMount(false);
+        setMountJobId(null);
+        setMountQueuePosition(null);
+        setMountQueueLength(null);
+        setMountEstimatedWaitTime(null);
+
+        fetchVideos();
+      } else if (statusData.status === "failed") {
+        // Stop polling
+        if (mountPollingIntervalRef.current) {
+          clearInterval(mountPollingIntervalRef.current);
+          mountPollingIntervalRef.current = null;
+        }
+
+        alert(`Audio mounting failed: ${statusData.error}`);
+        setLoadingMount(false);
+        setMountJobId(null);
+        setMountQueuePosition(null);
+        setMountQueueLength(null);
+        setMountEstimatedWaitTime(null);
+      } else if (
+        statusData.status === "queued" ||
+        statusData.status === "processing"
+      ) {
+        // Update queue position
+        setMountQueuePosition(statusData.position || null);
+        setMountQueueLength(statusData.queueLength || null);
+        setMountEstimatedWaitTime(statusData.estimatedWaitTime || null);
+      }
+    } catch (err) {
+      console.error("[AudioMount] Polling error:", err);
+      // Don't stop polling on network errors, continue trying
+    }
+  };
+
   const generateAudio = async () => {
     if (!text.trim()) return alert("Please enter text!");
     setLoadingAudio(true);
@@ -158,19 +314,32 @@ export default function TextToSpeech() {
       });
 
       if (!audioRes.ok) throw new Error("TTS request failed");
-      const audioBlob = await audioRes.blob();
-      setAudioUrl(URL.createObjectURL(audioBlob));
-      setCurrentStep(3);
-      setInputHidden(true);
-    } catch (err) {
-      console.log("API not available, using mock audio");
-      setTimeout(() => {
-        setAudioUrl("/audio-waveform.png"); // Mock audio URL
-        setCurrentStep(3);
-        setInputHidden(true);
+
+      const data = await audioRes.json();
+      console.log("[TTS] Job submitted:", data);
+
+      if (!data.jobId) {
+        throw new Error("No job ID returned from server");
+      }
+
+      // Set job ID and start polling
+      setTtsJobId(data.jobId);
+      setTtsQueuePosition(data.position || 1);
+      setTtsQueueLength(data.queueLength || 1);
+      setTtsEstimatedWaitTime(data.estimatedWaitTime || 20);
+
+      // Start polling
+      ttsPollingIntervalRef.current = setInterval(() => {
+        pollTtsJobStatus(data.jobId);
       }, 2000);
-    } finally {
+
+      // Initial poll
+      pollTtsJobStatus(data.jobId);
+    } catch (err) {
+      console.error("[TTS] Error:", err);
+      alert("Failed to generate audio. Please try again.");
       setLoadingAudio(false);
+      setCurrentStep(1);
     }
   };
 
@@ -213,26 +382,30 @@ export default function TextToSpeech() {
       if (!res.ok) throw new Error("Failed to mount video with audio");
 
       const data = await res.json();
-      setMountedVideo({
-        id: data.s3Key,
-        url: data.url,
-        title: "Mounted Video",
-      });
-      setCurrentStep(5);
+      console.log("[AudioMount] Job submitted:", data);
 
-      fetchVideos();
+      if (!data.jobId) {
+        throw new Error("No job ID returned from server");
+      }
+
+      // Set job ID and start polling
+      setMountJobId(data.jobId);
+      setMountQueuePosition(data.position || 1);
+      setMountQueueLength(data.queueLength || 1);
+      setMountEstimatedWaitTime(data.estimatedWaitTime || 40);
+
+      // Start polling
+      mountPollingIntervalRef.current = setInterval(() => {
+        pollMountJobStatus(data.jobId);
+      }, 2000);
+
+      // Initial poll
+      pollMountJobStatus(data.jobId);
     } catch (err) {
-      console.log("API not available, using mock video mounting");
-      setTimeout(() => {
-        setMountedVideo({
-          id: "mounted-video",
-          url: "/final-mounted-video.jpg",
-          title: "Final Video with Audio",
-        });
-        setCurrentStep(5);
-      }, 3000);
-    } finally {
+      console.error("[AudioMount] Error:", err);
+      alert("Failed to mount audio. Please try again.");
       setLoadingMount(false);
+      setCurrentStep(3);
     }
   };
 
@@ -493,7 +666,9 @@ export default function TextToSpeech() {
                 {loadingAudio ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Generating Audio...
+                    {ttsQueuePosition && ttsQueuePosition > 1
+                      ? `In Queue - Position ${ttsQueuePosition}`
+                      : "Generating Audio..."}
                   </>
                 ) : (
                   <>
@@ -502,6 +677,20 @@ export default function TextToSpeech() {
                   </>
                 )}
               </Button>
+
+              {/* TTS Queue Information */}
+              {loadingAudio &&
+                ttsQueuePosition &&
+                ttsQueuePosition > 1 &&
+                ttsEstimatedWaitTime && (
+                  <div className="mt-2 text-center">
+                    <p className="text-white/60 text-xs sm:text-sm">
+                      Estimated wait time: ~
+                      {Math.ceil(ttsEstimatedWaitTime / 60)} minute
+                      {Math.ceil(ttsEstimatedWaitTime / 60) !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                )}
             </div>
 
             {/* Right Column - Audio Preview & Tips */}
@@ -702,7 +891,9 @@ export default function TextToSpeech() {
                       {loadingMount ? (
                         <>
                           <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Mounting Video...
+                          {mountQueuePosition && mountQueuePosition > 1
+                            ? `In Queue - Position ${mountQueuePosition}`
+                            : "Mounting Video..."}
                         </>
                       ) : (
                         <>
@@ -711,6 +902,22 @@ export default function TextToSpeech() {
                         </>
                       )}
                     </Button>
+
+                    {/* Audio Mount Queue Information */}
+                    {loadingMount &&
+                      mountQueuePosition &&
+                      mountQueuePosition > 1 &&
+                      mountEstimatedWaitTime && (
+                        <div className="mt-2 text-center">
+                          <p className="text-white/60 text-xs sm:text-sm">
+                            Estimated wait time: ~
+                            {Math.ceil(mountEstimatedWaitTime / 60)} minute
+                            {Math.ceil(mountEstimatedWaitTime / 60) !== 1
+                              ? "s"
+                              : ""}
+                          </p>
+                        </div>
+                      )}
                   </div>
                 )}
               </CardContent>

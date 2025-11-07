@@ -88,6 +88,15 @@ const PromptGenerator: React.FC = () => {
   ]);
   const [userRating, setUserRating] = useState<{ [key: string]: number }>({});
 
+  // Queue state
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [queueLength, setQueueLength] = useState<number | null>(null);
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(
+    null
+  );
+  const pollingIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+
   // Template prompts
   const templatePrompts = [
     {
@@ -178,6 +187,100 @@ const PromptGenerator: React.FC = () => {
     }
   };
 
+  // Cleanup polling on unmount
+  React.useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll for job status
+  const pollJobStatus = async (currentJobId: string) => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+      const statusRes = await fetch(
+        `${API_BASE_URL}/api/script-generation-status/${currentJobId}`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to get job status");
+      }
+
+      const statusData = await statusRes.json();
+
+      if (statusData.status === "completed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setGeneratedScript(statusData.script);
+        setScriptStatus("success");
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+
+        // Add to history
+        if (user) {
+          const enhancedPrompt = `${prompt}\n\nTone: ${scriptTone}\nLength: ${scriptLength}\nInclude: ${includeElements.join(
+            ", "
+          )}`;
+          const newItem = {
+            _id: Math.random().toString(36).slice(2),
+            prompt: enhancedPrompt,
+            script: statusData.script,
+            createdAt: new Date().toISOString(),
+          };
+          setScriptHistory((prev) => [newItem, ...prev]);
+
+          // Save to backend
+          await fetch(`${API_BASE_URL}/api/scripts/history`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: user.id || user.email,
+              prompt: enhancedPrompt,
+              script: statusData.script,
+            }),
+            credentials: "include",
+          });
+        }
+      } else if (statusData.status === "failed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setScriptError(statusData.error || "Script generation failed");
+        setScriptStatus("error");
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (
+        statusData.status === "queued" ||
+        statusData.status === "processing"
+      ) {
+        // Update queue position
+        setQueuePosition(statusData.position || null);
+        setQueueLength(statusData.queueLength || null);
+        setEstimatedWaitTime(statusData.estimatedWaitTime || null);
+      }
+    } catch (err) {
+      console.error("[ScriptGeneration] Polling error:", err);
+      // Don't stop polling on network errors, continue trying
+    }
+  };
+
   // --- HANDLERS ---
   const handleGenerateScript = async () => {
     if (!prompt.trim()) {
@@ -205,33 +308,21 @@ const PromptGenerator: React.FC = () => {
       if (!res.ok) throw new Error("Generation failed");
       const data = await res.json();
 
-      if (!data?.script) throw new Error("No script returned");
+      if (!data?.jobId) throw new Error("No job ID returned");
 
-      setGeneratedScript(data.script);
-      setScriptStatus("success");
+      // Set job ID and start polling
+      setJobId(data.jobId);
+      setQueuePosition(data.position || 1);
+      setQueueLength(data.queueLength || 1);
+      setEstimatedWaitTime(data.estimatedWaitTime || 30);
 
-      if (user) {
-        // Optimistic update
-        const newItem = {
-          _id: Math.random().toString(36).slice(2),
-          prompt: enhancedPrompt,
-          script: data.script,
-          createdAt: new Date().toISOString(),
-        };
-        setScriptHistory((prev) => [newItem, ...prev]);
+      // Start polling
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(data.jobId);
+      }, 2000);
 
-        // Save to backend
-        await fetch(`${API_BASE_URL}/api/scripts/history`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.id || user.email,
-            prompt: enhancedPrompt,
-            script: data.script,
-          }),
-          credentials: "include",
-        });
-      }
+      // Initial poll
+      pollJobStatus(data.jobId);
     } catch (err) {
       setScriptError(
         isErrorWithMessage(err) ? err.message : "Generation failed"
@@ -542,9 +633,15 @@ const PromptGenerator: React.FC = () => {
                         <span className="flex items-center gap-2">
                           <RefreshCw className="w-4 h-4 animate-spin" />
                           <span className="hidden xs:inline">
-                            Generating Script...
+                            {queuePosition && queuePosition > 1
+                              ? `In Queue - Position ${queuePosition}`
+                              : "Generating Script..."}
                           </span>
-                          <span className="xs:hidden">Generating...</span>
+                          <span className="xs:hidden">
+                            {queuePosition && queuePosition > 1
+                              ? `Queue ${queuePosition}`
+                              : "Generating..."}
+                          </span>
                         </span>
                       ) : (
                         <span className="flex items-center gap-2">
@@ -553,6 +650,20 @@ const PromptGenerator: React.FC = () => {
                         </span>
                       )}
                     </Button>
+
+                    {/* Queue Information */}
+                    {scriptStatus === "loading" &&
+                      queuePosition &&
+                      queuePosition > 1 &&
+                      estimatedWaitTime && (
+                        <div className="mt-2 text-center">
+                          <p className="text-white/60 text-xs sm:text-sm">
+                            Estimated wait time: ~
+                            {Math.ceil(estimatedWaitTime / 60)} minute
+                            {Math.ceil(estimatedWaitTime / 60) !== 1 ? "s" : ""}
+                          </p>
+                        </div>
+                      )}
 
                     {scriptError && (
                       <Alert
