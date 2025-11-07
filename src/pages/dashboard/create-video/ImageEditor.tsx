@@ -27,7 +27,16 @@ const ImageEditor: React.FC = () => {
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
   const [editedImageLoaded, setEditedImageLoaded] = useState(false);
 
+  // Queue state
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [queueLength, setQueueLength] = useState<number | null>(null);
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(
+    null
+  );
+
   const editedImageRef = useRef<HTMLImageElement>(null);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Prompt suggestions for image editing
   const promptSuggestions = [
@@ -37,6 +46,80 @@ const ImageEditor: React.FC = () => {
     "Add dramatic storm clouds",
     "Make it look like watercolor painting",
   ];
+
+  // Cleanup polling on unmount
+  React.useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll for job status
+  const pollJobStatus = async (currentJobId: string) => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
+
+      const statusRes = await fetch(
+        `${API_BASE_URL}/api/ai/edit-image-job-status/${currentJobId}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to get job status");
+      }
+
+      const statusData = await statusRes.json();
+
+      if (statusData.status === "completed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setEditedImageUrl(
+          statusData.editedImageUrl || statusData.imageUrl || statusData.url
+        );
+        setLoading(false);
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (statusData.status === "failed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setError(statusData.error || "Image edit failed");
+        setLoading(false);
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (
+        statusData.status === "queued" ||
+        statusData.status === "processing"
+      ) {
+        // Update queue position
+        setQueuePosition(statusData.position || null);
+        setQueueLength(statusData.queueLength || null);
+        setEstimatedWaitTime(statusData.estimatedWaitTime || null);
+      }
+    } catch (err) {
+      console.error("[ImageEditor] Polling error:", err);
+      // Don't stop polling on network errors, continue trying
+    }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -73,6 +156,16 @@ const ImageEditor: React.FC = () => {
     setError(null);
     setEditedImageUrl(null);
     setEditedImageLoaded(false);
+    setJobId(null);
+    setQueuePosition(null);
+    setQueueLength(null);
+    setEstimatedWaitTime(null);
+
+    // Clear any existing polling
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
 
     if (!imageFile) {
       setError("Please upload an image.");
@@ -143,7 +236,7 @@ const ImageEditor: React.FC = () => {
       }
       console.log("[ImageEditor] S3 upload successful");
 
-      // 3. Call backend with S3 key
+      // 3. Call backend with S3 key (now returns job ID)
       const payload = {
         prompt,
         imageS3Key: imageUploadData.key,
@@ -186,22 +279,50 @@ const ImageEditor: React.FC = () => {
 
       const data = await res.json();
       console.log("[ImageEditor] Received data:", data);
-      // Accept editedImageUrl, imageUrl, or url from backend (should be signed URL)
-      const url = data?.editedImageUrl || data?.imageUrl || data?.url;
-      if (url) {
-        setEditedImageUrl(url);
-        console.log("[ImageEditor] Success! Image URL set");
+
+      // Check if we got a job ID (queue system) or direct result
+      if (data.jobId && data.status === "queued") {
+        // Queue system - start polling
+        setJobId(data.jobId);
+        setQueuePosition(data.position);
+        setQueueLength(data.queueLength);
+        setEstimatedWaitTime(data.estimatedWaitTime);
+
+        console.log(
+          `[ImageEditor] Job queued: ${data.jobId}, Position: ${data.position}`
+        );
+
+        // Start polling for job status
+        pollingIntervalRef.current = setInterval(() => {
+          pollJobStatus(data.jobId);
+        }, 2000); // Poll every 2 seconds
+
+        // Also poll immediately
+        pollJobStatus(data.jobId);
       } else {
-        setError("No edited image returned from server.");
+        // Direct result (shouldn't happen with queue system, but handle it)
+        const url = data?.editedImageUrl || data?.imageUrl || data?.url;
+        if (url) {
+          setEditedImageUrl(url);
+          setLoading(false);
+          console.log("[ImageEditor] Success! Image URL set");
+        } else {
+          setError("No edited image returned from server.");
+          setLoading(false);
+        }
       }
     } catch (err: unknown) {
       console.error("[ImageEditor] Error during image edit:", err);
       const errorMessage =
         err instanceof Error ? err.message : "Network error. Please try again.";
       setError(errorMessage);
-    } finally {
       setLoading(false);
-      console.log("[ImageEditor] Request completed");
+
+      // Clear polling on error
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
     }
   };
 
@@ -361,14 +482,29 @@ const ImageEditor: React.FC = () => {
                 <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4 min-h-[350px] sm:min-h-[450px] md:min-h-[550px]">
                   <div className="flex justify-center w-full">
                     <Loader
-                      message="Editing your image..."
+                      message={
+                        queuePosition && queuePosition > 1
+                          ? `In Queue - Position ${queuePosition}${
+                              queueLength ? ` of ${queueLength}` : ""
+                            }`
+                          : "Editing your image..."
+                      }
                       size="small"
                       overlay={false}
                     />
                   </div>
-                  <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
-                    This may take a few moments...
-                  </p>
+                  {estimatedWaitTime && estimatedWaitTime > 0 && (
+                    <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
+                      Estimated wait: ~{Math.ceil(estimatedWaitTime / 60)}{" "}
+                      minute
+                      {Math.ceil(estimatedWaitTime / 60) !== 1 ? "s" : ""}
+                    </p>
+                  )}
+                  {(!queuePosition || queuePosition === 1) && (
+                    <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
+                      This may take a few moments...
+                    </p>
+                  )}
                 </div>
               )}
 

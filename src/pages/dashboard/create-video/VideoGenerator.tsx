@@ -40,6 +40,15 @@ const VideoGenerator = () => {
   const [deleteStatus, setDeleteStatus] = useState<Status>("idle");
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  // Queue management state
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [queueLength, setQueueLength] = useState<number | null>(null);
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(
+    null
+  );
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   // --- UPLOAD VIDEO STATE ---
   const [uploadStatus, setUploadStatus] = useState<Status>("idle");
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -49,6 +58,84 @@ const VideoGenerator = () => {
 
   // Form validation error
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll job status
+  const pollJobStatus = async (currentJobId: string) => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      const res = await fetch(
+        `${API_BASE_URL}/api/gemini-veo3/job-status/${currentJobId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to get job status.");
+      }
+
+      const data = await res.json();
+      console.log("📊 Job status:", data);
+
+      // Update queue info
+      if (data.position !== undefined) setQueuePosition(data.position);
+      if (data.queueLength !== undefined) setQueueLength(data.queueLength);
+      if (data.estimatedWaitTime !== undefined)
+        setEstimatedWaitTime(data.estimatedWaitTime);
+
+      // Check if completed
+      if (data.status === "completed") {
+        console.log("✅ Video generation completed!");
+
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        // Set video data
+        setVideoUrl(data.s3Url);
+        setVideoS3Key(data.s3Key || null);
+        setVideoDuration(data.duration || null);
+        setVideoResolution(data.resolution || selectedQuality);
+        setVideoStatus("success");
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (data.status === "failed") {
+        console.error("❌ Video generation failed");
+
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setVideoError(data.error || "Video generation failed");
+        setVideoStatus("error");
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      }
+      // If still processing or queued, continue polling
+    } catch (err: unknown) {
+      console.error("❌ Error polling job status:", err);
+      // Don't stop polling on temporary errors, but log them
+    }
+  };
 
   const handleGenerateVideo = async () => {
     if (!prompt.trim()) {
@@ -60,13 +147,14 @@ const VideoGenerator = () => {
     setVideoError(null);
     setVideoUrl(null);
     setVideoS3Key(null);
+    setQueuePosition(null);
+    setQueueLength(null);
+    setEstimatedWaitTime(null);
 
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-      // Show user that this will take time
-      console.log("🎬 Starting Veo-3 video generation...");
-      console.log("⏱️ This may take 1-2 minutes, please wait...");
+      console.log("🎬 Requesting video generation...");
 
       const res = await fetch(
         `${API_BASE_URL}/api/gemini-veo3/generate-video`,
@@ -78,7 +166,7 @@ const VideoGenerator = () => {
             prompt,
             quality: selectedQuality,
             voiceSpeed: selectedVoiceSpeed,
-            audioLanguage: selectedLanguage, // Add language parameter
+            audioLanguage: selectedLanguage,
           }),
         }
       );
@@ -89,21 +177,28 @@ const VideoGenerator = () => {
       }
 
       const data = await res.json();
-      console.log("✓ Video generation response:", data);
+      console.log("✓ Job created:", data);
 
-      if (!data?.s3Url) {
-        throw new Error(
-          "No video URL returned from Veo-3. The video may still be processing."
-        );
+      // Store job ID and queue info
+      setJobId(data.jobId);
+      setQueuePosition(data.position);
+      setQueueLength(data.queueLength);
+      setEstimatedWaitTime(data.estimatedWaitTime);
+
+      // Start polling for job status
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
       }
 
-      setVideoUrl(data.s3Url);
-      setVideoS3Key(data.s3Key || null);
-      setVideoDuration(data.duration || null);
-      setVideoResolution(data.resolution || selectedQuality);
-      setVideoStatus("success");
+      // Poll every 3 seconds
+      pollingIntervalRef.current = setInterval(() => {
+        if (data.jobId) {
+          pollJobStatus(data.jobId);
+        }
+      }, 3000);
 
-      console.log("✅ Video ready:", data.s3Url);
+      // Do an immediate poll
+      pollJobStatus(data.jobId);
     } catch (err: unknown) {
       let message = "An unexpected error occurred while generating the video.";
       if (isErrorWithMessage(err)) {
@@ -115,6 +210,12 @@ const VideoGenerator = () => {
       console.error("❌ Video generation error:", message);
       setVideoError(message);
       setVideoStatus("error");
+
+      // Clear polling on error
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
     }
   };
 
@@ -491,16 +592,45 @@ const VideoGenerator = () => {
                   <div className="flex flex-col items-center justify-center p-6 sm:p-8 md:p-10 border-2 border-storiq-purple/30 rounded-lg bg-gradient-to-br from-storiq-purple/10 to-transparent">
                     <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-storiq-purple mb-3 sm:mb-4"></div>
                     <span className="text-storiq-purple font-semibold text-base sm:text-lg text-center">
-                      Generating your video with Veo-3...
+                      {queuePosition && queuePosition > 0
+                        ? `In Queue - Position ${queuePosition}`
+                        : "Generating your video with Veo-3..."}
                     </span>
                     <p className="text-white/60 text-xs sm:text-sm mt-2 text-center max-w-md">
-                      This typically takes 1-2 minutes. The AI is creating,
-                      rendering, and uploading your video.
+                      {queuePosition && queuePosition > 0 ? (
+                        <>
+                          {queueLength && queueLength > 1 && (
+                            <span className="block">
+                              {queueLength - 1} other{" "}
+                              {queueLength - 1 === 1 ? "user" : "users"} ahead
+                              of you
+                            </span>
+                          )}
+                          {estimatedWaitTime && (
+                            <span className="block mt-1">
+                              Estimated wait:{" "}
+                              {Math.ceil(estimatedWaitTime / 60)} minute
+                              {Math.ceil(estimatedWaitTime / 60) === 1
+                                ? ""
+                                : "s"}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "The AI is creating, rendering, and uploading your video."
+                      )}
                     </p>
                     <div className="mt-4 flex items-center gap-2 text-white/50 text-xs">
-                      <div className="animate-pulse">⏳</div>
+                      <div className="animate-pulse">
+                        {queuePosition && queuePosition > 0 ? "⏳" : "🎬"}
+                      </div>
                       <span>Please don't close this page</span>
                     </div>
+                    {jobId && (
+                      <div className="mt-3 text-white/40 text-xs font-mono">
+                        Job ID: {jobId.substring(0, 8)}...
+                      </div>
+                    )}
                   </div>
                 )}
 

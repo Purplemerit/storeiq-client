@@ -20,6 +20,15 @@ const ImageGenerator: React.FC = () => {
   const [generationCount, setGenerationCount] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  // Queue management state
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [queueLength, setQueueLength] = useState<number | null>(null);
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(
+    null
+  );
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   // Aspect ratio options
   const aspectRatioOptions = [
     { value: "1:1", label: "Square (1:1)", description: "1024x1024" },
@@ -61,6 +70,77 @@ const ImageGenerator: React.FC = () => {
     "Steampunk airship flying through clouds",
   ];
 
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll job status
+  const pollJobStatus = async (currentJobId: string) => {
+    try {
+      const res = await authFetch(`/api/ai/image-job-status/${currentJobId}`, {
+        method: "GET",
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to get job status.");
+      }
+
+      const data = await res.json();
+      console.log("📊 Image job status:", data);
+
+      // Update queue info
+      if (data.position !== undefined) setQueuePosition(data.position);
+      if (data.queueLength !== undefined) setQueueLength(data.queueLength);
+      if (data.estimatedWaitTime !== undefined)
+        setEstimatedWaitTime(data.estimatedWaitTime);
+
+      // Check if completed
+      if (data.status === "completed") {
+        console.log("✅ Image generation completed!");
+
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        // Set image data
+        setImageUrl(data.imageUrl);
+        setGenerationCount((prev) => prev + 1);
+        setLoading(false);
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (data.status === "failed") {
+        console.error("❌ Image generation failed");
+
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setError(data.error || "Image generation failed");
+        setLoading(false);
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      }
+      // If still processing or queued, continue polling
+    } catch (err: unknown) {
+      console.error("❌ Error polling job status:", err);
+      // Don't stop polling on temporary errors, but log them
+    }
+  };
+
   // Smooth image transition effect
   useEffect(() => {
     if (imageUrl || loading || error) return;
@@ -83,6 +163,9 @@ const ImageGenerator: React.FC = () => {
     setError(null);
     setImageUrl(null);
     setImageLoaded(false);
+    setQueuePosition(null);
+    setQueueLength(null);
+    setEstimatedWaitTime(null);
 
     if (!prompt.trim()) {
       setError("Please enter a prompt.");
@@ -91,6 +174,8 @@ const ImageGenerator: React.FC = () => {
 
     setLoading(true);
     try {
+      console.log("🎨 Requesting image generation...");
+
       const res = await authFetch("/api/ai/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -105,17 +190,37 @@ const ImageGenerator: React.FC = () => {
       }
 
       const data = await res.json();
-      // imageUrl is now a signed download URL from backend
-      if (data?.imageUrl) {
-        setImageUrl(data.imageUrl);
-        setGenerationCount((prev) => prev + 1);
-      } else {
-        setError("No image returned from server.");
+      console.log("✓ Job created:", data);
+
+      // Store job ID and queue info
+      setJobId(data.jobId);
+      setQueuePosition(data.position);
+      setQueueLength(data.queueLength);
+      setEstimatedWaitTime(data.estimatedWaitTime);
+
+      // Start polling for job status
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
       }
+
+      // Poll every 2 seconds (images are faster than videos)
+      pollingIntervalRef.current = setInterval(() => {
+        if (data.jobId) {
+          pollJobStatus(data.jobId);
+        }
+      }, 2000);
+
+      // Do an immediate poll
+      pollJobStatus(data.jobId);
     } catch {
       setError("Network error. Please try again.");
-    } finally {
       setLoading(false);
+
+      // Clear polling on error
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
     }
   };
 
@@ -269,10 +374,39 @@ const ImageGenerator: React.FC = () => {
               {/* Loading */}
               {loading && (
                 <div className="flex flex-col items-center justify-center flex-1 space-y-3 sm:space-y-4 min-h-[350px] sm:min-h-[450px] md:min-h-[550px]">
-                  <Loader message="Painting your vision..." size="small" />
-                  <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
-                    This may take a few moments...
-                  </p>
+                  <div className="animate-spin rounded-full h-12 w-12 sm:h-14 sm:w-14 border-b-2 border-storiq-purple"></div>
+                  <div className="text-center">
+                    <p className="text-storiq-purple font-semibold text-base sm:text-lg mb-2">
+                      {queuePosition && queuePosition > 0
+                        ? `In Queue - Position ${queuePosition}`
+                        : "Generating your image..."}
+                    </p>
+                    <p className="text-gray-400 text-xs sm:text-sm animate-pulse">
+                      {queuePosition && queuePosition > 0 ? (
+                        <>
+                          {queueLength && queueLength > 1 && (
+                            <span className="block">
+                              {queueLength - 1} other{" "}
+                              {queueLength - 1 === 1 ? "user" : "users"} ahead
+                              of you
+                            </span>
+                          )}
+                          {estimatedWaitTime && (
+                            <span className="block mt-1">
+                              Estimated wait: ~{estimatedWaitTime} seconds
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "This may take a few moments..."
+                      )}
+                    </p>
+                    {jobId && (
+                      <div className="mt-3 text-white/40 text-xs font-mono">
+                        Job ID: {jobId.substring(0, 8)}...
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
