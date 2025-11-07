@@ -5,6 +5,7 @@ import CustomButton from "@/components/ui/custom-button";
 interface FAQItem {
   id: number;
   question: string;
+  answer: string;
   isOpen: boolean;
 }
 
@@ -20,48 +21,30 @@ const growthVideo =
 
 const About = () => {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
-  const [faqItems, setFaqItems] = useState<FAQItem[]>([
+  const faqData = [
     {
       id: 1,
       question: "How can Storiq transform my content creation game?",
-      isOpen: false,
+      answer:
+        "STORIQ is your AI-powered co-creator for modern storytelling — turning raw ideas into scroll-stopping content effortlessly. From smart scripting to polished visuals, it helps creators plan, repurpose, and publish engaging content that actually connects.",
     },
     {
       id: 2,
       question: "Can I cancel my subscription at any time?",
-      isOpen: false,
+      answer:
+        "Yes, you can cancel your subscription at any time. You can do so by going to your account settings. And if you need help with anything, our (human) support team is here to assist you.",
     },
     {
       id: 3,
       question: "What kind of content can I create with Storiq?",
-      isOpen: false,
+      answer:
+        "Whatever you imagine, STORIQ brings it to life. Repurpose blogs, transform podcasts, craft viral shorts, or auto-generate product demos — all from a single prompt. Just drop in your idea, and let AI do the rest — script, edit, design, and publish.",
     },
-    {
-      id: 4,
-      question: "Can I cancel my subscription at any time?",
-      isOpen: false,
-    },
-    {
-      id: 5,
-      question: "How can Storiq transform my content creation game?",
-      isOpen: false,
-    },
-    {
-      id: 6,
-      question: "What kind of content can I create with Storiq?",
-      isOpen: false,
-    },
-    {
-      id: 7,
-      question: "How can Storiq transform my content creation game?",
-      isOpen: false,
-    },
-    {
-      id: 8,
-      question: "Can I cancel my subscription at any time?",
-      isOpen: false,
-    },
-  ]);
+  ];
+
+  const [faqItems, setFaqItems] = useState<FAQItem[]>(
+    faqData.map((item) => ({ ...item, isOpen: false }))
+  );
 
   const toggleFAQ = (id: number) => {
     setFaqItems((items) =>
@@ -208,8 +191,16 @@ const About = () => {
                 </li>
               </ul>
             </div>
-            <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 md:p-8 flex items-center justify-center min-h-[200px] md:min-h-full">
-              <h3 className="text-xl md:text-2xl font-bold text-center">
+            <div className="relative bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 md:p-8 flex items-center justify-center min-h-[200px] md:min-h-full overflow-hidden">
+              <video
+                src="https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/about-emotion.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover opacity-40"
+              />
+              <h3 className="relative text-xl md:text-2xl font-bold text-center z-10">
                 Emotion Driven Creation
               </h3>
             </div>
@@ -221,8 +212,16 @@ const About = () => {
       <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
-            <div className="bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 md:p-8 flex items-center justify-center min-h-[200px] md:min-h-full order-2 lg:order-1">
-              <h3 className="text-xl md:text-2xl font-bold text-center">
+            <div className="relative bg-storiq-card-bg border border-storiq-border rounded-2xl p-6 md:p-8 flex items-center justify-center min-h-[200px] md:min-h-full order-2 lg:order-1 overflow-hidden">
+              <video
+                src="https://store-iq-video-bucket.s3.ap-south-1.amazonaws.com/about-creator.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover opacity-40"
+              />
+              <h3 className="relative text-xl md:text-2xl font-bold text-center z-10">
                 Creator-first philosophy
               </h3>
             </div>
@@ -314,7 +313,13 @@ const About = () => {
                 aria-expanded={item.isOpen}
                 aria-controls={`faq-content-${item.id}`}
               >
-                <div className="flex-1 my-auto text-left">{item.question}</div>
+                <div
+                  className={`flex-1 my-auto text-left ${
+                    item.isOpen ? "underline" : ""
+                  }`}
+                >
+                  {item.question}
+                </div>
                 <img
                   src="https://api.builder.io/api/v1/image/assets/35de5dc00516421d9aa405b4c562fade/5174b3c6fbffa0666d0dbde2086ba1eedb2c3817?placeholderIfAbsent=true"
                   className={`aspect-[1] object-contain w-5 md:w-6 flex-shrink-0 my-auto transition-transform duration-300 ${
@@ -335,9 +340,7 @@ const About = () => {
                     id={`faq-content-${item.id}`}
                     className="text-sm md:text-base text-gray-300 leading-relaxed text-left"
                   >
-                    This is the answer content for "{item.question}". Here you
-                    would typically include detailed information about the
-                    question.
+                    {item.answer}
                   </div>
                 </div>
               </div>
