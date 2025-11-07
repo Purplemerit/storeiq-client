@@ -18,10 +18,124 @@ const AIObjectBlendTool: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Queue state
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [queueLength, setQueueLength] = useState<number | null>(null);
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState<number | null>(
+    null
+  );
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneImgRef = useRef<HTMLImageElement>(new Image());
   const fileInputSceneRef = useRef<HTMLInputElement>(null);
   const fileInputObjectRef = useRef<HTMLInputElement>(null);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup polling on unmount
+  React.useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Poll for job status
+  const pollJobStatus = async (
+    currentJobId: string,
+    clickX: number,
+    clickY: number
+  ) => {
+    try {
+      const API_BASE_URL =
+        import.meta.env.VITE_API_BASE_URL || "https://api.example.com";
+
+      const statusRes = await fetch(
+        `${API_BASE_URL}/api/remove-bg-status/${currentJobId}`
+      );
+
+      if (!statusRes.ok) {
+        throw new Error("Failed to get job status");
+      }
+
+      const statusData = await statusRes.json();
+
+      if (statusData.status === "completed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        // Draw the processed object on canvas
+        const objectUrl = statusData.url;
+        const canvas = canvasRef.current;
+        if (!canvas) {
+          throw new Error("Canvas not available");
+        }
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          throw new Error("Canvas context not available");
+        }
+
+        // Redraw the scene
+        ctx.drawImage(sceneImgRef.current, 0, 0);
+
+        console.log("[AIObjectBlend] Placing object at:", {
+          x: clickX,
+          y: clickY,
+        });
+
+        // Load and draw the AI-processed object
+        const objImg = new Image();
+        objImg.crossOrigin = "anonymous";
+        objImg.src = objectUrl;
+
+        objImg.onload = () => {
+          console.log("[AIObjectBlend] Object loaded, drawing on canvas");
+          ctx.drawImage(objImg, clickX, clickY, 400, 400);
+          setLoading(false);
+          setJobId(null);
+          setQueuePosition(null);
+          setQueueLength(null);
+          setEstimatedWaitTime(null);
+        };
+
+        objImg.onerror = (err) => {
+          console.error("[AIObjectBlend] Failed to load processed image:", err);
+          setError("Failed to load the processed image. Please try again.");
+          setLoading(false);
+          setJobId(null);
+        };
+      } else if (statusData.status === "failed") {
+        // Stop polling
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+
+        setError(statusData.error || "Background removal failed");
+        setLoading(false);
+        setJobId(null);
+        setQueuePosition(null);
+        setQueueLength(null);
+        setEstimatedWaitTime(null);
+      } else if (
+        statusData.status === "queued" ||
+        statusData.status === "processing"
+      ) {
+        // Update queue position
+        setQueuePosition(statusData.position || null);
+        setQueueLength(statusData.queueLength || null);
+        setEstimatedWaitTime(statusData.estimatedWaitTime || null);
+      }
+    } catch (err) {
+      console.error("[AIObjectBlend] Polling error:", err);
+      // Don't stop polling on network errors, continue trying
+    }
+  };
 
   const handleSceneUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,9 +174,7 @@ const AIObjectBlendTool: React.FC = () => {
     setError(null);
 
     try {
-      console.log(
-        "[AIObjectBlend] Starting background removal with Vertex AI..."
-      );
+      console.log("[AIObjectBlend] Starting background removal with queue...");
       const formData = new FormData();
       formData.append("image", objectFile);
 
@@ -84,51 +196,37 @@ const AIObjectBlendTool: React.FC = () => {
       }
 
       const data = await res.json();
-      console.log("[AIObjectBlend] Response:", data);
+      console.log("[AIObjectBlend] Job submitted:", data);
 
-      if (!data.url) {
-        throw new Error("No processed image returned from server");
+      if (!data.jobId) {
+        throw new Error("No job ID returned from server");
       }
 
-      const objectUrl = data.url;
+      // Calculate click position for later use
       const canvas = canvasRef.current;
       if (!canvas) {
         throw new Error("Canvas not available");
       }
 
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        throw new Error("Canvas context not available");
-      }
-
-      // Redraw the scene
-      ctx.drawImage(sceneImgRef.current, 0, 0);
-
-      // Calculate click position relative to canvas
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX - 200; // Center object on click (200px = half of 400px object size)
-      const y = (e.clientY - rect.top) * scaleY - 200;
+      const clickX = (e.clientX - rect.left) * scaleX - 200; // Center object on click
+      const clickY = (e.clientY - rect.top) * scaleY - 200;
 
-      console.log("[AIObjectBlend] Placing object at:", { x, y });
+      // Set job ID and start polling
+      setJobId(data.jobId);
+      setQueuePosition(data.position || 1);
+      setQueueLength(data.queueLength || 1);
+      setEstimatedWaitTime(data.estimatedWaitTime || 20);
 
-      // Load and draw the AI-processed object
-      const objImg = new Image();
-      objImg.crossOrigin = "anonymous";
-      objImg.src = objectUrl;
+      // Start polling
+      pollingIntervalRef.current = setInterval(() => {
+        pollJobStatus(data.jobId, clickX, clickY);
+      }, 2000);
 
-      objImg.onload = () => {
-        console.log("[AIObjectBlend] Object loaded, drawing on canvas");
-        ctx.drawImage(objImg, x, y, 400, 400);
-        setLoading(false);
-      };
-
-      objImg.onerror = (err) => {
-        console.error("[AIObjectBlend] Failed to load processed image:", err);
-        setError("Failed to load the processed image. Please try again.");
-        setLoading(false);
-      };
+      // Initial poll
+      pollJobStatus(data.jobId, clickX, clickY);
     } catch (err) {
       console.error("[AIObjectBlend] Error:", err);
       const errorMessage =
@@ -340,14 +438,28 @@ const AIObjectBlendTool: React.FC = () => {
         {loading && (
           <div className="flex flex-col items-center justify-center py-12 space-y-4">
             <Loader
-              message="AI is removing background and blending your object…"
+              message={
+                queuePosition && queuePosition > 1
+                  ? `In Queue - Position ${queuePosition}`
+                  : "AI is removing background and blending your object…"
+              }
               size="small"
               overlay={false}
             />
             <p className="text-white/60 text-sm">
               Using Vertex AI Imagen 3 for processing...
             </p>
-            <p className="text-white/40 text-xs">This may take a few moments</p>
+            {queuePosition && queuePosition > 1 && estimatedWaitTime && (
+              <p className="text-white/40 text-xs">
+                Estimated wait time: ~{Math.ceil(estimatedWaitTime / 60)} minute
+                {Math.ceil(estimatedWaitTime / 60) !== 1 ? "s" : ""}
+              </p>
+            )}
+            {(!queuePosition || queuePosition === 1) && (
+              <p className="text-white/40 text-xs">
+                This may take a few moments
+              </p>
+            )}
           </div>
         )}
 
