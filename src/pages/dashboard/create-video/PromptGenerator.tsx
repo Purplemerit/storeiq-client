@@ -456,7 +456,7 @@ const PromptGenerator: React.FC = () => {
           {/* Main Content */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
             {/* Left Sidebar - Templates & Settings */}
-            <div className="xl:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-2 xl:order-1">
+            <div className="xl:col-span-1 space-y-4 sm:space-y-5 md:space-y-6 order-2 xl:order-1 xl:max-h-[calc(100vh-12rem)] xl:overflow-y-auto xl:pr-2 scrollbar-hide">
               {/* Quick Templates */}
               <Card className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6">
                 <h3 className="text-white font-semibold text-sm sm:text-base mb-3 sm:mb-4 flex items-center gap-2">
@@ -580,11 +580,11 @@ const PromptGenerator: React.FC = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="xl:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-1 xl:order-2">
+            <div className="xl:col-span-2 space-y-4 sm:space-y-5 md:space-y-6 order-1 xl:order-2 xl:sticky xl:top-8 xl:self-start">
               {activeTab === "generate" ? (
                 <>
                   {/* Prompt Input */}
-                  <Card className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6">
+                  <Card className="bg-storiq-card-bg/50 border-storiq-border rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 min-h-[420px] sm:min-h-[460px] md:min-h-[500px]">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
                       <h3 className="text-white font-semibold text-sm sm:text-base flex items-center gap-2">
                         <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-storiq-purple flex-shrink-0" />
@@ -607,7 +607,7 @@ const PromptGenerator: React.FC = () => {
                         setFormError(null);
                       }}
                       placeholder="Describe your video concept, target audience, key messages, and any specific requirements..."
-                      className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[150px] sm:min-h-[180px] md:min-h-[200px] resize-none focus:border-storiq-purple font-medium text-sm sm:text-base"
+                      className="bg-storiq-card-bg border-storiq-border text-white placeholder:text-white/40 min-h-[200px] sm:min-h-[230px] md:min-h-[250px] resize-none focus:border-storiq-purple font-medium text-sm sm:text-base"
                     />
 
                     {formError && (
