@@ -458,7 +458,7 @@ const MemeGenerator: React.FC = () => {
 
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:items-start">
           {/* Left Column - Upload & Controls */}
-          <div className="w-full xl:w-[45%] 2xl:w-[40%] space-y-4 sm:space-y-5 md:space-y-6">
+          <div className="w-full xl:w-[45%] 2xl:w-[40%] space-y-4 sm:space-y-5 md:space-y-6 xl:overflow-y-auto xl:max-h-[calc(100vh-12rem)] xl:pr-2 scrollbar-hide">
             {/* Image Upload */}
             <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2">
@@ -643,8 +643,8 @@ const MemeGenerator: React.FC = () => {
           </div>
 
           {/* Right Column - Results */}
-          <div className="w-full xl:w-[55%] 2xl:w-[60%]">
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+          <div className="w-full xl:w-[55%] 2xl:w-[60%] xl:sticky xl:top-4 xl:self-start">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6 min-h-[600px] xl:max-h-[calc(100vh-8rem)] flex flex-col">
               <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-storiq-purple" />
                 Your Meme

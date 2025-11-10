@@ -200,6 +200,10 @@ body.mobile-menu-open {
   background: hsl(271 100% 60% / 0.7);
 }
 
+.scrollbar-thumb-storiq-border::-webkit-scrollbar-thumb {
+  background: hsl(var(--storiq-border));
+}
+
 .scrollbar-thumb-storiq-purple\/50::-webkit-scrollbar-thumb {
   background: hsl(271 100% 60% / 0.5);
 }
