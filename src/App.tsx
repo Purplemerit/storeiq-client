@@ -32,6 +32,7 @@ import PromptGenerator from "./pages/dashboard/create-video/PromptGenerator";
 import ImageEditor from "./pages/dashboard/create-video/ImageEditor";
 import ImageToPrompt from "./pages/dashboard/create-video/ImageToPrompt";
 import MemeGenerator from "./pages/dashboard/create-video/MemeGenerator";
+import ThumbnailGenerator from "./pages/dashboard/create-video/ThumbnailGenerator";
 import BackgroundRemover from "./pages/dashboard/create-video/BackgroundRemover";
 // import CreateVideo from "./pages/dashboard/CreateVideo";
 import SearchVideos from "./pages/dashboard/SearchVideos";
@@ -195,6 +196,14 @@ const AnimatedRoutes = () => {
           element={
             <ProtectedRoute>
               <MemeGenerator />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/thumbnail-generator"
+          element={
+            <ProtectedRoute>
+              <ThumbnailGenerator />
             </ProtectedRoute>
           }
         />

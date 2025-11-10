@@ -13,6 +13,7 @@ import aiImagePlaceholder from "@/assets/images/ai-image-placeholder.png";
 import aiImageEditorPlaceholder from "@/assets/images/ai-imageeditor-placeholder.png";
 import imageToPromptPlaceholder from "@/assets/images/image-to-prompt.png";
 import memePlaceholder from "@/assets/images/image-meme.png";
+import thumbnailPlaceholder from "@/assets/images/video-thumbnail.png";
 import backRemoverPlaceholder from "@/assets/images/back-remover.png";
 
 import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
@@ -105,6 +106,13 @@ const Dashboard = () => {
       image: memePlaceholder,
       buttonText: "Try Now",
       link: "/dashboard/meme-generator",
+    },
+    {
+      title: "Thumbnail Generator",
+      subtitle: "YouTube-optimized thumbnail designs",
+      image: thumbnailPlaceholder,
+      buttonText: "Try Now",
+      link: "/dashboard/thumbnail-generator",
     },
     {
       title: "Background Remover",
