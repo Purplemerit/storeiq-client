@@ -220,7 +220,7 @@ const VideoGenerator = () => {
   };
 
   // --- DATA ---
-  const qualityOptions = ["480P", "720P", "1080P"];
+  const qualityOptions = ["720P", "1080P"];
   const voiceSpeedOptions = ["1x", "2x"];
   const languageOptions = [
     "English",
@@ -397,7 +397,7 @@ const VideoGenerator = () => {
               <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                 Video Quality
               </h3>
-              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {qualityOptions.map((quality) => (
                   <Button
                     key={quality}
