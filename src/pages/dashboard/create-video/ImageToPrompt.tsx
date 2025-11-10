@@ -48,6 +48,9 @@ const ImageToPrompt: React.FC = () => {
   const [promptStyle, setPromptStyle] = useState<
     "detailed" | "concise" | "creative" | "technical"
   >("detailed");
+  const [selectedModel, setSelectedModel] = useState<
+    "gemini-2.5-flash" | "gemini-2.5-flash-lite"
+  >("gemini-2.5-flash");
   const [includeColors, setIncludeColors] = useState(true);
   const [includeMood, setIncludeMood] = useState(true);
   const [includeComposition, setIncludeComposition] = useState(true);
@@ -68,6 +71,19 @@ const ImageToPrompt: React.FC = () => {
       value: "technical",
       label: "Technical",
       description: "Precise specifications",
+    },
+  ];
+
+  const modelOptions = [
+    {
+      value: "gemini-2.5-flash",
+      label: "Gemini 2.5 Flash",
+      description: "Best quality, hybrid reasoning",
+    },
+    {
+      value: "gemini-2.5-flash-lite",
+      label: "Gemini 2.5 Flash Lite",
+      description: "Fastest, cost-effective",
     },
   ];
 
@@ -203,6 +219,7 @@ const ImageToPrompt: React.FC = () => {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const payload: {
         promptStyle: string;
+        modelName: string;
         includeColors: boolean;
         includeMood: boolean;
         includeComposition: boolean;
@@ -210,6 +227,7 @@ const ImageToPrompt: React.FC = () => {
         imageUrl?: string;
       } = {
         promptStyle,
+        modelName: selectedModel,
         includeColors,
         includeMood,
         includeComposition,
@@ -451,6 +469,38 @@ const ImageToPrompt: React.FC = () => {
               </div>
             </Card>
 
+            {/* AI Model Selection */}
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-storiq-purple" />
+                AI Model
+              </h3>
+              <div className="grid grid-cols-1 gap-2">
+                {modelOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() =>
+                      setSelectedModel(
+                        option.value as
+                          | "gemini-2.5-flash"
+                          | "gemini-2.5-flash-lite"
+                      )
+                    }
+                    className={`p-3 rounded-lg border transition-all text-left ${
+                      selectedModel === option.value
+                        ? "border-storiq-purple bg-storiq-purple/10 text-white"
+                        : "border-storiq-border bg-storiq-card-bg/30 text-white/60 hover:text-white"
+                    }`}
+                  >
+                    <div className="text-sm font-semibold">{option.label}</div>
+                    <div className="text-xs text-white/40 mt-1">
+                      {option.description}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </Card>
+
             {/* Additional Options */}
             <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4">
@@ -565,7 +615,11 @@ const ImageToPrompt: React.FC = () => {
                   <Textarea
                     value={generatedPrompt}
                     readOnly
-                    className="flex-1 bg-storiq-card-bg border-storiq-border text-white min-h-[400px] resize-none text-sm sm:text-base"
+                    className="flex-1 bg-storiq-card-bg border-storiq-border text-white min-h-[400px] resize-none text-sm sm:text-base scrollbar-hide"
+                    style={{
+                      scrollbarWidth: "none",
+                      msOverflowStyle: "none",
+                    }}
                   />
 
                   {/* Action Buttons */}

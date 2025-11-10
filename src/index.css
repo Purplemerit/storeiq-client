@@ -113,6 +113,15 @@ All colors MUST be HSL.
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* Scrollbar hide utility for Tailwind */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 /* Animation for blob effect */
 @keyframes blob {
   0% {
