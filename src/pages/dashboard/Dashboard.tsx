@@ -1,7 +1,6 @@
 import scriptLiveImage from "@/assets/images/script-live.png";
 import imageMobingImage from "@/assets/images/image-mobing.png";
 import audioMountImage from "@/assets/images/audio-mount.png";
-("use client");
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
 import aiImagePlaceholder from "@/assets/images/ai-image-placeholder.png";
 import aiImageEditorPlaceholder from "@/assets/images/ai-imageeditor-placeholder.png";
+import imageToPromptPlaceholder from "@/assets/images/image-to-prompt.png";
 
 import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
 import viralPlatformImage from "@/assets/images/viral-platform.png";
@@ -89,6 +89,13 @@ const Dashboard = () => {
       image: aiImageEditorPlaceholder,
       buttonText: "Try Now",
       link: "/dashboard/edit-image",
+    },
+    {
+      title: "Image to Prompt",
+      subtitle: "Generate prompts from your images",
+      image: imageToPromptPlaceholder,
+      buttonText: "Try Now",
+      link: "/dashboard/image-to-prompt",
     },
     {
       title: "Script Generator",
