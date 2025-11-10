@@ -31,6 +31,7 @@ import ImageGenerator from "./pages/dashboard/create-video/ImageGenerator";
 import PromptGenerator from "./pages/dashboard/create-video/PromptGenerator";
 import ImageEditor from "./pages/dashboard/create-video/ImageEditor";
 import ImageToPrompt from "./pages/dashboard/create-video/ImageToPrompt";
+import BackgroundRemover from "./pages/dashboard/create-video/BackgroundRemover";
 // import CreateVideo from "./pages/dashboard/CreateVideo";
 import SearchVideos from "./pages/dashboard/SearchVideos";
 import SearchImages from "./pages/dashboard/SearchImages";
@@ -185,6 +186,14 @@ const AnimatedRoutes = () => {
           element={
             <ProtectedRoute>
               <ImageToPrompt />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/remove-background"
+          element={
+            <ProtectedRoute>
+              <BackgroundRemover />
             </ProtectedRoute>
           }
         />

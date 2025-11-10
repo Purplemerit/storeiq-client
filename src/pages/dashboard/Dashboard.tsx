@@ -12,6 +12,7 @@ import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
 import aiImagePlaceholder from "@/assets/images/ai-image-placeholder.png";
 import aiImageEditorPlaceholder from "@/assets/images/ai-imageeditor-placeholder.png";
 import imageToPromptPlaceholder from "@/assets/images/image-to-prompt.png";
+import backRemoverPlaceholder from "@/assets/images/back-remover.png";
 
 import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
 import viralPlatformImage from "@/assets/images/viral-platform.png";
@@ -96,6 +97,13 @@ const Dashboard = () => {
       image: imageToPromptPlaceholder,
       buttonText: "Try Now",
       link: "/dashboard/image-to-prompt",
+    },
+    {
+      title: "Background Remover",
+      subtitle: "Remove backgrounds with AI",
+      image: backRemoverPlaceholder,
+      buttonText: "Try Now",
+      link: "/dashboard/remove-background",
     },
     {
       title: "Script Generator",
