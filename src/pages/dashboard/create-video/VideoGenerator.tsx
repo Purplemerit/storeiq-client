@@ -27,9 +27,10 @@ const VideoGenerator = () => {
   // --- STATE MANAGEMENT ---
   type Status = "idle" | "loading" | "success" | "error";
   const [prompt, setPrompt] = useState(``);
-  const [selectedQuality, setSelectedQuality] = useState("720P");
-  const [selectedVoiceSpeed, setSelectedVoiceSpeed] = useState("1x");
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const [selectedQuality, setSelectedQuality] = useState("720p");
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9");
+  const [selectedDuration, setSelectedDuration] = useState(8);
+  const [enhancePrompt, setEnhancePrompt] = useState(true);
   // Status for video generation
   const [videoStatus, setVideoStatus] = useState<Status>("idle");
   const [videoError, setVideoError] = useState<string | null>(null);
@@ -165,8 +166,9 @@ const VideoGenerator = () => {
           body: JSON.stringify({
             prompt,
             quality: selectedQuality,
-            voiceSpeed: selectedVoiceSpeed,
-            audioLanguage: selectedLanguage,
+            aspectRatio: selectedAspectRatio,
+            durationSeconds: selectedDuration,
+            enhancePrompt: enhancePrompt,
           }),
         }
       );
@@ -220,22 +222,9 @@ const VideoGenerator = () => {
   };
 
   // --- DATA ---
-  const qualityOptions = ["720P", "1080P"];
-  const voiceSpeedOptions = ["1x", "2x"];
-  const languageOptions = [
-    "English",
-    "Spanish",
-    "French",
-    "German",
-    "Italian",
-    "Portuguese",
-    "Russian",
-    "Chinese",
-    "Japanese",
-    "Korean",
-    "Hindi",
-    "Arabic",
-  ];
+  const qualityOptions = ["720p", "1080p"];
+  const aspectRatioOptions = ["16:9", "9:16"];
+  const durationOptions = [4, 6, 8];
 
   // --- UPLOAD VIDEO HANDLER ---
   const handleUploadVideo = async (e: React.FormEvent) => {
@@ -428,30 +417,32 @@ const VideoGenerator = () => {
             {/* Voice Speed Selection */}
             <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-                Voice Speed
+                Aspect Ratio
               </h3>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                {voiceSpeedOptions.map((speed) => (
+                {aspectRatioOptions.map((ratio) => (
                   <Button
-                    key={speed}
-                    onClick={() => setSelectedVoiceSpeed(speed)}
+                    key={ratio}
+                    onClick={() => setSelectedAspectRatio(ratio)}
                     variant={
-                      selectedVoiceSpeed === speed ? "default" : "outline"
+                      selectedAspectRatio === ratio ? "default" : "outline"
                     }
                     className={`h-10 sm:h-11 md:h-12 text-sm sm:text-base transition-all duration-200 ${
-                      selectedVoiceSpeed === speed
+                      selectedAspectRatio === ratio
                         ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
                         : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
                     }`}
                   >
                     <span
                       className={
-                        selectedVoiceSpeed === speed
+                        selectedAspectRatio === ratio
                           ? "text-white"
                           : "text-white/80"
                       }
                     >
-                      {speed}
+                      {ratio === "16:9"
+                        ? "Landscape (16:9)"
+                        : "Portrait (9:16)"}
                     </span>
                   </Button>
                 ))}
@@ -461,26 +452,63 @@ const VideoGenerator = () => {
             {/* Audio Language Selection */}
             <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-                Audio Language
+                Video Duration
               </h3>
-              <select
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="w-full h-10 sm:h-11 md:h-12 px-3 sm:px-4 bg-storiq-card-bg border-2 border-storiq-border text-white rounded-md focus:border-storiq-purple focus:ring-2 focus:ring-storiq-purple/50 transition-all duration-200 text-sm sm:text-base cursor-pointer hover:border-storiq-purple/50"
-              >
-                {languageOptions.map((language) => (
-                  <option
-                    key={language}
-                    value={language}
-                    className="bg-storiq-card-bg text-white"
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {durationOptions.map((duration) => (
+                  <Button
+                    key={duration}
+                    onClick={() => setSelectedDuration(duration)}
+                    variant={
+                      selectedDuration === duration ? "default" : "outline"
+                    }
+                    className={`h-10 sm:h-11 md:h-12 text-sm sm:text-base transition-all duration-200 ${
+                      selectedDuration === duration
+                        ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
+                        : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
+                    }`}
                   >
-                    {language}
-                  </option>
+                    <span
+                      className={
+                        selectedDuration === duration
+                          ? "text-white"
+                          : "text-white/80"
+                      }
+                    >
+                      {duration}s
+                    </span>
+                  </Button>
                 ))}
-              </select>
+              </div>
               <p className="text-white/50 text-xs sm:text-sm mt-2">
-                The AI will generate narration in the selected language
+                Length of the generated video
               </p>
+            </Card>
+
+            {/* Enhance Prompt Option */}
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-white text-base sm:text-lg font-semibold mb-1">
+                    Enhance Prompt
+                  </h3>
+                  <p className="text-white/50 text-xs sm:text-sm">
+                    Use Gemini AI to improve your prompt for better results
+                  </p>
+                </div>
+                <button
+                  onClick={() => setEnhancePrompt(!enhancePrompt)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    enhancePrompt ? "bg-storiq-purple" : "bg-storiq-border"
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      enhancePrompt ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </div>
             </Card>
 
             {/* Generate Button */}
