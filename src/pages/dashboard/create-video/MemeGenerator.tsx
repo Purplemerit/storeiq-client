@@ -325,86 +325,71 @@ const MemeGenerator: React.FC = () => {
     setEstimatedWaitTime(null);
 
     try {
-      const payload: {
-        memeStyle: string;
-        captionCount: number;
-        modelName: string;
-        imageS3Key?: string;
-        imageUrl?: string;
-      } = {
-        memeStyle,
-        captionCount,
-        modelName: selectedModel,
-      };
+      console.log("🎭 Requesting meme generation...");
 
-      // If using uploaded file, upload to S3 first
+      // If using uploaded file, send directly in FormData (no S3 upload)
       if (selectedFile) {
-        console.log("📤 Uploading image to S3...");
-        const uploadRes = await authFetch("/api/s3/generate-upload-url", {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("memeStyle", memeStyle);
+        formData.append("captionCount", captionCount.toString());
+        formData.append("modelName", selectedModel);
+
+        const res = await authFetch("/api/ai/generate-meme", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || "Meme generation failed");
+        }
+
+        const data = await res.json();
+        console.log("✅ Job created:", data);
+
+        setJobId(data.jobId);
+        setQueuePosition(data.position);
+        setQueueLength(data.queueLength);
+        setEstimatedWaitTime(data.estimatedWaitTime);
+
+        // Start polling for job status
+        pollingIntervalRef.current = setInterval(() => {
+          pollJobStatus(data.jobId);
+        }, 2000);
+      } else if (imageUrl) {
+        // If using URL, send as JSON
+        const payload = {
+          memeStyle,
+          captionCount,
+          modelName: selectedModel,
+          imageUrl,
+        };
+
+        const res = await authFetch("/api/ai/generate-meme", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            filename: selectedFile.name,
-            contentType: selectedFile.type,
-          }),
+          body: JSON.stringify(payload),
         });
 
-        if (!uploadRes.ok) {
-          throw new Error("Failed to get upload URL");
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || "Meme generation failed");
         }
 
-        const uploadData = await uploadRes.json();
+        const data = await res.json();
+        console.log("✅ Job created:", data);
 
-        // Upload to S3
-        const s3Res = await fetch(uploadData.uploadUrl, {
-          method: "PUT",
-          body: selectedFile,
-          headers: { "Content-Type": selectedFile.type },
-        });
+        setJobId(data.jobId);
+        setQueuePosition(data.position);
+        setQueueLength(data.queueLength);
+        setEstimatedWaitTime(data.estimatedWaitTime);
 
-        if (!s3Res.ok) {
-          throw new Error("Failed to upload image");
-        }
-
-        payload.imageS3Key = uploadData.key;
-      } else if (imageUrl) {
-        payload.imageUrl = imageUrl;
-      }
-
-      console.log("🎭 Requesting meme generation...");
-      const res = await authFetch("/api/ai/generate-meme", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "Failed to generate meme");
-      }
-
-      const data = await res.json();
-      console.log("✓ Job created:", data);
-
-      // Store job ID and queue info
-      setJobId(data.jobId);
-      setQueuePosition(data.position);
-      setQueueLength(data.queueLength);
-      setEstimatedWaitTime(data.estimatedWaitTime);
-
-      // Start polling
-      if (pollingIntervalRef.current) {
-        clearInterval(pollingIntervalRef.current);
-      }
-
-      pollingIntervalRef.current = setInterval(() => {
-        if (data.jobId) {
+        // Start polling for job status
+        pollingIntervalRef.current = setInterval(() => {
           pollJobStatus(data.jobId);
-        }
-      }, 2000);
-
-      // Immediate poll
-      pollJobStatus(data.jobId);
+        }, 2000);
+      }
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to generate meme";

@@ -12,7 +12,6 @@ import {
   X,
   RefreshCw,
   FileVideo,
-  Link as LinkIcon,
   Type,
   Palette,
   Layout,
@@ -44,7 +43,6 @@ const ThumbnailGenerator: React.FC = () => {
   // Image/Video upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [mediaUrl, setMediaUrl] = useState<string>("");
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -230,20 +228,7 @@ const ThumbnailGenerator: React.FC = () => {
 
       setSelectedFile(file);
       setImagePreview(URL.createObjectURL(file));
-      setMediaUrl("");
       setMediaType(isImage ? "image" : "video");
-      setError(null);
-      setGeneratedThumbnails([]);
-      setSelectedThumbnail(null);
-    }
-  };
-
-  // Handle URL input
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMediaUrl(e.target.value);
-    if (e.target.value) {
-      setSelectedFile(null);
-      setImagePreview(e.target.value);
       setError(null);
       setGeneratedThumbnails([]);
       setSelectedThumbnail(null);
@@ -254,7 +239,6 @@ const ThumbnailGenerator: React.FC = () => {
   const handleRemoveMedia = () => {
     setSelectedFile(null);
     setImagePreview(null);
-    setMediaUrl("");
     setGeneratedThumbnails([]);
     setSelectedThumbnail(null);
     setError(null);
@@ -265,8 +249,8 @@ const ThumbnailGenerator: React.FC = () => {
 
   // Generate thumbnails
   const handleGenerateThumbnails = async () => {
-    if (!selectedFile && !mediaUrl) {
-      setError("Please upload a file or provide a URL");
+    if (!selectedFile) {
+      setError("Please upload an image or video file");
       return;
     }
 
@@ -279,98 +263,41 @@ const ThumbnailGenerator: React.FC = () => {
     setEstimatedWaitTime(null);
 
     try {
-      const payload: {
-        thumbnailStyle: string;
-        textOverlay: string;
-        includeEmoji: boolean;
-        colorScheme: string;
-        thumbnailCount: number;
-        modelName: string;
-        imageS3Key?: string;
-        imageUrl?: string;
-        videoS3Key?: string;
-        videoUrl?: string;
-      } = {
-        thumbnailStyle,
-        textOverlay,
-        includeEmoji,
-        colorScheme,
-        thumbnailCount,
-        modelName: selectedModel,
-      };
-
-      // If using uploaded file, upload to S3 first
-      if (selectedFile) {
-        console.log("📤 Uploading file to S3...");
-        const uploadRes = await authFetch("/api/s3/generate-upload-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            filename: selectedFile.name,
-            contentType: selectedFile.type,
-          }),
-        });
-
-        if (!uploadRes.ok) {
-          throw new Error("Failed to get upload URL");
-        }
-
-        const uploadData = await uploadRes.json();
-
-        const s3Res = await fetch(uploadData.uploadUrl, {
-          method: "PUT",
-          body: selectedFile,
-          headers: { "Content-Type": selectedFile.type },
-        });
-
-        if (!s3Res.ok) {
-          throw new Error("Failed to upload file");
-        }
-
-        if (mediaType === "image") {
-          payload.imageS3Key = uploadData.key;
-        } else {
-          payload.videoS3Key = uploadData.key;
-        }
-      } else if (mediaUrl) {
-        if (mediaType === "image") {
-          payload.imageUrl = mediaUrl;
-        } else {
-          payload.videoUrl = mediaUrl;
-        }
-      }
-
       console.log("🎨 Requesting thumbnail generation...");
+
+      // Send file directly in FormData (no S3 upload)
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("thumbnailStyle", thumbnailStyle);
+      formData.append("textOverlay", textOverlay);
+      formData.append("includeEmoji", includeEmoji.toString());
+      formData.append("colorScheme", colorScheme);
+      formData.append("thumbnailCount", thumbnailCount.toString());
+      formData.append("modelName", selectedModel);
+      formData.append("mediaType", mediaType);
+
       const res = await authFetch("/api/ai/generate-thumbnail", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "Failed to generate thumbnails");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Thumbnail generation failed");
       }
 
       const data = await res.json();
-      console.log("✓ Job created:", data);
+      console.log("✅ Job created:", data);
 
       setJobId(data.jobId);
       setQueuePosition(data.position);
       setQueueLength(data.queueLength);
       setEstimatedWaitTime(data.estimatedWaitTime);
 
-      if (pollingIntervalRef.current) {
-        clearInterval(pollingIntervalRef.current);
-      }
-
+      // Start polling for job status
       pollingIntervalRef.current = setInterval(() => {
-        if (data.jobId) {
-          pollJobStatus(data.jobId);
-        }
+        pollJobStatus(data.jobId);
       }, 2000);
-
-      pollJobStatus(data.jobId);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to generate thumbnails";
@@ -469,26 +396,6 @@ const ThumbnailGenerator: React.FC = () => {
                   onChange={handleFileChange}
                   className="hidden"
                 />
-
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-px bg-storiq-border"></div>
-                  <span className="text-white/40 text-xs">OR</span>
-                  <div className="flex-1 h-px bg-storiq-border"></div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-white/80 text-sm flex items-center gap-2">
-                    <LinkIcon className="w-4 h-4 text-storiq-purple" />
-                    Media URL
-                  </label>
-                  <Input
-                    type="url"
-                    value={mediaUrl}
-                    onChange={handleUrlChange}
-                    placeholder="https://example.com/video.mp4"
-                    className="w-full bg-storiq-card-bg border border-storiq-border text-white placeholder:text-white/40"
-                  />
-                </div>
               </div>
             </Card>
 
@@ -644,7 +551,7 @@ const ThumbnailGenerator: React.FC = () => {
             {/* Generate Button */}
             <Button
               onClick={handleGenerateThumbnails}
-              disabled={status === "loading" || (!selectedFile && !mediaUrl)}
+              disabled={status === "loading" || !selectedFile}
               className="w-full bg-gradient-to-r from-storiq-purple to-storiq-purple/80 hover:from-storiq-purple/90 hover:to-storiq-purple/70 text-white font-semibold py-6 text-base rounded-xl transition-all disabled:opacity-50"
             >
               {status === "loading" ? (
