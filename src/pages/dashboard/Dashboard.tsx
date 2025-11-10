@@ -12,6 +12,7 @@ import aiVideoPlaceholder from "@/assets/images/ai-video-placeholder.png";
 import aiImagePlaceholder from "@/assets/images/ai-image-placeholder.png";
 import aiImageEditorPlaceholder from "@/assets/images/ai-imageeditor-placeholder.png";
 import imageToPromptPlaceholder from "@/assets/images/image-to-prompt.png";
+import memePlaceholder from "@/assets/images/image-meme.png";
 import backRemoverPlaceholder from "@/assets/images/back-remover.png";
 
 import aiScriptPlaceholder from "@/assets/images/ai-script-placeholder.png";
@@ -97,6 +98,13 @@ const Dashboard = () => {
       image: imageToPromptPlaceholder,
       buttonText: "Try Now",
       link: "/dashboard/image-to-prompt",
+    },
+    {
+      title: "Meme Generator",
+      subtitle: "Create funny memes with AI captions",
+      image: memePlaceholder,
+      buttonText: "Try Now",
+      link: "/dashboard/meme-generator",
     },
     {
       title: "Background Remover",
