@@ -30,6 +30,7 @@ const VideoGenerator = () => {
   const [selectedQuality, setSelectedQuality] = useState("720p");
   const [selectedAspectRatio, setSelectedAspectRatio] = useState("16:9");
   const [selectedDuration, setSelectedDuration] = useState(8);
+  const [selectedModel, setSelectedModel] = useState("standard");
   const [enhancePrompt, setEnhancePrompt] = useState(true);
   // Status for video generation
   const [videoStatus, setVideoStatus] = useState<Status>("idle");
@@ -38,6 +39,7 @@ const VideoGenerator = () => {
   const [videoS3Key, setVideoS3Key] = useState<string | null>(null);
   const [videoDuration, setVideoDuration] = useState<number | null>(null);
   const [videoResolution, setVideoResolution] = useState<string | null>(null);
+  const [tokenUsage, setTokenUsage] = useState<number | null>(null);
   const [deleteStatus, setDeleteStatus] = useState<Status>("idle");
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -110,6 +112,7 @@ const VideoGenerator = () => {
         setVideoS3Key(data.s3Key || null);
         setVideoDuration(data.duration || null);
         setVideoResolution(data.resolution || selectedQuality);
+        setTokenUsage(data.tokenUsage || null);
         setVideoStatus("success");
         setJobId(null);
         setQueuePosition(null);
@@ -168,6 +171,7 @@ const VideoGenerator = () => {
             quality: selectedQuality,
             aspectRatio: selectedAspectRatio,
             durationSeconds: selectedDuration,
+            modelType: selectedModel,
             enhancePrompt: enhancePrompt,
           }),
         }
@@ -225,6 +229,14 @@ const VideoGenerator = () => {
   const qualityOptions = ["720p", "1080p"];
   const aspectRatioOptions = ["16:9", "9:16"];
   const durationOptions = [4, 6, 8];
+  const modelOptions = [
+    {
+      value: "standard",
+      label: "Standard",
+      description: "High quality, slower",
+    },
+    { value: "fast", label: "Fast", description: "Lower quality, faster" },
+  ];
 
   // --- UPLOAD VIDEO HANDLER ---
   const handleUploadVideo = async (e: React.FormEvent) => {
@@ -409,6 +421,50 @@ const VideoGenerator = () => {
                     >
                       {quality}
                     </span>
+                  </Button>
+                ))}
+              </div>
+            </Card>
+
+            {/* Model Selection */}
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
+              <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+                Generation Model
+              </h3>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {modelOptions.map((model) => (
+                  <Button
+                    key={model.value}
+                    onClick={() => setSelectedModel(model.value)}
+                    variant={
+                      selectedModel === model.value ? "default" : "outline"
+                    }
+                    className={`h-auto py-2 sm:py-3 text-sm sm:text-base transition-all duration-200 ${
+                      selectedModel === model.value
+                        ? "bg-storiq-purple hover:bg-storiq-purple/80 text-white border-storiq-purple"
+                        : "bg-black border-storiq-border text-white/80 hover:bg-storiq-purple/10 hover:border-storiq-purple"
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-1">
+                      <span
+                        className={`font-semibold ${
+                          selectedModel === model.value
+                            ? "text-white"
+                            : "text-white/80"
+                        }`}
+                      >
+                        {model.label}
+                      </span>
+                      <span
+                        className={`text-xs ${
+                          selectedModel === model.value
+                            ? "text-white/80"
+                            : "text-white/60"
+                        }`}
+                      >
+                        {model.description}
+                      </span>
+                    </div>
                   </Button>
                 ))}
               </div>
@@ -692,6 +748,11 @@ const VideoGenerator = () => {
                         )}
                         {videoResolution && (
                           <span>Resolution: {videoResolution}</span>
+                        )}
+                        {tokenUsage && (
+                          <span className="text-white/60">
+                            Tokens used: {tokenUsage.toLocaleString()}
+                          </span>
                         )}
                       </div>
                     </div>
