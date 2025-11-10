@@ -75,7 +75,12 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   isLeftColumn = false,
 }) => {
   return (
-    <article className="w-full h-52 relative shrink-0 max-md:max-w-[538px] md:h-[200px] lg:h-52 max-sm:h-[120px] group">
+    <article className="w-full h-52 relative shrink-0 max-md:max-w-[538px] md:h-[200px] lg:h-52 max-sm:h-[120px] group cursor-pointer">
+      {/* Animated glow effect */}
+      <div className="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 max-sm:rounded-[18px] max-sm:group-hover:opacity-70">
+        <div className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-[#8638E5] via-[#CCA2FF] to-[#8638E5] blur-xl animate-pulse max-sm:rounded-[18px] max-sm:blur-lg" />
+      </div>
+
       {/* Hover animation lines for left column */}
       {isLeftColumn && (
         <>
@@ -131,24 +136,26 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       )}
 
       {/* Purple shadow layer */}
-      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px] transition-transform duration-300 group-hover:translate-x-[2px] group-hover:translate-y-[2px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-[#8638E5] rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px] transition-all duration-300 group-hover:translate-x-[4px] group-hover:translate-y-[4px] group-hover:scale-[1.02] max-sm:group-hover:translate-x-[2px] max-sm:group-hover:translate-y-[2px] max-sm:group-hover:scale-[1.01] md:group-hover:translate-x-[3px] md:group-hover:translate-y-[3px]" />
 
       {/* White background layer */}
-      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px]" />
+      <div className="absolute w-[calc(100%_-_12px)] h-[204px] shrink-0 bg-white rounded-[28px] left-1.5 top-0.5 max-sm:h-[calc(100%_-_4px)] max-sm:rounded-[18px] md:h-[192px] lg:h-[204px] transition-all duration-300 group-hover:scale-[1.01] max-sm:group-hover:scale-[1.005]" />
 
       {/* Main dark card with border */}
-      <div className="absolute w-full h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-sm:h-full max-sm:rounded-[18px] md:h-[200px] lg:h-52" />
+      <div className="absolute w-full h-52 border shrink-0 bg-neutral-900 rounded-[28px] border-solid border-[#CCA2FF] left-0 top-0 max-sm:h-full max-sm:rounded-[18px] md:h-[200px] lg:h-52 transition-all duration-300 group-hover:scale-[1.03] group-hover:border-[#8638E5] group-hover:shadow-2xl group-hover:shadow-[#8638E5]/50 max-sm:group-hover:scale-[1.015] max-sm:group-hover:shadow-xl max-sm:group-hover:shadow-[#8638E5]/40 md:group-hover:scale-[1.02]" />
 
       {/* Icon */}
-      <FeatureIcon type={icon} />
+      <div className="transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 max-sm:group-hover:scale-105 max-sm:group-hover:-rotate-3 md:group-hover:scale-[1.07] md:group-hover:-rotate-4">
+        <FeatureIcon type={icon} />
+      </div>
 
       {/* Title */}
-      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[109px] md:text-2xl md:leading-7 md:top-[99px] lg:text-[26px] lg:leading-[28px] lg:top-[104px] max-sm:text-lg max-sm:leading-5 max-sm:px-3 max-sm:py-0 max-sm:top-[68px]">
+      <h2 className="absolute text-white text-center text-[28px] font-medium leading-[30px] -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[109px] md:text-2xl md:leading-7 md:top-[99px] lg:text-[26px] lg:leading-[28px] lg:top-[104px] max-sm:text-lg max-sm:leading-5 max-sm:px-3 max-sm:py-0 max-sm:top-[68px] transition-all duration-300 group-hover:text-[#CCA2FF] max-sm:group-hover:text-[#B48FE0]">
         {title}
       </h2>
 
       {/* Description */}
-      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[149px] md:text-sm md:leading-[18px] md:top-[134px] lg:text-[15px] lg:leading-[19px] lg:top-[144px] max-sm:text-[11px] max-sm:leading-[14px] max-sm:px-3 max-sm:py-0 max-sm:top-[94px]">
+      <p className="absolute text-neutral-900 text-center text-base font-light leading-5 -translate-x-2/4 w-full box-border px-5 py-0 left-2/4 top-[149px] md:text-sm md:leading-[18px] md:top-[134px] lg:text-[15px] lg:leading-[19px] lg:top-[144px] max-sm:text-[11px] max-sm:leading-[14px] max-sm:px-3 max-sm:py-0 max-sm:top-[94px] transition-all duration-300 group-hover:font-normal max-sm:group-hover:font-medium">
         {description}
       </p>
     </article>

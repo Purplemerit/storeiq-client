@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ArrowIconProps {
   size?: number;
@@ -47,9 +48,19 @@ export const GetStartedButton: React.FC<GetStartedButtonProps> = ({
   disabled = false,
   className = "",
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate("/signup");
+    }
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       className={`group flex w-[180px] h-[50px] sm:w-[200px] sm:h-14 md:w-[220px] md:h-[60px] lg:w-[251px] lg:h-[68px] justify-center items-center shrink-0 bg-[#8E31FF] mx-auto my-0 p-0.5 sm:p-[3px] md:p-1 rounded-[25px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden transition-all duration-200 hover:bg-[#7A2BE6] focus:outline-none focus:ring-2 focus:ring-[#8E31FF] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       aria-label="Get started"
