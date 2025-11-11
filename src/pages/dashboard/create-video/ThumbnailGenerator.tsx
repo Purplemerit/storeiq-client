@@ -617,7 +617,7 @@ const ThumbnailGenerator: React.FC = () => {
 
               {/* Success State */}
               {generatedThumbnails.length > 0 && status === "success" && (
-                <div className="flex-1 flex flex-col space-y-4 overflow-y-auto">
+                <div className="flex-1 flex flex-col space-y-4 overflow-y-auto scrollbar-hide">
                   {/* Selected Thumbnail Preview */}
                   {selectedThumbnail && selectedThumbnail.imageData && (
                     <div className="bg-storiq-card-bg/30 rounded-lg p-4">
