@@ -629,8 +629,8 @@ const MemeGenerator: React.FC = () => {
 
           {/* Right Column - Results */}
           <div className="w-full xl:w-[55%] 2xl:w-[60%] xl:sticky xl:top-4 xl:self-start">
-            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6 min-h-[600px] xl:max-h-[calc(100vh-8rem)] flex flex-col">
-              <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2">
+            <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6 min-h-[600px] xl:max-h-[calc(100vh-8rem)] flex flex-col overflow-hidden">
+              <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2 flex-shrink-0">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-storiq-purple" />
                 Your Meme
               </h3>
@@ -676,22 +676,22 @@ const MemeGenerator: React.FC = () => {
 
               {/* Success State */}
               {generatedCaptions.length > 0 && status === "success" && (
-                <div className="space-y-4">
+                <div className="space-y-4 overflow-y-auto flex-1 scrollbar-hide">
                   {/* Meme Preview */}
-                  <div className="bg-storiq-card-bg/30 rounded-lg p-4">
+                  <div className="bg-storiq-card-bg/30 rounded-lg p-4 flex-shrink-0">
                     <canvas
                       ref={memeCanvasRef}
                       className="w-full rounded-lg"
-                      style={{ maxHeight: "500px", objectFit: "contain" }}
+                      style={{ maxHeight: "400px", objectFit: "contain" }}
                     />
                   </div>
 
                   {/* Caption Options */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 flex-shrink-0">
                     <h4 className="text-white/80 text-sm font-semibold">
                       Choose a Caption:
                     </h4>
-                    <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto scrollbar-hide">
+                    <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto scrollbar-hide">
                       {generatedCaptions.map((caption, index) => (
                         <button
                           key={index}
@@ -715,7 +715,7 @@ const MemeGenerator: React.FC = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 flex-shrink-0">
                     <Button
                       onClick={handleDownloadMeme}
                       className="flex-1 bg-storiq-purple hover:bg-storiq-purple/80 text-white"
