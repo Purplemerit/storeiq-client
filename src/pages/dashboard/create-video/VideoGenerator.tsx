@@ -365,7 +365,7 @@ const VideoGenerator = () => {
 
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-8">
           {/* Left Column - Controls */}
-          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 h-full w-full xl:w-[45%] 2xl:w-[40%] xl:overflow-y-auto xl:max-h-[calc(100vh-140px)] xl:pr-2 scrollbar-thin scrollbar-thumb-storiq-border/40 scrollbar-track-transparent [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 h-full w-full xl:w-[45%] 2xl:w-[40%] xl:overflow-y-auto xl:max-h-[calc(100vh-140px)] xl:pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {/* Prompt Area */}
             <Card className="bg-storiq-card-bg/50 border-storiq-border p-3 sm:p-4 md:p-5 lg:p-6">
               <Textarea
