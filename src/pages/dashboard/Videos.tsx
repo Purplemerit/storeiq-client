@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { extractMeaningfulFilename } from "@/lib/extractFilename";
+import { authFetch } from "@/lib/authFetch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -96,10 +97,8 @@ const Videos = () => {
       setLoading(true);
       setError(null);
       try {
-        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-        const fetchOptions: RequestInit = { credentials: "include" };
-        // Fetch videos (metadata)
-        const res = await fetch(`${API_BASE_URL}/api/videos`, fetchOptions);
+        // Fetch videos (metadata) using authFetch
+        const res = await authFetch("/api/videos");
         if (res.status === 401) {
           throw new Error("Unauthorized (401): Please log in.");
         }
@@ -111,11 +110,8 @@ const Videos = () => {
           data.map(async (video: any) => {
             if (video.s3Key) {
               try {
-                const signedUrlRes = await fetch(
-                  `${API_BASE_URL}/api/signed-url?s3Key=${encodeURIComponent(
-                    video.s3Key
-                  )}`,
-                  fetchOptions
+                const signedUrlRes = await authFetch(
+                  `/api/signed-url?s3Key=${encodeURIComponent(video.s3Key)}`
                 );
                 if (signedUrlRes.ok) {
                   const { url: signedUrl } = await signedUrlRes.json();
@@ -129,7 +125,7 @@ const Videos = () => {
         setVideos(videosWithSignedUrls);
         // removed debug log
         // Fetch images
-        const imgRes = await fetch(`${API_BASE_URL}/api/images`, fetchOptions);
+        const imgRes = await authFetch("/api/images");
         if (imgRes.ok) {
           const imgData = await imgRes.json();
           setImages(Array.isArray(imgData) ? imgData : []);
@@ -256,14 +252,12 @@ const Videos = () => {
         throw new Error("Video s3Key not found");
       }
       // removed debug log
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-      const res = await fetch(`${API_BASE_URL}/api/delete-video`, {
+      const res = await authFetch("/api/delete-video", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ s3Key: videoToDelete.s3Key }),
-        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete video");
 
@@ -422,14 +416,12 @@ const Videos = () => {
       if (!imageToDelete || !imageToDelete.s3Key) {
         throw new Error("Image s3Key not found");
       }
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-      const res = await fetch(`${API_BASE_URL}/api/delete-video`, {
+      const res = await authFetch("/api/delete-video", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ s3Key: imageToDelete.s3Key }),
-        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete image");
       setVideos((prev) =>
