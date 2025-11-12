@@ -84,19 +84,19 @@ const Login = () => {
   const handleGoogleAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/google/login`;
+    }/api/auth/google/login`;
   };
 
   const handleFacebookAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/facebook/login`;
+    }/api/auth/facebook/login`;
   };
 
   const handleGithubAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/github/login`;
+    }/api/auth/github/login`;
   };
 
   const handleForgotPassword = () => {

@@ -97,19 +97,19 @@ const Signup = () => {
   const handleGoogleAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/google/register`;
+    }/api/auth/google/register`;
   };
 
   const handleFacebookAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/facebook/register`;
+    }/api/auth/facebook/register`;
   };
 
   const handleGithubAuth = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/auth/github/register`;
+    }/api/auth/github/register`;
   };
 
   const handleSkipClick = () => {
