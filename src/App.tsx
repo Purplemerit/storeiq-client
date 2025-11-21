@@ -46,6 +46,8 @@ import TTSPlayer from "./pages/dashboard/ai-tools/Ttscharachter";
 import { AuthProvider } from "./context/AuthContext";
 import { LoaderProvider } from "./context/LoaderContext";
 import ProtectedRoute from "./context/Protected";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -101,6 +103,8 @@ const AnimatedRoutes = () => {
         <Route path="/Home" element={<Home />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
 
         {/* Protected Routes (everything else) */}
         <Route
