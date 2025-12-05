@@ -80,7 +80,7 @@ const Header = () => {
               }}
               className="md:text-2xl"
             >
-              STORIQ
+              Viralitykit
             </div>
           </Link>
         </div>

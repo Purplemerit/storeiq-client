@@ -144,7 +144,7 @@ const Signup = () => {
               }}
               className="md:text-2xl md:leading-6 md:pl-6"
             >
-              STORIQ
+              Viralitykit
             </div>
           </Link>
           <Button

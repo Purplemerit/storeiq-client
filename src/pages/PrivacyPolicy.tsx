@@ -87,8 +87,8 @@ const PolicyContent: React.FC = () => {
       <PolicySection title="Attention!">
         <div className="flex w-full flex-col items-start relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
           <p className="w-full text-[#CACFD8] text-base font-normal leading-[25.6px] relative box-border m-0 p-0">
-            Please carefully review the following terms before using the Storiq
-            platform. By accessing or using Storiq, you acknowledge that you
+            Please carefully review the following terms before using the Viralitykit
+            platform. By accessing or using Viralitykit, you acknowledge that you
             have read, understood, and agree to be bound by these terms. If you
             do not agree with any part of these terms, you are prohibited from
             using the platform.
@@ -128,7 +128,7 @@ const PolicyContent: React.FC = () => {
         <div className="flex w-full flex-col items-start gap-3 relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
           <ListItem>
             All content on this website, including text, images, graphics, and
-            logos, is the property of Storiq or its licensors and is protected
+            logos, is the property of Viralitykit or its licensors and is protected
             by copyright and other intellectual property laws.
           </ListItem>
           <ListItem>
@@ -141,7 +141,7 @@ const PolicyContent: React.FC = () => {
       <PolicySection title="Member Content" className="pt-[38px] max-md:pt-8">
         <div className="flex w-full flex-col items-start gap-3 relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
           <ListItem>
-            When you share content on Storiq, you grant us permission to use,
+            When you share content on Viralitykit, you grant us permission to use,
             modify, and share it.
           </ListItem>
           <ListItem>
@@ -160,8 +160,8 @@ const PolicyContent: React.FC = () => {
         </div>
         <div className="flex w-full flex-col items-start gap-3 relative box-border mb-[38px] m-0 pl-5 p-0 max-md:mb-8 max-sm:pl-4">
           <ListItem>
-            Storiq assumes no liability for damages incurred while using our
-            platform. Use Storiq at your own risk.
+            Viralitykit assumes no liability for damages incurred while using our
+            platform. Use Viralitykit at your own risk.
           </ListItem>
           <ListItem>
             This includes all types of damages, whether foreseeable or not.
@@ -183,7 +183,7 @@ const PolicyContent: React.FC = () => {
         <div className="flex w-full flex-col items-start relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
           <p className="text-[#CACFD8] text-base font-normal leading-[25.6px] relative box-border m-0 p-0">
             We reserve the right to modify these terms at any time. Continued
-            use of Storiq after changes constitutes acceptance of the new terms.
+            use of Viralitykit after changes constitutes acceptance of the new terms.
             Check back regularly for updates.
           </p>
         </div>
@@ -202,10 +202,10 @@ const PolicyContent: React.FC = () => {
           <p className="text-[#CACFD8] text-base font-normal leading-[25.6px] relative box-border m-0 p-0">
             If you have any questions, please contact us at{" "}
             <a
-              href="mailto:support@storiq.com"
+              href="mailto:support@Viralitykit.com"
               className="text-white hover:text-[#8638E5] transition-colors underline"
             >
-              support@storiq.com
+              support@Viralitykit.com
             </a>
             .
           </p>
