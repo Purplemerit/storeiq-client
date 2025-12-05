@@ -127,7 +127,7 @@ const TermsContent: React.FC = () => {
       <TermsSection title="Legal Disclaimer">
         <div className="flex w-full flex-col items-start gap-4 relative pl-5 max-sm:pl-4">
           <ListItem>
-            All content on this site is the exclusive property of Storiq and is
+            All content on this site is the exclusive property of Viralitykit and is
             protected by international copyright laws. This includes text,
             graphics, logos, and software. Unauthorized use may violate
             copyright, trademark, and other laws.
@@ -161,7 +161,7 @@ const TermsContent: React.FC = () => {
         </ContentBlock>
         <div className="flex w-full flex-col items-start gap-4 relative pl-5 max-sm:pl-4">
           <ListItem>
-            Storiq is not liable for any damages resulting from your use of this
+            Viralitykit is not liable for any damages resulting from your use of this
             site. This includes any errors, omissions, or inaccuracies in the
             content. Use the site at your own risk and discretion.
           </ListItem>
@@ -196,15 +196,30 @@ const TermsContent: React.FC = () => {
           will be resolved in the courts of Tallinn, Estonia.
         </ContentBlock>
       </TermsSection>
+      <TermsSection title="Refund Policy">
+        <ContentBlock>
+          ViralityKit.com operates a strict no-refund policy for all subscriptions and purchases, emphasizing that cancellations are the only available option to stop future billing. Once a payment is processed, no refunds, partial refunds, or prorated credits are issued under any circumstances, regardless of usage or dissatisfaction.​
+
+Cancellation Process
+Users can cancel their subscription at any time directly from their account dashboard settings on viralitykit.com. Cancellation takes effect at the end of the current billing cycle, with full access retained until then—no further charges occur post-cancellation.​
+
+Key Policy Details
+No exceptions for refunds due to change of mind, technical issues resolvable by support, or after the billing cycle begins.
+
+Auto-renewals must be canceled manually before the renewal date to avoid charges.
+
+For support on cancellations or policy questions, contact via the site's help section or listed support email.
+        </ContentBlock>
+      </TermsSection>
 
       <TermsSection title="Get In Touch">
         <ContentBlock>
           Please contact us at{" "}
           <a
-            href="mailto:support@storiq.com"
+            href="mailto:support@Viralitykit.com"
             className="text-white hover:text-[#8638E5] transition-colors underline"
           >
-            support@storiq.com
+            support@Viralitykit.com
           </a>{" "}
           with any questions or concerns. Our support team is available to
           assist you. We value your feedback and strive to provide excellent

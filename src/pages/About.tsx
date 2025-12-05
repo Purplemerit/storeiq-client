@@ -24,9 +24,9 @@ const About = () => {
   const faqData = [
     {
       id: 1,
-      question: "How can Storiq transform my content creation game?",
+      question: "How can Viralitykit transform my content creation game?",
       answer:
-        "STORIQ is your AI-powered co-creator for modern storytelling — turning raw ideas into scroll-stopping content effortlessly. From smart scripting to polished visuals, it helps creators plan, repurpose, and publish engaging content that actually connects.",
+        "Viralitykit is your AI-powered co-creator for modern storytelling — turning raw ideas into scroll-stopping content effortlessly. From smart scripting to polished visuals, it helps creators plan, repurpose, and publish engaging content that actually connects.",
     },
     {
       id: 2,
@@ -36,9 +36,9 @@ const About = () => {
     },
     {
       id: 3,
-      question: "What kind of content can I create with Storiq?",
+      question: "What kind of content can I create with Viralitykit?",
       answer:
-        "Whatever you imagine, STORIQ brings it to life. Repurpose blogs, transform podcasts, craft viral shorts, or auto-generate product demos — all from a single prompt. Just drop in your idea, and let AI do the rest — script, edit, design, and publish.",
+        "Whatever you imagine, Viralitykit brings it to life. Repurpose blogs, transform podcasts, craft viral shorts, or auto-generate product demos — all from a single prompt. Just drop in your idea, and let AI do the rest — script, edit, design, and publish.",
     },
   ];
 
@@ -114,7 +114,7 @@ const About = () => {
       <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16">
-            Why creators love STORIQ?
+            Why creators love Viralitykit?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {whyCreatorsLove.map((feature, index) => (

@@ -62,7 +62,7 @@ const HeroSection = () => {
 
       {/* Subheading */}
       <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 mb-3 sm:mb-5 md:mb-6 lg:mb-8 w-full max-w-[1180px] px-2">
-        <span className="underline">STORIQ</span> helps modern creators
+        <span className="underline">Viralitykit</span> helps modern creators
         streamline content creation, planning, and publishing like never before.
       </p>
 

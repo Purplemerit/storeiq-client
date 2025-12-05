@@ -94,7 +94,7 @@ export const PricingConnector: React.FC<PricingConnectorProps> = ({
 const pricingPlans = [
   {
     title: "STARTER",
-    description: "Perfect for trying STORIQ",
+    description: "Perfect for trying Viralitykit",
     features: [
       "5 AI edits / month",
       "Basic templates",

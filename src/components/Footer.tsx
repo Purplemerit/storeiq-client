@@ -6,7 +6,7 @@ export const FooterBrand: React.FC = () => {
       <div className="flex w-full flex-col items-stretch">
         <div className="flex items-center gap-2 text-xl sm:text-2xl text-white font-semibold whitespace-nowrap leading-none">
           <div className="self-stretch my-auto">
-            <div>STORIQ</div>
+            <div>Viralitykit</div>
           </div>
         </div>
         <div className="text-sm sm:text-base text-[rgba(202,207,216,1)] font-normal leading-relaxed sm:leading-[26px] mt-3 sm:mt-4 pr-0 md:pr-7">
@@ -79,28 +79,28 @@ export const FooterNavigation: React.FC = () => {
         <ul className="list-none p-0 m-0">
           <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-2">
             <a
-              href="/about#why"
+              href="/terms-and-conditions"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
             >
-              <div>Why</div>
+              <div>Terms & Conditions</div>
             </a>
           </li>
           <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-2">
             <a
-              href="/about#ethics"
+              href="/privacy-policy"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
             >
-              <div>AI With Ethics</div>
+              <div>Privacy Policy</div>
             </a>
           </li>
-          <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-2">
+          {/* <li className="flex w-full items-center text-sm font-normal whitespace-nowrap leading-[1.6] mt-2">
             <a
               href="/about#questions"
               className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
             >
               <div>Questions</div>
             </a>
-          </li>
+          </li> */}
           <li className="flex w-full items-center mt-2">
             <div className="self-stretch flex min-h-[23px] my-auto" />
           </li>
@@ -110,16 +110,24 @@ export const FooterNavigation: React.FC = () => {
       <div className="min-w-[120px]">
         <div className="w-full text-sm text-white font-bold whitespace-nowrap leading-[1.6] pb-2">
           <div className="w-full">
-            <div>Tools</div>
+            <div>Contact</div>
           </div>
         </div>
         <ul className="list-none p-0 m-0">
           <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-2">
             <a
-              href="/tools"
-              className="self-stretch my-auto text-[rgba(153,160,174,1)] hover:text-white transition-colors"
+              
+              className="self-stretch my-auto text-[rgba(153,160,174,1)] "
             >
-              <div>All Free Tools</div>
+              <div><b>Address:</b> 5a, 1A Cross Rd,</div><div> Dollar Scheme Colony, 1st Stage, </div><div> BTM 1st Stage,Bengaluru,</div><div> Karnataka 560068 </div>
+            </a>
+          </li>
+          <li className="flex w-full items-center text-sm font-normal leading-[1.6] mt-2">
+            <a
+              
+              className="self-stretch my-auto text-[rgba(153,160,174,1)] "
+            >
+              <div><b>Phone Number:</b>9742212377</div><div><b>Email:</b>support@viralitykit.com</div>
             </a>
           </li>
           <li className="flex w-full items-center mt-2">
@@ -142,12 +150,12 @@ export const FooterBottom: React.FC = () => {
     <div className="z-10 flex w-full gap-4 sm:gap-6 text-xs sm:text-sm leading-[1.6] flex-wrap justify-between items-center mt-8 sm:mt-10 md:mt-12">
       <div className="flex text-[rgba(153,160,174,1)] font-normal flex-wrap">
         <div>
-          © 2025 <span className="font-bold">STORIQ</span>
+          © 2025 <span className="font-bold">Viralitykit</span>
         </div>
         <div className="flex min-h-[23px]" />
       </div>
       <div className="flex items-center gap-4 sm:gap-6 text-white font-bold flex-wrap">
-        <div className="self-stretch my-auto">
+        {/* <div className="self-stretch my-auto">
           <a
             href="/terms-and-conditions"
             className="text-white hover:text-gray-300 transition-colors"
@@ -162,7 +170,7 @@ export const FooterBottom: React.FC = () => {
           >
             <div>Privacy Policy</div>
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );
