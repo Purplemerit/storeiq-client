@@ -192,7 +192,10 @@ const PolicyContent: React.FC = () => {
       <PolicySection title="Legal Standards" className="pt-[38px] max-md:pt-8">
         <div className="flex w-full flex-col items-start relative box-border mb-[38px] m-0 p-0 max-md:mb-8">
           <p className="text-[#CACFD8] text-base font-normal leading-[25.6px] relative box-border m-0 p-0">
-            These Terms are governed by the laws of the Republic of Viridia.
+            These Terms shall be governed by and construed in accordance with the laws of India.
+Any disputes arising under these Terms shall be subject to the exclusive jurisdiction
+of the courts of Bengaluru, India.
+
           </p>
         </div>
       </PolicySection>
