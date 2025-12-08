@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
           <div className="flex flex-col justify-center items-center gap-6 relative box-border m-0 p-0 max-md:gap-4">
             <div className="flex flex-col items-start relative box-border m-0 p-0">
               <div className="text-white text-base font-bold leading-4 tracking-[0.16px] uppercase relative box-border m-0 p-0">
-                EFFECTIVE DATE: OCTOBER 29, 2025
+                
               </div>
             </div>
 
