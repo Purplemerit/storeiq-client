@@ -191,9 +191,10 @@ const TermsContent: React.FC = () => {
 
       <TermsSection title="Applicable Laws">
         <ContentBlock>
-          These terms are governed by the laws of Estonia, without regard to its
-          conflict of law principles. Any disputes arising under these terms
-          will be resolved in the courts of Tallinn, Estonia.
+         These Terms shall be governed by and construed in accordance with the laws of India. 
+Any disputes arising under these Terms shall be subject to the exclusive jurisdiction 
+of the courts of Bengaluru, India.
+
         </ContentBlock>
       </TermsSection>
       <TermsSection title="Refund Policy">
