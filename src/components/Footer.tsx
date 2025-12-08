@@ -147,32 +147,37 @@ export const FooterNavigation: React.FC = () => {
 
 export const FooterBottom: React.FC = () => {
   return (
-    <div className="z-10 flex w-full gap-4 sm:gap-6 text-xs sm:text-sm leading-[1.6] flex-wrap justify-between items-center mt-8 sm:mt-10 md:mt-12">
-      <div className="flex text-[rgba(153,160,174,1)] font-normal flex-wrap">
-        <div>
-          © 2025 <span className="font-bold">Viralitykit</span>
-        </div>
-        <div className="flex min-h-[23px]" />
-      </div>
-      <div className="flex items-center gap-4 sm:gap-6 text-white font-bold flex-wrap">
-        {/* <div className="self-stretch my-auto">
-          <a
-            href="/terms-and-conditions"
-            className="text-white hover:text-gray-300 transition-colors"
-          >
-            <div>Terms & Conditions</div>
-          </a>
-        </div>
-        <div className="self-stretch my-auto">
-          <a
-            href="/privacy-policy"
-            className="text-white hover:text-gray-300 transition-colors"
-          >
-            <div>Privacy Policy</div>
-          </a>
-        </div> */}
-      </div>
+    <div className="z-10 flex flex-col gap-4 mt-8 sm:mt-10 md:mt-12 w-full">
+  <div className="flex flex-col sm:flex-row w-full justify-between items-start sm:items-center text-xs sm:text-sm text-[rgba(153,160,174,1)] gap-3 sm:gap-0">
+
+    {/* LEFT SECTION */}
+    <div className="flex flex-wrap items-center gap-2">
+      <span
+        style={{
+          color: "#ffffffff",
+          fontFamily: "Orbitron",
+          fontSize: "20px",
+          fontStyle: "normal",
+          fontWeight: 600,
+          lineHeight: "24px",
+        }}
+      >
+        ViralityKit
+      </span>
+
+      <span>Viralitykit</span>
+      <span>is a</span>
+      <span className="font-bold text-white">Purplemerit</span>
+      <span>Company</span>
     </div>
+
+    {/* RIGHT SECTION */}
+    <div className="text-[10px] sm:text-xs md:text-sm">
+      © 2025 Viralitykit. All rights reserved
+    </div>
+  </div>
+</div>
+
   );
 };
 
