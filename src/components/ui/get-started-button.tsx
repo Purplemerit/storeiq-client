@@ -7,7 +7,7 @@ interface ArrowIconProps {
 }
 
 export const ArrowIcon: React.FC<ArrowIconProps> = ({
-  size = 60,
+  size = 24,
   className = "",
 }) => {
   return (
@@ -62,18 +62,18 @@ export const GetStartedButton: React.FC<GetStartedButtonProps> = ({
     <button
       onClick={handleClick}
       disabled={disabled}
-      className={`group flex w-[180px] h-[50px] sm:w-[200px] sm:h-14 md:w-[220px] md:h-[60px] lg:w-[251px] lg:h-[68px] justify-center items-center shrink-0 bg-[#8E31FF] mx-auto my-0 p-0.5 sm:p-[3px] md:p-1 rounded-[25px] sm:rounded-[28px] md:rounded-[34px] overflow-hidden transition-all duration-200 hover:bg-[#7A2BE6] focus:outline-none focus:ring-2 focus:ring-[#8E31FF] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`group flex w-auto h-11 sm:h-12 md:h-[52px] justify-center items-center shrink-0 bg-[#8E31FF] mx-auto my-0 px-5 sm:px-6 md:px-8 rounded-full overflow-hidden transition-all duration-200 hover:bg-[#7A2BE6] focus:outline-none focus:ring-2 focus:ring-[#8E31FF] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       aria-label="Get started"
       type="button"
     >
-      <div className="flex justify-center items-center gap-1.5 sm:gap-2 whitespace-nowrap pl-4 pr-1.5 sm:pl-5 sm:pr-2 md:pl-6 md:pr-2">
-        <span className="text-white text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-normal leading-none">
+      <div className="flex justify-center items-center gap-2 sm:gap-2.5 whitespace-nowrap">
+        <span className="text-white text-base sm:text-lg md:text-xl font-medium leading-none">
           Get Started
         </span>
         <div className="flex-shrink-0">
           <ArrowIcon
-            size={42}
-            className="w-[42px] h-[42px] sm:w-[48px] sm:h-[48px] md:w-[52px] md:h-[52px] lg:w-[58px] lg:h-[58px]"
+            size={27}
+            className="w-5 h-5 sm:w-6 sm:h-6"
           />
         </div>
       </div>
