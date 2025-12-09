@@ -98,8 +98,8 @@ const About = () => {
       {/* Hero Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-            We're not just a tool —<br />
+          <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">
+            We're not just a tool <br />
             we're your co-creator.
           </h1>
           <p className="text-base md:text-xl text-white/60 mb-6 md:mb-8 max-w-2xl mx-auto">
@@ -154,7 +154,7 @@ const About = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
             <div className="flex flex-col justify-center">
               <h2 className="text-2xl md:text-[32px] font-bold leading-tight md:leading-[36px] mb-4 md:mb-6 text-white">
-                <span className="underline">Emotion-Driven</span> Creation
+                <span className="">Emotion-Driven</span> Creation
               </h2>
               <p className="text-sm md:text-base text-white/60 mb-4 md:mb-6">
                 Move beyond cut-and-dry edits — think how AI feels that
@@ -227,7 +227,7 @@ const About = () => {
             </div>
             <div className="flex flex-col justify-center order-1 lg:order-2">
               <h2 className="text-2xl md:text-[32px] font-bold leading-tight md:leading-[36px] mb-4 md:mb-6 text-white">
-                <span className="underline">Built for Creators</span>, Not
+                <span className="">Built for Creators</span>, Not
                 Corporates
               </h2>
               <p className="text-base md:text-xl text-white/60 mb-6 md:mb-8">
@@ -269,7 +269,7 @@ const About = () => {
       <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16">
-            <span className="underline">AI With</span> Ethics
+            <span className="">AI With</span> Ethics
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {ethicsFeatures.map((feature, index) => (
@@ -297,7 +297,7 @@ const About = () => {
       {/* FAQ Section */}
       <section className="py-12 md:py-20 px-4 md:px-8 flex flex-col items-center">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16">
-          <span className="underline">Frequently Asked</span> Questions
+          <span className="">Frequently Asked</span> Questions
         </h2>
         <div className="w-full max-w-[1180px] text-lg sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium text-center leading-relaxed md:leading-loose">
           {faqItems.map((item) => (

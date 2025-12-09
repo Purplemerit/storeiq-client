@@ -139,7 +139,7 @@ export const PricingSection: React.FC = () => {
   return (
     <section className="w-full relative flex flex-col items-center box-border bg-black px-4 sm:px-6 md:px-8 pt-0 sm:pt-2 md:pt-4 lg:pt-6 pb-0">
       <header className="text-center mb-2 sm:mb-3 md:mb-6 lg:mb-8 max-w-[1180px]">
-        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-medium leading-tight underline decoration-solid decoration-auto underline-offset-auto text-center mb-1 sm:mb-0.5">
+        <h1 className="text-white text-3xl sm:text-4xl md:text-4xl font-medium leading-tight  decoration-solid decoration-auto underline-offset-auto text-center mb-1 sm:mb-0.5">
           Pricing
         </h1>
         <p className="text-white text-lg sm:text-xl md:text-2xl lg:text-[28px] font-normal leading-relaxed text-center">

@@ -19,7 +19,7 @@ export const StepCard: React.FC<StepCardProps> = ({
         </span>
       </div>
       <div className="flex flex-col justify-center flex-1 md:ml-[200px] lg:ml-[271px] md:pr-10">
-        <h3 className="text-white text-xl sm:text-2xl md:text-[28px] lg:text-[40px] font-medium leading-tight mb-2 md:mb-3">
+        <h3 className="text-white text-xl sm:text-2xl md:text-[28px] lg:text-[30px] font-medium leading-tight mb-2 md:mb-3">
           {title}
         </h3>
         <p className="text-white text-sm sm:text-base md:text-lg font-light leading-relaxed">
@@ -70,7 +70,7 @@ export const Steps: React.FC = () => {
       <header className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-[60px] max-w-[1180px]">
         <h1
           id="steps-title"
-          className="text-white text-3xl sm:text-4xl md:text-5xl font-medium leading-tight underline decoration-solid decoration-auto underline-offset-auto text-center mb-3 sm:mb-4 md:mb-5"
+          className="text-white text-2xl sm:text-3xl md:text-4xl font-medium leading-tight  decoration-solid decoration-auto underline-offset-auto text-center mb-3 sm:mb-4 md:mb-5"
         >
           Steps to Edit
         </h1>

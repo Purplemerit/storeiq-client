@@ -202,7 +202,7 @@ const FeaturesSection: React.FC = () => {
   return (
     <section className="w-full min-h-[1002px] relative box-border bg-black px-4 sm:px-6 md:px-8 py-[72px] max-md:py-[60px] max-sm:py-10 overflow-x-hidden">
       <header className="text-center mb-[60px] max-md:mb-10 max-sm:mb-[30px]">
-        <h1 className="text-white text-5xl font-medium leading-[60px] underline decoration-solid decoration-auto underline-offset-auto mb-0.5 max-md:text-[40px] max-md:leading-[48px] max-sm:text-[32px] max-sm:leading-10">
+        <h1 className="text-white text-4xl font-medium leading-[60px]  decoration-solid decoration-auto underline-offset-auto mb-0.5 max-md:text-[40px] max-md:leading-[48px] max-sm:text-[32px] max-sm:leading-10">
           Features
         </h1>
         <p className="text-white text-[28px] font-normal leading-8 max-md:text-2xl max-md:leading-7 max-sm:text-lg max-sm:leading-6 whitespace-nowrap">
